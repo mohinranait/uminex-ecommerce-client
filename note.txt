@@ -1,0 +1,5 @@
+Firebase app name : storemi-react-ecommerce-app
+
+// Questions
+1. filtering UI OR Server -> Done
+2. User Dashboard leftsidebar active / deActive problem

@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@200;300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .box {
+    @apply px-2 lg:px-5 2xl:container 
+  }
+  .select-count {
+    @apply w-5 h-5 flex items-center justify-center bg-secondary rounded-full text-xs font-bold text-white absolute -top-2 -right-2
+  }
+  .all-cat-hover{
+    @apply absolute top-0 left-2/4 -translate-x-2/4 right-0 h-[1px] w-[0px] group-hover:w-full transition-all duration-500 bg-primary
+  }
+  .link-menu{
+    @apply block w-full font-medium text-text-color hover:text-primary transition-all duration-100
+  }
+  .mobilemenu{
+      @apply px-5 py-2 inline-block text-text-color hover:bg-primary w-full hover:text-white transition-all duration-300
+  }
+  .mobilemenu-icon{
+      @apply py-2  inline-block text-gray-700 hover:text-gray-900
+  }
+  .mobilembttom{
+      @apply fixed bottom-0 border-t border-slate-100 z-[100] left-0 w-full py-1 bg-white
+  }
+  .mobile-left{
+      @apply  w-[90vw]  sm:w-[310px] z-50  top-0 fixed bottom-0 bg-white shadow
+  }
+  .countMobile{
+    @apply absolute top-4 right-2 w-5 h-5 text-xs text-white bg-secondary rounded-full flex items-center justify-center
+  }
+  .mobileCartStyle { 
+    @apply w-14 h-14  bg-primary border-4 border-white shadow-lg rounded-full flex items-center justify-center
+  }
+  .cartLi {  @apply relative flex items-center justify-center }
+  .shopLeftFilter {
+    @apply bg-white lg:bg-transparent w-[80vw] sm:w-[60vw]  md:w-[30vw] z-50 top-0  bottom-0 transition-all lg:static  lg:w-auto fixed shadow lg:shadow-none
+  }
+  .shop-header { @apply flex justify-center md:justify-between gap-3 flex-wrap bg-white px-4 items-center py-3 mb-3 border-b-2 border-gray-100 }
+  .customFilters { @apply absolute left-0 transition-all  bg-white shadow w-full overflow-hidden }
+  .shopGrid { @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 }
+  .custom-select-box { @apply px-5 py-1 cursor-pointer hover:bg-slate-50 }
+  .cart-right-royar { @apply w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center cursor-pointer   }
+  .btn{ @apply  py-2 font-medium  text-center rounded }
+  .btn-primary { @apply  bg-primary  text-white  }
+  .btn-secondary { @apply  bg-secondary  text-white  }
+  .mobile-logo-wrap { @apply  border-b flex px-5 py-2 items-center justify-between border-gray-200  }
+}

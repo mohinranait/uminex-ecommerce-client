@@ -1,0 +1,4 @@
+.dashboardActive a.active{
+    background-color: rgb(43, 56, 209);
+    color: white;
+}
