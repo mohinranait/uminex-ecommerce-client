@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { IoCallOutline, IoHeartSharp, IoPersonSharp } from "react-icons/io5";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { LuMenu, LuShoppingCart } from "react-icons/lu";
@@ -11,10 +11,11 @@ import useAuth from "../../../hooks/useAuth";
 const Header = ({toggleCartDoyarHandler}) => {
     const location = useLocation();
     const {logOut} = useAuth();
+    const navigate = useNavigate();
     
 
     const handleLogout = async () => {
-        await logOut().then(res => res.json()).then((data) => {console.log(data)})
+        await logOut().then(res => res.json()).then(() => {navigate('/login')})
     }
     
     return (

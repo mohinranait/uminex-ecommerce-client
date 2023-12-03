@@ -7,7 +7,7 @@ const PrivateRoutes = ({children}) => {
     const {user,loading} = useAuth();
     const location = useLocation();
 
-    
+    console.log(loading);
     if( loading ){
         return <div>
             <p className='text-center pt-16 text-red-600 font-bold '>Loading...</p>

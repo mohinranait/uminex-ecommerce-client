@@ -46,6 +46,7 @@ const AuthProvider = ({children}) => {
             
             const email = currentUser?.email;
             if(email){
+                
                 // Create JWT 
                 await axios.post('/jwt', {email});
 
@@ -65,6 +66,7 @@ const AuthProvider = ({children}) => {
                 await axios.post('/logout-user', {email});
                 console.log('Logout');
             }
+            setLoading(false)
         })
         return () => onSubscribe()
     },[axios])

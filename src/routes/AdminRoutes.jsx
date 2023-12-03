@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 
 const AdminRoutes = ({children}) => {
     const {user,loading} = useAuth();
-
+    console.log();
     if( loading ){
         return <div>Admin Loading...</div>
     }
