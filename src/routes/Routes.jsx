@@ -14,6 +14,7 @@ import AdminDashboardLayout from '../backend/Layout/AdminDashboardLayout';
 import Categorys from '../backend/pages/Categorys';
 import PrivateRoutes from './PrivateRoutes';
 import AdminRoutes from './AdminRoutes';
+import Sliders from '../backend/pages/Sliders';
 
 const myRoutes = createBrowserRouter([
     {
@@ -57,7 +58,7 @@ const myRoutes = createBrowserRouter([
          ,
         children: [
             {
-                index:true,
+                path: 'dashboard',
                 element : <div>Dashboard</div>
             },
             {
@@ -67,6 +68,10 @@ const myRoutes = createBrowserRouter([
             {
                 path: 'categorys',
                 element : <Categorys />
+            },
+            {
+                path: 'sliders',
+                element : <Sliders />
             },
         ]
     }
