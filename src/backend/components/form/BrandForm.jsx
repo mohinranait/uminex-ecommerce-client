@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { uploadImage } from '../../../services/UploadImage';
 import useAxios from '../../../hooks/useAxios';
@@ -56,7 +57,6 @@ const BrandForm = ({brand, refetch, closeModal}) => {
         }
     }
 
-    console.log(brand?.status);
     return (
         <div className="bg-white relative">
             <form  onSubmit={handleBrand} >

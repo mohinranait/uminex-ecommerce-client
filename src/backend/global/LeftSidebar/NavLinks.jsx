@@ -1,6 +1,8 @@
 
-import { IoGiftOutline, IoGridOutline, IoHomeOutline } from 'react-icons/io5';
-
+import {  IoGridOutline, IoHomeOutline } from 'react-icons/io5';
+import { TbBrandBinance, TbCategory } from "react-icons/tb";
+import { LiaSlidersHSolid } from "react-icons/lia";
+import { HiOutlineUsers } from 'react-icons/hi2';
 const LeftSidebarLinks = [
     {
         id : 1,
@@ -20,22 +22,29 @@ const LeftSidebarLinks = [
         id : 3,
         link : "/admin/categorys",
         name : "Category",
-        icon : <IoGiftOutline className='text-lg' />,
+        icon : <TbCategory className='text-lg' />,
         path : '/admin/categorys',
     },
     {
         id : 4,
         link : "/admin/brands",
         name : "Brands",
-        icon : <IoGiftOutline className='text-lg' />,
+        icon : <TbBrandBinance className='text-lg' />,
         path : '/admin/brands',
     },
     {
         id : 5,
         link : "/admin/sliders",
         name : "Sliders",
-        icon : <IoGiftOutline className='text-lg' />,
+        icon : <LiaSlidersHSolid className='text-lg' />,
         path : '/admin/sliders',
+    },
+    {
+        id : 6,
+        link : "/admin/users",
+        name : "Users",
+        icon : <HiOutlineUsers className='text-lg' />,
+        path : '/admin/users',
     },
 ];
 

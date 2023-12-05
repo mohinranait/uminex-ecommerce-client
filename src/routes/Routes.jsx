@@ -16,6 +16,7 @@ import PrivateRoutes from './PrivateRoutes';
 import AdminRoutes from './AdminRoutes';
 import Sliders from '../backend/pages/Sliders';
 import Brands from '../backend/pages/Brands';
+import Users from '../backend/pages/Users';
 
 const myRoutes = createBrowserRouter([
     {
@@ -73,6 +74,10 @@ const myRoutes = createBrowserRouter([
             {
                 path: 'brands',
                 element : <Brands />
+            },
+            {
+                path: 'users',
+                element : <Users />
             },
             {
                 path: 'sliders',
