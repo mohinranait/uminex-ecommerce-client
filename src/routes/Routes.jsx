@@ -15,6 +15,7 @@ import Categorys from '../backend/pages/Categorys';
 import PrivateRoutes from './PrivateRoutes';
 import AdminRoutes from './AdminRoutes';
 import Sliders from '../backend/pages/Sliders';
+import Brands from '../backend/pages/Brands';
 
 const myRoutes = createBrowserRouter([
     {
@@ -68,6 +69,10 @@ const myRoutes = createBrowserRouter([
             {
                 path: 'categorys',
                 element : <Categorys />
+            },
+            {
+                path: 'brands',
+                element : <Brands />
             },
             {
                 path: 'sliders',

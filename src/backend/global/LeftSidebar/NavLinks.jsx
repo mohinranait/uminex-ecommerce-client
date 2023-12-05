@@ -25,6 +25,13 @@ const LeftSidebarLinks = [
     },
     {
         id : 4,
+        link : "/admin/brands",
+        name : "Brands",
+        icon : <IoGiftOutline className='text-lg' />,
+        path : '/admin/brands',
+    },
+    {
+        id : 5,
         link : "/admin/sliders",
         name : "Sliders",
         icon : <IoGiftOutline className='text-lg' />,
