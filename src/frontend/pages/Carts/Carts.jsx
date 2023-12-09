@@ -1,22 +1,27 @@
 
 import { Link } from "react-router-dom";
 import CartItems from "../../components/CartItems/CartItems";
-import { useState } from "react";
 
+import useCarts from "../../../hooks/useCarts";
+import useAxios from "../../../hooks/useAxios";
+import useAuth from "../../../hooks/useAuth";
+import toast from "react-hot-toast"
 
 const Carts = () => {
-    const myCarts = [
-        {_id: 1, name: "Camera mobile", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_3.png?v=1681548716&width=1500', quantity:1,color:'Red'},
-        {_id: 2, name: "Game controllers", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_4.png?v=1681548715&width=1500', quantity:2,color:'White'},
-        {_id: 3, name: "Table ipads", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_5.png?v=1681548716&width=1500', quantity:1,color:'Blue'},
-    ]
+    const [carts,refetch] = useCarts();
+    const axios = useAxios();
+    const {user} = useAuth();
 
-    const [carts , setCarts] = useState(myCarts);
 
-    const handleCartDeletes = (id) => {
-        if(id) {
-            const filter = carts?.filter(cart => cart?._id !== id );
-            setCarts(filter)
+    const handleCartDeletes = async (id) => {
+        try {
+            const {data} = await axios.delete(`/remove-shopping-cart/${id}?request=user&email=${user?.email}`)
+            if(data.success){
+                refetch();
+                toast.success("Cart removed");
+            }
+        } catch (error) {
+            toast.success(error.message);
         }
     }
 

@@ -2,22 +2,13 @@ import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import RightDoyarCartItems from "../../components/CartItems/RightDoyarCartItems";
+import useCarts from "../../../hooks/useCarts";
 
 
 const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
+    const [carts, refetch] = useCarts();
     const navigate = useNavigate();
-    const carts = [
-        {_id: 1, name: "Camera mobile", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_3.png?v=1681548716&width=1500', quantity:1,color:'Red'},
-        {_id: 2, name: "Game controllers", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_4.png?v=1681548715&width=1500', quantity:2,color:'White'},
-        {_id: 3, name: "Table ipads", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_5.png?v=1681548716&width=1500', quantity:1,color:'Blue'},
-        {_id: 4, name: "Table ipads", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_5.png?v=1681548716&width=1500', quantity:1,color:'Blue'},
-        {_id: 7, name: "Table ipads", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_5.png?v=1681548716&width=1500', quantity:1,color:'Blue'},
-    ]
-
-
-
-
-
+    
     const handleRedirectCartPage = () => {
         toggleCartDoyarHandler()
         navigate('/carts');
@@ -40,29 +31,10 @@ const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
                     </div>
                     <div className='px-4 flex-grow overflow-y-auto'>
                         <ul className=" h-full  py-3 space-y-4">
-                            {/* {
-                                myCarts?.map(cart =>   <li key={cart?._id} className="bg-white border gap-2 rounded px-2 py-3 flex ">
-                                    <div>
-                                        <img src={cart?.img} className="w-20 rounded-md border" alt="" />
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <p className="flex-grow"><Link>{cart?.name}</Link></p>
-                                        <div className=" flex justify-between pb-1 gap-10">
-                                            <div className="flex items-center gap-2">
-                                                <button  className="w-5 h-5 lg:h-6 lg:w-6 rounded-full border flex items-center justify-center text-lg">-</button>
-                                                <span className='w-[16px]'>2</span>
-                                                <button  className="w-5 h-5 lg:h-6 lg:w-6 rounded-full border flex items-center justify-center text-lg">+</button>
-                                            </div>
-                                            <p>$245</p>
-                                            <div className=''>
-                                                <span  className="lg:h-6 lg:w-6 rounded-full border cursor-pointer flex items-center justify-center bg-white"><IoCloseSharp /></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li> )
-                            } */}
+                            
                             {
-                                carts?.map(cart => <RightDoyarCartItems key={cart?._id} cart={cart} /> )}
+                                carts?.map(cart => <RightDoyarCartItems key={cart?._id} refetch={refetch} cart={cart} /> )
+                            }
                         </ul>
                     </div>
                     <div className='px-4'>

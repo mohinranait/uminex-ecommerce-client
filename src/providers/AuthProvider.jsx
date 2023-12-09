@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import useAxios from "../hooks/useAxios";
 
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext({});
 
 const AuthProvider = ({children}) => {
     const axios = useAxios();

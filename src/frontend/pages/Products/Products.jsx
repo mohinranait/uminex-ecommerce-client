@@ -7,19 +7,27 @@ import { FaTruckMoving } from 'react-icons/fa';
 import { PiStackSimpleBold } from "react-icons/pi";
 import ProductGallary from '../../components/ProductGallary/ProductGallary';
 import { HiMiniChevronLeft, HiMiniChevronRight } from 'react-icons/hi2';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
+import useAuth from '../../../hooks/useAuth';
+import useAxios from '../../../hooks/useAxios';
+import toast from "react-hot-toast"
+import useCarts from '../../../hooks/useCarts';
 
 
 
 const Products = () => {
+    const [,refetch] = useCarts();
     const {slug} = useParams();  
     const axiosPublic = useAxiosPublic();
+    const axios = useAxios()
     const [accourding, setAccording] = useState(true);
     const [color, setColor] = useState('Red');
     const [size, setSize] = useState("2GB");
     const [quantity, setQuantity] = useState(1);
+    const {user} = useAuth();
+    const navigate = useNavigate();
 
     const {data:product} = useQuery({
         queryKey: ['getSingleProductBySlug'],
@@ -28,8 +36,8 @@ const Products = () => {
             return data.product;
         }
     })
-    const {name,media,brand, category,skuCode,price,isStock
-    ,discount,discount_type,colors,product_type} = product || {};
+    const {name,media,brand, category,price,isStock
+    ,product_type} = product || {};
 
     const handleAccording = () => {
         setAccording(!accourding)
@@ -64,6 +72,42 @@ const Products = () => {
         {_id: 3, name: "Table ipads", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_5.png?v=1681548716&width=1500', quantity:1,color:'Blue'},
     ]
 
+
+    // product shopping cart store
+    const productShoppingCartAdd = async () => {
+        if(!user?.email){
+            navigate("/login")
+            return ;
+        }
+        try {
+           
+            let varientArr = [];
+            if(color){
+                varientArr = [...varientArr, {color}]
+            }
+            if(size){
+                varientArr = [...varientArr, {size}]
+            }
+
+            const cartObject = {
+                user : user?._id,
+                product : product?._id,
+                quantity,
+                varient : varientArr,
+            }
+
+           
+            const response = await axios.post("/carts", cartObject);
+            if(response.data.success){
+                refetch();
+                toast.success("Shopping cart added")
+            }
+           
+           
+        } catch (error) {
+            console.log("Shopping cart ",error.message);
+        }
+    }
 
     return (
         <>
@@ -130,7 +174,7 @@ const Products = () => {
                                                 <button onClick={handleIncrement} className='px-3 text-2xl py-[3px] border-l inline-block'>+</button>
                                             </div>
                                             <button className='px-8 sm:px-5 md:px-3 xl:w-full py-2 bg-primary uppercase rounded font-semibold text-white'>Buy Now</button>
-                                            <button className='px-8 sm:px-5 md:px-3 xl:w-full py-2 bg-secondary uppercase rounded font-semibold text-white'>Add to cart</button>
+                                            <button onClick={productShoppingCartAdd} className='px-8 sm:px-5 md:px-3 xl:w-full py-2 bg-secondary uppercase rounded font-semibold text-white'>Add to cart</button>
                                         </div>
                                         <ul className='text-gray-700 flex gap-5 py-5'>
                                             <li className='flex cursor-pointer text-sm items-center gap-2'> <LuHeart /> <span className='uppercase font-semibold'>Add wishlist</span> </li>

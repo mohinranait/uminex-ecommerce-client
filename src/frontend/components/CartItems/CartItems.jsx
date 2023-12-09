@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from "prop-types"
 
 const CartItems = ({cart,handleCartDeletes}) => {
-    const {_id,quantity:pQuantity, img, name,color} = cart || {};
+    const {_id,quantity:pQuantity,color,product} = cart || {};
     const [quantity,setQuantity]  = useState(pQuantity);
     const quantityIncrement = () => {
         setQuantity(quantity+1)
@@ -19,15 +19,15 @@ const CartItems = ({cart,handleCartDeletes}) => {
             <div className="grid grid-cols-4 px-5 py-3 lg:py-1 relative items-center ">
                 <div className="col-span-3 row-span-2 lg:row-span-1 lg:col-span-2 flex  py-2  md:lg:flex-row lg:items-center gap-3">
                     <span>
-                        <img className="w-16 h-16 sm:w-24 sm:h-24 " src={img} alt="" />
+                        <img className="w-16 h-16 sm:w-24 sm:h-24 " src={product?.media?.images[0]} alt="" />
                     </span>
                     <div>
-                        <Link to={'/products'} className="block font-semibold text-sm sm:text-base md:text-lg text-gray-800">{name}</Link>
+                        <Link to={'/products'} className="block font-semibold text-sm sm:text-base md:text-lg text-gray-800">{product?.name}</Link>
                         <p className="text-sm md:text-base text-gray-500"><span className="font-semibold">Color</span> <span className="text-gray-400">{color}</span></p>
                     </div>
                 </div>
                 <div>
-                    <p className="flex text-sm justify-end items-center gap-3"><span className="text-gray-800 sm:text-lg lg:text-lg font-semibold">$100</span> <span className="text-gray-600 text-sm font-medium hidden lg:block">$120</span> </p>
+                    <p className="flex text-sm justify-end items-center gap-3"><span className="text-gray-800 sm:text-lg lg:text-lg font-semibold">${product?.price?.sellingPrice}</span> {product?.productPrice && <span className="text-gray-600 text-sm font-medium hidden lg:block">${product?.productPrice}</span> }  </p>
                 </div>
                 <div className=" flex justify-end gap-10">
                     <div className="flex items-center gap-2">

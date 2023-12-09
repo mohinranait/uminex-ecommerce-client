@@ -10,11 +10,8 @@
 - An admin has the maximum power of this website. Who can control all these websites.
 - Daynamic banner slider
 
-
-
-
-
 </br>
+
 
 ### Live Link
 - Live: https://uminex-mern-app.web.app/

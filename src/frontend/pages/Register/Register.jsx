@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
 
 
 const Register = () => {
     const {createUser,userProfileUpdate} = useAuth();
-    const { register, handleSubmit,   watch,  formState: { errors } } = useForm()
+    const { register, handleSubmit,  formState: { errors } } = useForm()
     const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
     
     const handleRegister = async (data) => {
 
@@ -50,12 +52,7 @@ const Register = () => {
                 await userProfileUpdate( name);
                 const newUser = {name ,email}
                 try {
-                    const res = await fetch("http://localhost:5000/api/v1/users", {
-                        method : "POST",
-                        headers : {"Content-type":"application/json"},
-                        body : JSON.stringify(newUser)
-                    });
-                    const data = await res.json();
+                    const {data} = await axiosPublic.post(`/api/v1/users`, {newUser})
                     console.log(data);
                     
                 } catch (error) {

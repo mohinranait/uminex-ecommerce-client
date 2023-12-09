@@ -7,10 +7,12 @@ import PropTypes from "prop-types"
 import "./Header.css"
 import CategorysLists from "../Categorys/CategorysLists";
 import useAuth from "../../../hooks/useAuth";
+import useCarts from "../../../hooks/useCarts";
 
 const Header = ({toggleCartDoyarHandler}) => {
+    const [carts] = useCarts();
     const location = useLocation();
-    const {logOut} = useAuth();
+    const {logOut,user} = useAuth();
     const navigate = useNavigate();
     
 
@@ -80,7 +82,7 @@ const Header = ({toggleCartDoyarHandler}) => {
                                     <button onClick={toggleCartDoyarHandler} className="flex items-center pl-2 gap-4">
                                         <div className="relative">
                                             <LuShoppingCart className="text-3xl text-text-color" />
-                                            <span className="select-count">2</span>
+                                            <span className="select-count">{carts?.length}</span>
                                         </div>
                                         <div>
                                             <p className="text-xs leading-3 font-medium">Your Cart</p>
@@ -110,9 +112,15 @@ const Header = ({toggleCartDoyarHandler}) => {
                             <ul className="lg:flex items-center pl-3 gap-5 menu">
                                 <li><NavLink to={'/'} className="link-menu py-2 px-1">Home</NavLink></li>
                                 <li><NavLink to={'/carts'} className="link-menu py-2 px-1">Cart</NavLink></li>
-                                <li><NavLink to={'/login'} className="link-menu py-2 px-1">Login</NavLink></li>
-                                <li><NavLink to={'/admin'} className="link-menu py-2 px-1">Admin</NavLink></li>
-                                <li><button onClick={handleLogout} className="link-menu py-2 px-1">Logout</button></li>
+                                {
+                                    user?.email ? <>
+                                    {user?.role == 'admin' &&  <li><NavLink to={'/admin'} className="link-menu py-2 px-1">Admin</NavLink></li>}
+                                    <li><button onClick={handleLogout} className="link-menu py-2 px-1">Logout</button></li>
+                                    </> :    
+                                    <li><NavLink to={'/login'} className="link-menu py-2 px-1">Login</NavLink></li>
+                                }
+
+                             
                                
                             </ul>
                         </div>
