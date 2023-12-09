@@ -9,14 +9,23 @@ import { EffectFade, Navigation, Pagination } from 'swiper/modules';
 import HomeSliderItem from '../Slider/HomeSliderItem';
 import { Link } from 'react-router-dom';
 import CategorysLists from '../../global/Categorys/CategorysLists';
+import { useEffect, useState } from 'react';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
 
 
 
 const HomeBanner = () => {
-    const sliders = [
-        { _id : 1, title : "Todays Offer", sTitle : "Skin gamepage 2023", subTitle : 'Gamepade', image : "https://demo-uminex.myshopify.com/cdn/shop/files/banner_3_2.jpg?v=1681465965&width=1500" },
-        { _id : 2, title : "Outdoor", sTitle : "Security cameras", subTitle : 'Security cameras', image : "https://demo-uminex.myshopify.com/cdn/shop/files/banner_3_3.jpg?v=1681465977&width=1500" }
-    ]
+    const axiosPublic = useAxiosPublic();
+    const [sliders, setSliders] = useState([]);
+
+    useEffect(() => {
+        const getSliders = async () => {
+            const {data} = await axiosPublic.get(`/all-banners?request=user`);
+            setSliders(data?.banners)
+        }
+        getSliders();
+    },[axiosPublic])
+
     const bannerProducts = [
         {_id: 1, title : "Tablets/lapt", image : "https://demo-uminex.myshopify.com/cdn/shop/files/col_3_1.png?v=1681548716&width=1500"},
         {_id: 2, title : "Tablets/Ipad", image : "https://demo-uminex.myshopify.com/cdn/shop/files/col_3_2.png?v=1681548716&width=1500"},

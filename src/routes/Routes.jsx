@@ -17,15 +17,18 @@ import AdminRoutes from './AdminRoutes';
 import Sliders from '../backend/pages/Sliders';
 import Brands from '../backend/pages/Brands';
 import Users from '../backend/pages/Users';
+import ProductCreate from '../backend/pages/ProductCreate';
+import AllProducts from '../backend/pages/AllProducts';
+import EditProduct from '../backend/pages/EditProduct';
 
 const myRoutes = createBrowserRouter([
     {
         path : "/",
         element : <MainLayout />,
         children : [
-            { index : true, element : <Home />, loader : async () => await fetch("https://assignment-10-server-theta-ivory.vercel.app/products") },
+            { index : true, element : <Home /> },
             { path : "/shops", element : <Shops /> , loader : async () => await fetch("https://assignment-10-server-theta-ivory.vercel.app/products") },
-            { path : "/products", element : <Products /> },
+            { path : "/:slug/:slug", element : <Products /> },
             { path : "/carts", element : <Carts /> },
             { path : "/login", element : <Login /> },
             { path : "/register", element : <Register /> },
@@ -65,7 +68,16 @@ const myRoutes = createBrowserRouter([
             },
             {
                 path: 'products',
-                element : <div>Products</div>
+                element : <AllProducts />
+            },
+            {
+                path: 'new-product',
+                element : <ProductCreate />
+            },
+            {
+                path: 'update-product/:id',
+                element : <EditProduct />,
+                loader : async ({params}) => await fetch(`${import.meta.env.VITE_DEVELOPMENT_ENV}/products/${params?.id}`)
             },
             {
                 path: 'categorys',

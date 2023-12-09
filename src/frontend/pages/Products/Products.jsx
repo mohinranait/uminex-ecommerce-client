@@ -7,15 +7,29 @@ import { FaTruckMoving } from 'react-icons/fa';
 import { PiStackSimpleBold } from "react-icons/pi";
 import ProductGallary from '../../components/ProductGallary/ProductGallary';
 import { HiMiniChevronLeft, HiMiniChevronRight } from 'react-icons/hi2';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
 
 
 
 const Products = () => {
+    const {slug} = useParams();  
+    const axiosPublic = useAxiosPublic();
     const [accourding, setAccording] = useState(true);
     const [color, setColor] = useState('Red');
     const [size, setSize] = useState("2GB");
     const [quantity, setQuantity] = useState(1);
+
+    const {data:product} = useQuery({
+        queryKey: ['getSingleProductBySlug'],
+        queryFn: async () => {
+            const {data} = await axiosPublic.get(`/product-by-slug/${slug}`);
+            return data.product;
+        }
+    })
+    const {name,media,brand, category,skuCode,price,isStock
+    ,discount,discount_type,colors,product_type} = product || {};
 
     const handleAccording = () => {
         setAccording(!accourding)
@@ -57,8 +71,8 @@ const Products = () => {
                 <div className="box py-4 flex items-center justify-between">
                     <ul className='flex flex-wrap items-center gap-1 font-medium text-base text-[#8D979E] '>
                         <li><a href='#' className='hover:text-text-color'>Home</a></li> <span>/</span>
-                        <li><a href="#" className='hover:text-text-color'>Phone & tablets</a></li> <span>/</span>
-                        <li className='text-text-color'>Apple mobile phone 4GB/64GB</li>
+                        <li><a href="#" className='hover:text-text-color'>{category?.name}</a></li> <span>/</span>
+                        <li className='text-text-color'>{name}</li>
                     </ul>
                     <ul className='hidden lg:flex items-center gap-1 justify-end'>
                         <li className='flex items-center text-sm'>Previus<a href="#"><HiMiniChevronLeft className='text-xl' /></a></li> | 
@@ -71,7 +85,7 @@ const Products = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         <div className='col-span-1'>
                             <div className='sticky top-0'>
-                                <ProductGallary />
+                                <ProductGallary media={media} />
                             </div>
                         </div>
                         <div className='col-span-1 lg:col-span-2'>
@@ -79,18 +93,18 @@ const Products = () => {
                                 <div className='lg:col-span-3'>
                                     <div className='py-8' >
                                         <div className='pb-5'>
-                                            <h1 className='text-xl mb-1 font-medium'>Samsung Galaxy S21 FE 8GB/128GB</h1>
+                                            <h1 className='text-xl mb-1 font-medium'>{name}</h1>
                                             <div className='flex items-center  gap-3'>
-                                                <ProductRating rating={4} /> <span className='text-sm'>/</span> <span className='text-sm'>2 Reviews</span> <span className='text-sm'>/</span> <span className='text-sm'>Write reviews</span>
+                                                <ProductRating rating={'4'} /> <span className='text-sm'>/</span> <span className='text-sm'>2 Reviews</span> <span className='text-sm'>/</span> <span className='text-sm'>Write reviews</span>
                                             </div>
                                         </div>
                                         <hr />
                                         <ul className='text-base py-2 space-y-3'>
-                                        <li> <span className='text-3xl font-bold text-primary'>$214</span> <span className='text-xl line-through text-mute'>$300</span> <span className='py-1 px-3 bg-[#fde9e9] text-secondary text-sm font-medium rounded-md'>12% discounts</span>  </li>
-                                            <li> <span className='font-semibold'>Brand:</span> <a href="#">Apple</a></li>
-                                            <li> <span className='font-semibold'>Stock:</span> 3 Available</li>
+                                        <li> <span className='text-3xl font-bold text-primary'>${price?.sellingPrice}</span> <span className='text-xl line-through text-mute'>$300</span> <span className='py-1 px-3 bg-[#fde9e9] text-secondary text-sm font-medium rounded-md'>12% discounts</span>  </li>
+                                            <li> <span className='font-semibold'>Brand:</span> <a href="#">{brand?.name}</a></li>
+                                            <li> <span className='font-semibold'>Stock:</span> {isStock} Available</li>
                                             <li> <span className='font-semibold'>Product:</span> Mobile</li>
-                                            <li> <span className='font-semibold'>Type:</span> <a href="#">Physical</a></li>
+                                            <li> <span className='font-semibold'>Type:</span> <a href="#" className='capitalize'>{product_type}</a></li>
                                             <li className='flex flex-col gap-2'> <span className='font-semibold'>Color: <span className='font-medium'>{color}</span> </span> 
                                                 <ul className='flex items-center gap-2'>
                                                     <li className={`border-2  rounded-md w-8 h-8 ${color == 'Red' ? 'border-primary' : 'border-slate-200' } `} ><span onClick={() => colorVariant('Red')} className='w-7 h-7 cursor-pointer scale-95 rounded border bg-red-600 inline-block'></span></li>
@@ -291,7 +305,7 @@ const Products = () => {
                                     <span onClick={handleAccording} className='h-9 w-9 rounded-full bg-slate-50 flex items-center justify-center cursor-pointer'><IoChevronDown /></span>
                                 </div>
                                 <div className={` px-4  transition-all duration-500 overflow-hidden ${accourding ? " target:max-h-[300px] py-4":'h-0'} `}>
-                                    <p className={` `}>The Canon EOS 2000D Digital SLR Camera sensor is CMOS. When it comes to ISO settings, this camera offers Auto. Movies may be recorded at 1920x1080 pixels (1080p HD) or 1280x720 pixels (720p HD). This simple-to-use camera is ideal for beginners, delivering beautiful photos and cinematic Full HD movies full of detail, color, and depth, as well as an excellent low-light performance from a 24.1 Megapixel sensor. With built-in guidance and creative settings in Creative Auto mode, offering partial and full manual photographic controls whenever you're ready, live-view shooting with on-screen previews is simple. When using the Canon Camera Connect and Photo Companion apps, you can easily share to social media and shoot remotely by connecting via Wi-Fi or NFC. This camera has to Create stunning photographs and videos by blurring the backdrop. With a big 24.1 Megapixel sensor, shoot detailed shots into the night and produce a lovely background blur. Express your imagination with simple-to-follow the w instructions. With Creative Auto mode, you may shoot with guidelines in mind. Use Creative Filters to create one-of-a-kind effects. Learn about the capabilities of DSLRs and interchangeable lenses with Canon's Photo Companion app. When you're ready, add lenses and accessories and switch to manual mode. Shoot with confidence and speed in challenging settings. Capture the moment precisely as you remember it with accurate autofocus, 3.0 f, ps, and DIGIC 4+ processing.</p>
+                                    <p className={` `}>The Canon EOS 2000D Digital SLR Camera sensor is CMOS. When it comes to ISO settings, this camera offers Auto. Movies may be recorded at 1920x1080 pixels (1080p HD) or 1280x720 pixels (720p HD). This simple-to-use camera is ideal for beginners, delivering beautiful photos and cinematic Full HD movies full of detail, color, and depth, as well as an excellent low-light performance from a 24.1 Megapixel sensor. With built-in guidance and creative settings in Creative Auto mode, offering partial and full manual photographic controls whenever  ready, live-view shooting with on-screen previews is simple. When using the Canon Camera Connect and Photo Companion apps, you can easily share to social media and shoot remotely by connecting via Wi-Fi or NFC. This camera has to Create stunning photographs and videos by blurring the backdrop. With a big 24.1 Megapixel sensor, shoot detailed shots into the night and produce a lovely background blur. Express your imagination with simple-to-follow the w instructions. With Creative Auto mode, you may shoot with guidelines in mind. Use Creative Filters to create one-of-a-kind effects. Learn about the capabilities of DSLRs and interchangeable lenses with  Photo Companion app. When  ready, add lenses and accessories and switch to manual mode. Shoot with confidence and speed in challenging settings. Capture the moment precisely as you remember it with accurate autofocus, 3.0 f, ps, and DIGIC 4+ processing.</p>
                                    
                                 </div>
                             </div>

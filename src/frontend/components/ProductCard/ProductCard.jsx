@@ -4,23 +4,23 @@ import ProductRating from '../../global/ProductRating';
 import { LuPlusSquare } from 'react-icons/lu';
 
 const ProductCard = ({product}) => {
-    const { image, price, title} = product || {};
+    const { media, price,category, name,slug} = product || {};
+
 
     return (
         <>
-
+        
 
             <div className='rounded-md group bg-white  min-h-[350px] flex flex-col pb-2 '>
                 <div className='block  p-1   pb-7'>
-                    <Link to={'/products'} >
-                        <img src={image} className='h-44 mx-auto' alt="" />
+                    <Link to={`/${category?.slug}/${slug}`} >
+                        <img src={media?.images[0]} className='h-44 mx-auto' alt="" />
                     </Link>
-                
                 </div>
                 <div className=' flex-grow bg-opacity-80  transition-all duration-500'>
                     <div className=' px-3 '>
                         {/* <p className=' pt-4 text-sm text-gray-500 hover:text-gray-700 flex justify-between items-center'><Link  >Apple</Link>  </p> */}
-                        <p className=' '><Link to={'/products'} className='text-sx font-medium text-text-color'>{title}</Link></p>
+                        <p className=' '><Link to={`/${category?.slug}/${slug}`} className='text-sx font-medium text-text-color'>{name}</Link></p>
                         <div className=' flex items-center gap-2'>
                             <ProductRating rating={'3'}  /> <span className='text-xs text-gray-500'>(3 Reviews)</span>
                         </div>
@@ -30,7 +30,7 @@ const ProductCard = ({product}) => {
                    
                 </div>
                 <div className='px-4 flex justify-between items-center'>
-                    <div ><span className='text-primary font-bold text-lg'>${price}.00</span> <del className='text-xs text-gray-400'>$150</del> </div>
+                    <div ><span className='text-primary font-bold text-lg'>${price?.sellingPrice}.00</span> <del className='text-xs text-gray-400'>$150</del> </div>
                     <button className='py-2 rounded-3xl text-gray-700'> <LuPlusSquare className='text-2xl' /> </button>
                 </div>
                 

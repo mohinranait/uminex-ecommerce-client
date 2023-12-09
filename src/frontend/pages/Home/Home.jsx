@@ -1,18 +1,19 @@
-import { useLoaderData } from "react-router-dom";
+
 import "../../../global.css"
 import HomeBanner from '../../components/Section/HomeBanner';
 import ProductSection from "../../components/Section/ProductSection";
 import CoverProduct from "../../components/Section/CoverProduct";
 import DisplayProducts from "../../components/Section/DisplayProducts";
+import useProducts from "../../../hooks/useProducts";
 
 const Home = () => {
-    const products = useLoaderData()
-  
+    const [products] = useProducts();
+    const {products:getProducts} = products || [];
     return (
         <>
             <HomeBanner />
             <CoverProduct />
-            <ProductSection products={products} />
+            <ProductSection products={getProducts} />
 
             <section className="py-5 ">
                 <div className="box">
@@ -28,7 +29,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <DisplayProducts products={products} />
+            <DisplayProducts products={getProducts} />
 
         </>
     );

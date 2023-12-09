@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from './useAxiosPublic';
 
 const useCategorys = ({search,status}) => {
-    const visibility = status;
-    const searchValue = search;
+    const visibility = status || true;
+    const searchValue = search || '';
     const axiosPublic = useAxiosPublic();
     const {data:categorys=[],refetch} = useQuery({
         queryKey: ['categorys',visibility,searchValue],

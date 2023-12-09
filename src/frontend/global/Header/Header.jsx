@@ -138,7 +138,7 @@ const Header = ({toggleCartDoyarHandler}) => {
 };
 
 Header.propTypes = {
-    toggleCartDoyarHandler: PropTypes.bool.isRequired
+    toggleCartDoyarHandler: PropTypes.func.isRequired
 }
 
 export default Header;

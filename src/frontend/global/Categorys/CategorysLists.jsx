@@ -1,21 +1,10 @@
 
 import { Link } from 'react-router-dom';
+import useCategorys from '../../../hooks/useCategorys';
 
 const CategorysLists = () => {
+    const [categoris] = useCategorys({search:'',status:true});
 
-    const categoris = [
-        {_id: 1, name : "Computer & Desktop"},
-        {_id: 2, name : "Laptop & Ipad"},
-        {_id: 3, name : "Cameras & Photos"},
-        {_id: 4, name : "Smart Phones & Tablets"},
-        {_id: 5, name : "Home & Kitchen"},
-        {_id: 6, name : "TV & Audios"},
-        {_id: 7, name : "Health & Beauty"},
-        {_id: 8, name : "Watches & Eyewear"},
-        {_id: 9, name : "Top Deals"},
-        {_id: 10, name : "Top Selling Products"},
-        {_id: 11, name : "Top Featured Products"},
-    ]
 
     return (
         <>
