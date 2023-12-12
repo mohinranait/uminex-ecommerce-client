@@ -17,7 +17,8 @@ const Header = ({toggleCartDoyarHandler}) => {
     
 
     const handleLogout = async () => {
-        await logOut().then(res => res.json()).then(() => {navigate('/login')})
+        await logOut();
+        navigate('/')
     }
     
     return (

@@ -22,9 +22,16 @@ const Login = () => {
         }
 
         try {
-            await loginUser(email, password);
-            toast.success("Login Successfull");
-            navigate( location?.state ? location?.state : '/' )
+            console.log('login 1');
+            const response = await loginUser(email, password);
+            if(response?.user){
+                toast.success("Login Successfull");
+                console.log('login 8');
+                navigate( location?.state ? location?.state : '/' )
+            }else{
+                console.log("user login hota paray nay");
+            }
+           
         } catch (error) {
             if( error.message == 'Firebase: Error (auth/invalid-login-credentials).' ){
                 toast.error("Email and password don't match");

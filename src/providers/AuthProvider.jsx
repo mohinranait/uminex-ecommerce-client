@@ -45,32 +45,31 @@ const AuthProvider = ({children}) => {
         const onSubscribe = onAuthStateChanged(auth , async currentUser => {
             
             const email = currentUser?.email;
-            if(email){
-                
+            console.log(email);
+
+            if(currentUser?.email){
+                console.log("inside auth", email);
                 // Create JWT 
-                await axios.post('/jwt', {email});
-
+                await axios.post('/jwt', {email: currentUser?.email});
                 // Find a new user / admin
-                const getUser = await axios.get(`/user/${email}`);
-
-                if(getUser.data.success){
-                    setUser(getUser.data.user);
+                const getUser = await axios.get(`/user/${currentUser?.email}?request=user`);
+                if(getUser.data?.success){
+                    setUser(getUser.data?.user);
                     setLoading(false)
-                    console.log('Login');
-                }else{
-                    // Logout user
-                    await axios.post('/logout-user', {email});
                 }
              
             }else{
-                await axios.post('/logout-user', {email});
+                await axios.post('/logout-user', {email:currentUser?.email});
+                setUser({});
                 console.log('Logout');
             }
             setLoading(false)
+          
         })
-        return () => onSubscribe()
+        return () => {onSubscribe()}
     },[axios])
 
+    console.log(user);
 
     const userInfo = {
         user, 
