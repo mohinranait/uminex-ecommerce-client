@@ -41,6 +41,13 @@ const LeftSidebarLinks = [
     },
     {
         id : 6,
+        link : "/admin/colors",
+        name : "Colors",
+        icon : <LiaSlidersHSolid className='text-lg' />,
+        path : '/admin/colors',
+    },
+    {
+        id : 7,
         link : "/admin/users",
         name : "Users",
         icon : <HiOutlineUsers className='text-lg' />,

@@ -7,13 +7,14 @@ import DisplayProducts from "../../components/Section/DisplayProducts";
 import useProducts from "../../../hooks/useProducts";
 
 const Home = () => {
-    const [products] = useProducts();
+    const [products,,isPending] = useProducts();
     const {products:getProducts} = products || [];
+    
     return (
         <>
             <HomeBanner />
             <CoverProduct />
-            <ProductSection products={getProducts} />
+            <ProductSection products={getProducts} isPending={isPending} />
 
             <section className="py-5 ">
                 <div className="box">
@@ -29,7 +30,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <DisplayProducts products={getProducts} />
+            <DisplayProducts products={getProducts} isPending={isPending} />
 
         </>
     );

@@ -45,10 +45,10 @@ const AuthProvider = ({children}) => {
         const onSubscribe = onAuthStateChanged(auth , async currentUser => {
             
             const email = currentUser?.email;
-            console.log(email);
+            // console.log(email);
 
             if(currentUser?.email){
-                console.log("inside auth", email);
+                // console.log("inside auth", email);
                 // Create JWT 
                 await axios.post('/jwt', {email: currentUser?.email});
                 // Find a new user / admin
@@ -68,8 +68,6 @@ const AuthProvider = ({children}) => {
         })
         return () => {onSubscribe()}
     },[axios])
-
-    console.log(user);
 
     const userInfo = {
         user, 

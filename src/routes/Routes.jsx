@@ -20,6 +20,8 @@ import Users from '../backend/pages/Users';
 import ProductCreate from '../backend/pages/ProductCreate';
 import AllProducts from '../backend/pages/AllProducts';
 import EditProduct from '../backend/pages/EditProduct';
+import Colors from '../backend/pages/Colors';
+import Checkout from '../frontend/pages/Checkout/Checkout';
 
 const myRoutes = createBrowserRouter([
     {
@@ -27,9 +29,10 @@ const myRoutes = createBrowserRouter([
         element : <MainLayout />,
         children : [
             { index : true, element : <Home /> },
-            { path : "/shops", element : <Shops /> , loader : async () => await fetch("https://assignment-10-server-theta-ivory.vercel.app/products") },
+            { path : "/category/:slug", element : <Shops /> },
             { path : "/:slug/:slug", element : <Products /> },
             { path : "/carts", element : <Carts /> },
+            { path : "/checkout", element : <Checkout /> },
             { path : "/login", element : <Login /> },
             { path : "/register", element : <Register /> },
             {
@@ -90,6 +93,10 @@ const myRoutes = createBrowserRouter([
             {
                 path: 'users',
                 element : <Users />
+            },
+            {
+                path: 'colors',
+                element : <Colors />
             },
             {
                 path: 'sliders',

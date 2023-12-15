@@ -7,6 +7,7 @@ import useCarts from "../../../hooks/useCarts";
 
 const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
     const [carts, refetch] = useCarts();
+    // console.log(carts);
     const navigate = useNavigate();
     
     const handleRedirectCartPage = () => {
@@ -19,6 +20,7 @@ const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
     }
 
 
+
     return (
         <>
             <div onClick={handlePropagration} className="">
@@ -26,14 +28,14 @@ const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
                     <div className='px-4 py-3 border-b '>
                         <div className="flex justify-between items-center">
                             <span onClick={toggleCartDoyarHandler} className="cart-right-royar group"><IoClose className="group-hover:rotate-90 transition-all " /></span>
-                            <span>Carts({carts?.length})</span>
+                            <span>Carts({ carts?.totalCarts > 0 ? carts?.totalCarts : 0 })</span>
                         </div>
                     </div>
                     <div className='px-4 flex-grow overflow-y-auto'>
                         <ul className=" h-full  py-3 space-y-4">
                             
                             {
-                                carts?.map(cart => <RightDoyarCartItems key={cart?._id} refetch={refetch} cart={cart} /> )
+                                carts?.items?.map(cart => <RightDoyarCartItems key={cart?._id} refetch={refetch} cart={cart} /> )
                             }
                         </ul>
                     </div>
@@ -42,15 +44,15 @@ const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
                             <div className="pb-3 space-y-1">
                                 <p className="flex items-center justify-between">
                                     <span className="text-gray-500 font-medium text-lg">Sub total</span>
-                                    <span className="text-gray-600 text-lg font-semibold">$100</span>
+                                    <span className="text-gray-600 text-lg font-semibold">${carts?.totalPrice}</span>
                                 </p>
                                 <p className="flex items-center justify-between">
                                     <span className="text-gray-500 font-medium text-lg">Vat & taxt</span>
-                                    <span className="text-gray-600 text-lg font-semibold">$100</span>
+                                    <span className="text-gray-600 text-lg font-semibold">$0</span>
                                 </p>
                                 <p className="flex items-center justify-between">
                                     <span className="text-gray-900 font-semibold text-lg">Total Amount</span>
-                                    <span className="text-gray-900 text-lg font-semibold">$150</span>
+                                    <span className="text-gray-900 text-lg font-semibold">${carts?.totalPrice}</span>
                                 </p>
                             </div>
                             <div className="flex gap-3 items-center justify-between">

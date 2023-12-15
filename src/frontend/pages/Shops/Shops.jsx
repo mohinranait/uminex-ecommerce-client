@@ -1,19 +1,37 @@
 
 import { useContext, useState } from 'react';
-import { Link, useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { IoChevronBack, IoChevronForwardOutline } from 'react-icons/io5';
 import { OnclickContext } from '../../Providers/OnclickProvider';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
+import queryString from "query-string"
+import useBrands from '../../../hooks/useBrands';
+import ProductPlaceholder from '../../components/Loding/ProductPlaceholder';
+
 
 const Shops = () => {
+    const {slug} = useParams();
+    const [brands] = useBrands();
+    const [params, setParams] = useSearchParams();
+    const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
     const {showItem,setShowItem,selectBox,setSelectBox} = useContext(OnclickContext);
     const getPproducts = useLoaderData();
-    const [products, setProducts] = useState(getPproducts);
+    // const [products, setProducts] = useState(getPproducts);
     const [filterProducts, setFilterProducts] = useState(10)
   
     const [perViews, setPerViews] = useState(10)
     const [selectValues, setSelectValues] = useState('Features')
     const [isLeftFilter, setIsLeftFilter] = useState(false);
+
+
+
+
+    const brand = params.get('brand');
+    const color = params.get('color');
+
 
     const handleSelectMenu = () => {
         setSelectBox(!selectBox)
@@ -64,6 +82,72 @@ const Shops = () => {
     }
 
 
+    const {data:products=[], isPending} = useQuery({
+        queryKey: ['categoriesProducts',slug,brand,color],
+        queryFn: async () => {
+            // const {data} = await axiosPublic.get(`/category-slug/${slug}`);
+            // const brands = await axiosPublic.get(`/`)
+            const products = await axiosPublic.get(`/category-wish-product/${slug}?brand=${brand}`)
+            console.log(products?.data?.products);
+            return products?.data?.products;
+        }
+    })
+
+
+
+    const handleBrand = (value) => {
+        
+        let currentQuery = {};
+        if(location.search){
+            currentQuery = queryString.parse(location.search)
+            
+        }
+
+        const updateQuery = {...currentQuery , brand: value.toLowerCase()};           
+        const url = queryString.stringifyUrl({
+            url: `/category/${slug}`,
+            query : updateQuery
+        })
+        navigate(url)
+    }
+
+
+    const handleColor = (value) => {
+        
+        let currentQuery = {};
+        if(location.search){
+            currentQuery = queryString.parse(location.search)
+            
+        }
+
+        const updateQuery = {...currentQuery , color: value.toLowerCase()};           
+        const url = queryString.stringifyUrl({
+            url: `/category/${slug}`,
+            query : updateQuery
+        })
+        navigate(url)
+    }
+
+
+    // filter clear
+    const handleClearFilter = (value) => {
+        let currentQuery = {};
+        if( location.search ){
+            currentQuery = queryString.parse(location.search);
+        }
+        if(value == 'brand'){
+            delete currentQuery.brand
+        }
+
+        const url = queryString.stringifyUrl({
+            url: `/category/${slug}`,
+            query : currentQuery
+        })
+
+        navigate(url);
+    }
+
+
     return (
         <>
             <section className='py-6 relative'>
@@ -95,21 +179,23 @@ const Shops = () => {
                                     </ul>
                                 </div>
                                 <div className='mt-6'>
-                                    <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Brands</p>
+                                    <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'><span>Brands</span> <span onClick={() => handleClearFilter('brand')} className='text-sm cursor-pointer'>Clear</span></p>
                                     <ul className='space-y-2'>
-
-                                        <li className=''>
-                                            <label htmlFor="nikon" className='cursor-pointer relative'>
+                                        {
+                                            brands?.map(brand =>  <li key={brand?._id} className='' onClick={() => handleBrand(brand?.slug)}>
+                                            <label htmlFor={brand?.slug} className='cursor-pointer relative'>
                                                 <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
-                                                    <input type="checkbox" id='nikon' className='opacity-0 peer' />
+                                                    <input type="checkbox" id={brand?.slug} className='opacity-0 peer' />
                                                     <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
                                                         <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
                                                     </span>
                                                 </span>
-                                                <span className='ml-1'>Nikon</span>
+                                                <span className='ml-1'>{brand?.name}</span>
                                             </label>
-                                        </li>
-                                        <li className=''>
+                                        </li> )
+                                        }
+                                       
+                                        <li className='' onClick={() => handleBrand('canon')}>
                                             <label htmlFor="Canon" className='cursor-pointer relative'>
                                                 <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
                                                     <input type="checkbox" id='Canon' className='opacity-0 peer' />
@@ -120,7 +206,7 @@ const Shops = () => {
                                                 <span className='ml-1'>Canon</span>
                                             </label>
                                         </li>
-                                        <li className=''>
+                                        <li className='' onClick={() => handleBrand('sony')}>
                                             <label htmlFor="Sony" className='cursor-pointer relative'>
                                                 <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
                                                     <input type="checkbox" id='Sony' className='opacity-0 peer' />
@@ -133,12 +219,51 @@ const Shops = () => {
                                         </li>
                                     </ul>
                                 </div>
+                                <div className='mt-6'>
+                                    <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Colors</p>
+                                    <ul className='space-y-2'>
+
+                                        <li className='' onClick={() => handleColor('red')}>
+                                            <label htmlFor="red" className='cursor-pointer relative'>
+                                                <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
+                                                    <input type="checkbox" id='red' className='opacity-0 peer' />
+                                                    <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
+                                                        <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
+                                                    </span>
+                                                </span>
+                                                <span className='ml-1'>Red</span>
+                                            </label>
+                                        </li>
+                                        <li className='' onClick={() => handleColor('green')}>
+                                            <label htmlFor="green" className='cursor-pointer relative'>
+                                                <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
+                                                    <input type="checkbox" id='green' className='opacity-0 peer' />
+                                                    <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
+                                                        <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
+                                                    </span>
+                                                </span>
+                                                <span className='ml-1'>Canon</span>
+                                            </label>
+                                        </li>
+                                        <li className='' onClick={() => handleColor('blue')}>
+                                            <label htmlFor="blue" className='cursor-pointer relative'>
+                                                <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
+                                                    <input type="checkbox" id='blue' className='opacity-0 peer' />
+                                                    <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
+                                                        <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
+                                                    </span>
+                                                </span>
+                                                <span className='ml-1'>Blue</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div className='col-span-3'>
                             <div>
                                 <div className='shop-header '>
-                                    <div className='text-lg font-semibold text-text-color'><span className='text-primary'>Samsung  </span> <span className='text-sm'> - ({filterProducts}) Products</span> </div>
+                                    <div className='text-lg font-semibold text-text-color'><span className='text-primary'>Samsung  </span> <span className='text-sm'> - ({products?.length}) Products</span> </div>
                                     <div className="relative">
                                         
                                         <div className={` flex gap-4 `}>
@@ -170,9 +295,12 @@ const Shops = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='shopGrid'>
+                            <div className='shopGrid relative'>
                                 {
-                                    products?.slice(0, filterProducts)?.map(product => <ProductCard key={product?._id} product={product} /> )
+                                    isPending && [1,2,3,4,5,6,7,8].map(item =>   <ProductPlaceholder key={item} />  )
+                                }                                
+                                {
+                                    products?.map(product => <ProductCard key={product?._id} product={product} /> )
                                 }
                             </div>
                         </div>

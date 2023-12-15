@@ -11,17 +11,21 @@ import { Link } from 'react-router-dom';
 import CategorysLists from '../../global/Categorys/CategorysLists';
 import { useEffect, useState } from 'react';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
+import SliderPlaceholder from '../Loding/SliderPlaceholder';
 
 
 
 const HomeBanner = () => {
     const axiosPublic = useAxiosPublic();
+    const [isLoading, setIsLoading] = useState(false);
     const [sliders, setSliders] = useState([]);
 
     useEffect(() => {
         const getSliders = async () => {
+            setIsLoading(true)
             const {data} = await axiosPublic.get(`/all-banners?request=user`);
             setSliders(data?.banners)
+            setIsLoading(false)
         }
         getSliders();
     },[axiosPublic])
@@ -56,7 +60,12 @@ const HomeBanner = () => {
                                     modules={[EffectFade, Navigation, Pagination]}
                                     className="mySwiper"
                                 >
-                                  
+                                    
+                                    {
+                                        isLoading &&  [1,2]?.map(item =>   <SwiperSlide key={item}>
+                                            <SliderPlaceholder />
+                                        </SwiperSlide> )
+                                    }
                                     {
                                         sliders?.map(slider =>   <SwiperSlide key={slider._id}>
                                             <HomeSliderItem slider={slider} />

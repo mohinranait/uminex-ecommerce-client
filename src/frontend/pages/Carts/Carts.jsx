@@ -9,6 +9,7 @@ import toast from "react-hot-toast"
 
 const Carts = () => {
     const [carts,refetch] = useCarts();
+    const getShoppingCarts = carts?.items || [];
     const axios = useAxios();
     const {user} = useAuth();
 
@@ -33,7 +34,7 @@ const Carts = () => {
                         <div className="md:col-span-1 lg:col-span-2 bg-white py-7">
                             <div className="lg:px-5">
                                 {
-                                    carts?.map(cart => <CartItems key={cart?._id} cart={cart} handleCartDeletes={handleCartDeletes} />)
+                                    getShoppingCarts?.map(cart => <CartItems key={cart?._id} cart={cart} handleCartDeletes={handleCartDeletes} />)
                                 }
                             </div>
                             {
@@ -59,11 +60,11 @@ const Carts = () => {
                                 <ul className="space-y-4 my-5">
                                     <li className="flex items-center justify-between">
                                         <span className="text-gray-500 font-medium text-lg">Order Summery  </span>
-                                        <span className="text-gray-600 text-lg font-semibold">$100</span>
+                                        <span className="text-gray-600 text-lg font-semibold">${carts?.totalPrice}</span>
                                     </li>
                                     <li className="flex items-center justify-between">
                                         <span className="text-gray-500 font-medium text-lg">Tax</span>
-                                        <span className="text-gray-600 text-lg font-semibold">$10</span>
+                                        <span className="text-gray-600 text-lg font-semibold">$0</span>
                                     </li>
                                     <li className="flex items-center justify-between">
                                         <span className="text-gray-500 font-medium text-lg">Additional Service</span>
@@ -71,11 +72,11 @@ const Carts = () => {
                                     </li>
                                     <li className="flex items-center justify-between">
                                         <span className="text-gray-800 font-bold text-lg">Total Amount</span>
-                                        <span className="text-gray-800 text-lg font-bold">$130</span>
+                                        <span className="text-gray-800 text-lg font-bold">${carts?.totalPrice}</span>
                                     </li>
                                 </ul>
-                                <Link className="w-full block font-semibold rounded-md text-center py-2 text-primary bg-[#deecff] ">Order now</Link>
-                                <Link className="w-full block font-semibold rounded-md text-center py-2 text-gray-700 mt-4  ">Continue Shopping</Link>
+                                <Link to={'/checkout'} className="w-full block font-semibold rounded-md text-center py-2 text-primary bg-[#deecff] ">Order now</Link>
+                                <Link to={'/'} className="w-full block font-semibold rounded-md text-center py-2 text-gray-700 mt-4  ">Continue Shopping</Link>
                             </div>
                         </div>
                     </div>

@@ -5,14 +5,14 @@ import { useQuery } from '@tanstack/react-query';
 const useCarts = () => {
     const {user,loading} = useAuth();
     const axios = useAxios();
-    const {data:carts=[],refetch} = useQuery({
+    const {data:carts={},refetch} = useQuery({
         queryKey: ['carts'],
         enabled: !loading,
         queryFn: async () => {
             if(user?.email){
                 const {data} = await axios.get(`/shopping_carts?user_id=${user?._id}`);
-                console.log(data.carts);
-                return data.carts;
+                console.log(data);
+                return data;
             }
         }
     })

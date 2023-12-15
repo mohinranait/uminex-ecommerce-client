@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import ProductCard from '../ProductCard/ProductCard';
+import ProductPlaceholder from '../Loding/ProductPlaceholder';
 
-const DisplayProducts = ({products}) => {
+
+const DisplayProducts = ({products,isPending}) => {
     return (
         <>
             <section className='py-7 bg-[#dcdcdc1a]'>
@@ -16,6 +18,9 @@ const DisplayProducts = ({products}) => {
                 <div className="box">
                     <div className='grid grid-cols-2 sm:gird-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3'>
                         {
+                            isPending && [1,2,3,4,5,6,7,8,7,8,9,0].map(item =>   <ProductPlaceholder key={item} />  )
+                        }
+                        {
                             products?.map( product => <ProductCard key={product?._id} product={product} /> )
                         }
                     </div>
@@ -26,6 +31,7 @@ const DisplayProducts = ({products}) => {
 };
 
 DisplayProducts.propTypes = {
-    products : PropTypes.array
+    products : PropTypes.array,
+    isPending : PropTypes.func
 }
 export default DisplayProducts;

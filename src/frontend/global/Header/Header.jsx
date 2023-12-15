@@ -83,11 +83,11 @@ const Header = ({toggleCartDoyarHandler}) => {
                                     <button onClick={toggleCartDoyarHandler} className="flex items-center pl-2 gap-4">
                                         <div className="relative">
                                             <LuShoppingCart className="text-3xl text-text-color" />
-                                            <span className="select-count">{carts?.length}</span>
+                                            <span className="select-count">{ carts?.totalCarts > 0 ? carts?.totalCarts : 0 }</span>
                                         </div>
                                         <div>
                                             <p className="text-xs leading-3 font-medium">Your Cart</p>
-                                            <p className="text-base font-semibold text-text-color ">$0.00</p>
+                                            <p className="text-base font-semibold text-text-color ">${carts?.totalPrice ? carts?.totalPrice : '0.00'}</p>
                                         </div>
                                     </button>
                                 </li>

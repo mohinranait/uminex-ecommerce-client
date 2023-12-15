@@ -36,7 +36,7 @@ const Brands = () => {
     return (
         <>
             <div className="bg-white px-5 py-5">
-            <div className="flex justify-between items-center gap-5 mb-5">
+                <div className="flex justify-between items-center gap-5 mb-5">
                     <div className="flex items-center  gap-5">
                         <div className="flex items-center gap-1">
                             Show 

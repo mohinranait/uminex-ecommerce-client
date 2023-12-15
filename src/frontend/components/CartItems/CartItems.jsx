@@ -2,16 +2,49 @@ import { useState } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types"
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useAxios from '../../../hooks/useAxios';
+import useAuth from '../../../hooks/useAuth';
 
 const CartItems = ({cart,handleCartDeletes}) => {
     const {_id,quantity:pQuantity,color,product} = cart || {};
     const [quantity,setQuantity]  = useState(pQuantity);
+    const axios = useAxios();
+    const {user} = useAuth();
+    const queryClient = useQueryClient()
+
+
+    const {mutate:updateShoppingCart} = useMutation({
+        mutationFn : async (reciveData) => {
+            const {updateData, id} = reciveData;
+            const {data} = await axios.patch(`/shopping_update/${id}?email=${user?.email}`,updateData) 
+            console.log(data);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['carts'])
+        }
+    })
+
     const quantityIncrement = () => {
         setQuantity(quantity+1)
+        const sendObject = {
+            updateData : {
+                quantity : quantity+1,
+            },
+            id : _id,
+        }
+        updateShoppingCart(sendObject)
     }
     const quantityDecrement = () => {
         if( quantity > 1 ){
             setQuantity(quantity-1)
+            const sendObject = {
+                updateData : {
+                    quantity : quantity-1,
+                },
+                id : _id,
+            }
+            updateShoppingCart(sendObject)
         }
     }
     return (

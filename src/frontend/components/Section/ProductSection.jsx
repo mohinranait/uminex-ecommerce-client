@@ -8,10 +8,11 @@ import { Navigation } from 'swiper/modules';
 import ProductCard from '../ProductCard/ProductCard';
 import { useContext, useState } from "react";
 import { OnclickContext } from "../../Providers/OnclickProvider";
+import ProductPlaceholder from "../Loding/ProductPlaceholder";
 
 
 
-const ProductSection = ({products}) => {
+const ProductSection = ({products,isPending}) => {
     const {isMobileTab,setIsMobileTab} = useContext(OnclickContext)
 
     const [selectCategory, setSelectCategory] = useState('Top Sell')
@@ -76,6 +77,11 @@ const ProductSection = ({products}) => {
                         className="mySwiper"
                     >
                         {
+                            isPending && [1,2,3,4,5,6,7,8]?.map(item =>  <SwiperSlide key={item}  >
+                                <ProductPlaceholder />
+                            </SwiperSlide>  )
+                        }
+                        {
                             products?.map(product =>  <SwiperSlide key={product._id}  >
                                 <ProductCard product={product} />
                             </SwiperSlide>  )
@@ -88,7 +94,8 @@ const ProductSection = ({products}) => {
 };
 
 ProductSection.propTypes = {
-    products : PropTypes.array
+    products : PropTypes.array,
+    isPending: PropTypes.func
 }
 
 export default ProductSection;
