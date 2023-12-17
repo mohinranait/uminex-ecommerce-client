@@ -22,6 +22,7 @@ import AllProducts from '../backend/pages/AllProducts';
 import EditProduct from '../backend/pages/EditProduct';
 import Colors from '../backend/pages/Colors';
 import Checkout from '../frontend/pages/Checkout/Checkout';
+import Orders from '../backend/pages/Orders';
 
 const myRoutes = createBrowserRouter([
     {
@@ -68,6 +69,10 @@ const myRoutes = createBrowserRouter([
             {
                 path: 'dashboard',
                 element : <div>Dashboard</div>
+            },
+            {
+                path: 'orders',
+                element : <Orders />
             },
             {
                 path: 'products',

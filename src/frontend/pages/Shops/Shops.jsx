@@ -1,5 +1,5 @@
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useLoaderData, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { IoChevronBack, IoChevronForwardOutline } from 'react-icons/io5';
@@ -15,6 +15,7 @@ const Shops = () => {
     const {slug} = useParams();
     const [brands] = useBrands();
     const [params, setParams] = useSearchParams();
+    const [isCategory, setIsCategory] = useState({});
     const navigate = useNavigate();
     const axiosPublic = useAxiosPublic();
     const {showItem,setShowItem,selectBox,setSelectBox} = useContext(OnclickContext);
@@ -80,7 +81,14 @@ const Shops = () => {
         setSelectValues(value)
         setSelectBox(false)
     }
-
+    
+    useEffect(() => {
+        const fetchCategory = async () => {
+            const {data} = await axiosPublic.get(`/category-slug/${slug}`);
+            setIsCategory(data.category)
+        }
+        fetchCategory();
+    },[slug])
 
     const {data:products=[], isPending} = useQuery({
         queryKey: ['categoriesProducts',slug,brand,color],
@@ -100,7 +108,6 @@ const Shops = () => {
         let currentQuery = {};
         if(location.search){
             currentQuery = queryString.parse(location.search)
-            
         }
 
         const updateQuery = {...currentQuery , brand: value.toLowerCase()};           
@@ -263,7 +270,7 @@ const Shops = () => {
                         <div className='col-span-3'>
                             <div>
                                 <div className='shop-header '>
-                                    <div className='text-lg font-semibold text-text-color'><span className='text-primary'>Samsung  </span> <span className='text-sm'> - ({products?.length}) Products</span> </div>
+                                    <div className='text-lg font-semibold text-text-color'><span className='text-primary'>{isCategory?.name}  </span> <span className='text-sm'> - ({products?.length}) Products</span> </div>
                                     <div className="relative">
                                         
                                         <div className={` flex gap-4 `}>
@@ -302,7 +309,17 @@ const Shops = () => {
                                 {
                                     products?.map(product => <ProductCard key={product?._id} product={product} /> )
                                 }
+                                
                             </div>
+                            {
+                                products?.length == 0 && <div className="flex mt-10 items-center justify-center">
+                                    <div>
+                                        <p className="text-center text-xl text-gray-800 font-semibold mb-2">Product not found in  <b>{isCategory?.name} category</b></p>
+                                        <p className="text-center font-medium text-gray-500">Continue Shopping <Link to={'/'} className="text-primary">Click</Link></p>
+                                       
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

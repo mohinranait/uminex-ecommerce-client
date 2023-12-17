@@ -11,7 +11,7 @@ const dateAdnTimeFormater = (date) => {
     const minutes = dateObject.getUTCMinutes().toString().padStart(2, '0');
     const seconds = dateObject.getUTCSeconds().toString().padStart(2, '0');
 
-    const formattedDate = `${year}-${month}-${day}`;
+    const formattedDate = `${day}-${month}-${year}`;
     const formatedTime = `${hours}:${minutes}:${seconds}`;
     return {
          formattedDate,

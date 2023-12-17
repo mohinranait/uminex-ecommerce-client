@@ -83,10 +83,10 @@ const Products = () => {
            
             let varientArr = [];
             if(color){
-                varientArr = [...varientArr, {color}]
+                varientArr = [...varientArr, {label:'Color', value: color }]
             }
             if(size){
-                varientArr = [...varientArr, {size}]
+                varientArr = [...varientArr, {label:'Size', value:size}]
             }
 
             const cartObject = {

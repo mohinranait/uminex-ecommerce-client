@@ -12,6 +12,13 @@ const LeftSidebarLinks = [
         path : '/admin/dashboard',
     },
     {
+        id : 8,
+        link : "/admin/orders",
+        name : "Orders",
+        icon : <IoHomeOutline className='text-lg' />,
+        path : '/admin/orders',
+    },
+    {
         id : 2,
         link : '/admin/products',
         name : "Products",

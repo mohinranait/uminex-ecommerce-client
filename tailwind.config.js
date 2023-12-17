@@ -17,7 +17,8 @@ export default {
         secondary : "#DD3842",
         'text-color' : "#212529",
         "mute" : "#999999",
-      }
+      },
+     
     },
   },
   plugins: [],

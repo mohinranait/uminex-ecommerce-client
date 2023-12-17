@@ -95,7 +95,7 @@ const ProductSection = ({products,isPending}) => {
 
 ProductSection.propTypes = {
     products : PropTypes.array,
-    isPending: PropTypes.func
+    isPending: PropTypes.bool
 }
 
 export default ProductSection;

@@ -5,19 +5,22 @@ import { useState } from "react";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import useAuth from "../../../hooks/useAuth";
 import useAxios from "../../../hooks/useAxios";
+import { BiLoaderCircle } from "react-icons/bi";
+import toast from "react-hot-toast";
 
 const Checkout = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const axios = useAxios();
     const [paymentOption, setPaymentOption] = useState('stripe');
     const [carts, refetch] = useCarts();
     const getShoppingCarts = carts?.items || [];
     const {user} = useAuth();
-    console.log(getShoppingCarts);
 
 
     // Order place mathod
     const handleOrderPlace = async () => {
-
+        const toastId = toast.loading("Loading...")
+        setIsLoading(true)
         const shopHistory = getShoppingCarts?.map(cart => {
             return {
                 product : {...cart?.product},   
@@ -37,8 +40,21 @@ const Checkout = () => {
             cartItems : getShoppingCarts?.map(item => item?._id )
         }
 
-        const res = await axios.post(`/checkout`, obj)
-        console.log(res.data);
+        try {
+            const res = await axios.post(`/checkout`, obj)
+            if(res.data.success){
+                refetch();
+                setIsLoading(false)
+                toast.success("Order placed", {id: toastId})
+            }
+            
+        } catch (error) {
+            setIsLoading(false)
+            toast.success(error.message , {id: toastId})
+        }
+       
+
+        // console.log(res.data);
     }
     return (
         <>
@@ -118,7 +134,11 @@ const Checkout = () => {
                                         <span className="text-gray-800 text-lg font-bold">${carts?.totalPrice}</span>
                                     </li>
                                 </ul>
-                                <button onClick={handleOrderPlace} type="button" className="w-full block font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] ">Place Order now</button>
+                                {
+                                    isLoading ?   <button type="button" className="w-full  font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] flex items-center justify-center "> <BiLoaderCircle className="animate-spin" /> </button>  :   <button onClick={handleOrderPlace} type="button" className="w-full block font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] ">Place Order now</button>
+                                }
+                                
+                              
                             </div>
                         </div>
                     </div>

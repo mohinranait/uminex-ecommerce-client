@@ -18,7 +18,7 @@ const DisplayProducts = ({products,isPending}) => {
                 <div className="box">
                     <div className='grid grid-cols-2 sm:gird-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3'>
                         {
-                            isPending && [1,2,3,4,5,6,7,8,7,8,9,0].map(item =>   <ProductPlaceholder key={item} />  )
+                            isPending && [1,2,3,4,5,6,7,8,9,10,11,12].map(item =>   <ProductPlaceholder key={item} />  )
                         }
                         {
                             products?.map( product => <ProductCard key={product?._id} product={product} /> )
@@ -32,6 +32,6 @@ const DisplayProducts = ({products,isPending}) => {
 
 DisplayProducts.propTypes = {
     products : PropTypes.array,
-    isPending : PropTypes.func
+    isPending : PropTypes.bool
 }
 export default DisplayProducts;

@@ -1,18 +1,24 @@
-import { IoAddOutline } from "react-icons/io5";
+import { useQuery } from "@tanstack/react-query";
+import useAxios from "../../hooks/useAxios";
 import { Link } from "react-router-dom";
-import useProducts from "../../hooks/useProducts";
-import ProductRows from "../components/TableRows/ProductRows";
+import OrdersRows from "../components/TableRows/OrdersRows";
+import { IoAddOutline } from "react-icons/io5";
 
+const Orders = () => {
+    const axios = useAxios();
 
-const AllProducts = () => {
+    const {data:orders} = useQuery({
+        queryKey: ['orders'],
+        queryFn: async () => {
+            const {data} = await axios.get(`/get-all-orders?request=admin`);
+            console.log(data.orders);
+            return data.orders
+        }
+    })
 
-    const [products, refetch] = useProducts();
-    // console.log(products);
-    const {products:getProducts, pagination} = products;
-    console.log(getProducts);
     return (
         <>
-            <div className="bg-white px-5 py-5">
+          <div className="bg-white px-5 py-5">
                 <div className="flex justify-between items-center gap-5 mb-5">
                     <div className="flex items-center  gap-5">
                         <div className="flex items-center gap-1">
@@ -40,23 +46,24 @@ const AllProducts = () => {
                     <Link to={'/admin/new-product'} className="flex gap-1 items-center py-2 px-3 bg-primary text-white rounded text-sm"><IoAddOutline />Add Product</Link>
                 </div>
                 <hr />
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto min-h-[300px]">
                     <table className="w-full border-collapse">
                         <thead>
                             <tr>
                                 <th className="text-left text-gray-600 py-3">ID</th>
-                                <th className="text-left text-gray-600 py-3">Product</th>
+                                <th className="text-left text-gray-600 py-3">Customer</th>
                                 <th className="text-left text-gray-600 py-3">Price</th>
-                                <th className="text-left text-gray-600 py-3">Brand</th>
-                                <th className="text-left text-gray-600 py-3">Category</th>
-                                <th className="text-left text-gray-600 py-3">U. code</th>
+                                <th className="text-left text-gray-600 py-3">Total Items</th>
+
                                 <th className="text-left text-gray-600 py-3">Status</th>
+                                <th className="text-left text-gray-600 py-3">Payment</th>
+                                <th className="text-left text-gray-600 py-3">Date</th>
                                 <th className=" text-gray-600 py-3 text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                getProducts?.map((product,index) => <ProductRows key={product?._id} index={index} product={product} /> )
+                                orders?.map((order,index) => <OrdersRows key={order?._id} index={index} order={order} /> )
                             }
                             
                         </tbody>
@@ -64,9 +71,9 @@ const AllProducts = () => {
 
                 
                 </div>
-            </div>
+            </div>   
         </>
     );
 };
 
-export default AllProducts;
+export default Orders;

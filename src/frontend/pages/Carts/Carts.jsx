@@ -36,9 +36,10 @@ const Carts = () => {
                                 {
                                     getShoppingCarts?.map(cart => <CartItems key={cart?._id} cart={cart} handleCartDeletes={handleCartDeletes} />)
                                 }
+
                             </div>
                             {
-                                carts?.length == 0 && <div className="flex h-full items-center justify-center">
+                                getShoppingCarts?.length == 0 && <div className="flex h-full items-center justify-center">
                                     <div>
                                         <p className="text-center text-xl text-secondary font-semibold mb-2">Product not found in your shopping cart</p>
                                         <p className="text-center font-medium text-gray-500">Continue Shopping <Link to={'/'} className="text-primary">Click</Link></p>
