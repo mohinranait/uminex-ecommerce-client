@@ -23,6 +23,7 @@ import EditProduct from '../backend/pages/EditProduct';
 import Colors from '../backend/pages/Colors';
 import Checkout from '../frontend/pages/Checkout/Checkout';
 import Orders from '../backend/pages/Orders';
+import PaymentSuccess from '../frontend/pages/PaymentSuccess/PaymentSuccess';
 
 const myRoutes = createBrowserRouter([
     {
@@ -34,14 +35,15 @@ const myRoutes = createBrowserRouter([
             { path : "/:slug/:slug", element : <Products /> },
             { path : "/carts", element : <Carts /> },
             { path : "/checkout", element : <Checkout /> },
+            { path : "/success", element : <PaymentSuccess /> },
             { path : "/login", element : <Login /> },
             { path : "/register", element : <Register /> },
             {
-                path: "/dashboard",
+                path: "/user",
                 element : <PrivateRoutes><UserDashboard /></PrivateRoutes> ,
                 children : [
                     {
-                        index: true,
+                        path: 'dashboard',
                         element : <Account />
                     },
                     {

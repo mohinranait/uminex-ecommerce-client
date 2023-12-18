@@ -3,19 +3,12 @@ import useAxios from "../../hooks/useAxios";
 import { Link } from "react-router-dom";
 import OrdersRows from "../components/TableRows/OrdersRows";
 import { IoAddOutline } from "react-icons/io5";
+import useOrders from "../../hooks/useOrders";
+import useAuth from "../../hooks/useAuth";
 
 const Orders = () => {
-    const axios = useAxios();
-
-    const {data:orders} = useQuery({
-        queryKey: ['orders'],
-        queryFn: async () => {
-            const {data} = await axios.get(`/get-all-orders?request=admin`);
-            console.log(data.orders);
-            return data.orders
-        }
-    })
-
+    const {user} = useAuth();
+    const [orders] = useOrders(`admin`);
     return (
         <>
           <div className="bg-white px-5 py-5">

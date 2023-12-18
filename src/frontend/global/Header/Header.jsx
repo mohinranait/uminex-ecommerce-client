@@ -61,12 +61,12 @@ const Header = ({toggleCartDoyarHandler}) => {
                         <div className="col-span-3">
                             <ul className="flex items-center justify-end lg:gap-5">
                                 <li>
-                                    <Link to={'/dashboard'} className="flex items-center gap-2">
+                                    <Link to={'/user/dashboard'} className="flex items-center gap-2">
                                         <div>
                                             <GoPerson className="text-3xl text-text-color" />
                                         </div>
                                         <div className="hidden xl:block">
-                                            <p className="text-xs leading-3 font-medium">Login</p>
+                                            <p className="text-xs leading-3 font-medium"> {user?.email ? user?.name.split(' ')[0] : 'Login'  } </p>
                                             <p className="text-base font-semibold text-text-color ">Account</p>
                                         </div>
                                     </Link>

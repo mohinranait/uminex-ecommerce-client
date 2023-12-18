@@ -44,7 +44,7 @@ const AuthProvider = ({children}) => {
     useEffect(() => {
         const onSubscribe = onAuthStateChanged(auth , async currentUser => {
             
-            const email = currentUser?.email;
+            // const email = currentUser?.email;
             // console.log(email);
 
             if(currentUser?.email){

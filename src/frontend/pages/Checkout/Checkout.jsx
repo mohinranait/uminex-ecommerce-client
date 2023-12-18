@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useCarts from "../../../hooks/useCarts";
 import { IoCloseSharp } from "react-icons/io5";
-import { useState } from "react";
+import {  useState } from "react";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import useAuth from "../../../hooks/useAuth";
 import useAxios from "../../../hooks/useAxios";
@@ -15,47 +15,52 @@ const Checkout = () => {
     const [carts, refetch] = useCarts();
     const getShoppingCarts = carts?.items || [];
     const {user} = useAuth();
+    const navigate = useNavigate();
+    const domainName = location.origin;
 
-
-    // Order place mathod
-    const handleOrderPlace = async () => {
-        const toastId = toast.loading("Loading...")
-        setIsLoading(true)
-        const shopHistory = getShoppingCarts?.map(cart => {
-            return {
-                product : {...cart?.product},   
-                price: cart?.product?.price?.sellingPrice, 
-                quantity:cart?.quantity,
-                totalPrice: cart?.product?.price?.sellingPrice * cart?.quantity, 
-                varient : cart?.varient ,
-            }
-        })
-        // console.log(products);
-        const obj = {
-            userInfo : user?._id,
-            deliveryAddress : 'address Id',
-            paymentMethod : paymentOption,
-            totalItems: getShoppingCarts?.reduce((total,current) => total + current?.quantity ,0),
-            orderHistory: shopHistory,
-            cartItems : getShoppingCarts?.map(item => item?._id )
-        }
-
+    const handleNewOrders = async () => {
         try {
-            const res = await axios.post(`/checkout`, obj)
-            if(res.data.success){
-                refetch();
-                setIsLoading(false)
-                toast.success("Order placed", {id: toastId})
+            const shopHistory = getShoppingCarts?.map(cart => {
+                return {
+                    product : {...cart?.product},   
+                    price: cart?.product?.price?.sellingPrice, 
+                    quantity:cart?.quantity,
+                    totalPrice: cart?.product?.price?.sellingPrice * cart?.quantity, 
+                    varient : cart?.varient ,
+                }
+            })
+            if(paymentOption === 'stripe'){
+                const response = await axios.post(`/create-checkout-session`,{shopHistory,domainName})
+                window.location.href =  response.data.url
+            }else{
+                setIsLoading(true)
+                const obj = {
+                    userInfo : user?._id,
+                    deliveryAddress : 'address Id',
+                    paymentMethod : paymentOption,
+                    totalItems: getShoppingCarts?.reduce((total,current) => total + current?.quantity ,0),
+                    orderHistory: shopHistory,
+                    cartItems : getShoppingCarts?.map(item => item?._id ),
+                }
+                if(getShoppingCarts.length > 0){
+                    const response = await axios.post(`/checkout-cash-on-delivery`, obj)
+                    console.log(response.data);
+                    if(response.data.success){
+                        setIsLoading(false)
+                        navigate('/success?method=cod')
+                    }
+                }
             }
-            
+           
         } catch (error) {
-            setIsLoading(false)
-            toast.success(error.message , {id: toastId})
+            toast(error.message);
         }
-       
-
-        // console.log(res.data);
     }
+
+
+
+
+
     return (
         <>
             <section className="my-4">
@@ -134,11 +139,13 @@ const Checkout = () => {
                                         <span className="text-gray-800 text-lg font-bold">${carts?.totalPrice}</span>
                                     </li>
                                 </ul>
+                                {/* <button onClick={handlePay} type="button" className="w-full  font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] flex items-center justify-center "> <BiLoaderCircle className="animate-spin" /> pay </button>   */}
                                 {
-                                    isLoading ?   <button type="button" className="w-full  font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] flex items-center justify-center "> <BiLoaderCircle className="animate-spin" /> </button>  :   <button onClick={handleOrderPlace} type="button" className="w-full block font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] ">Place Order now</button>
+                                    isLoading ?   
+                                    <button type="button" className="w-full  font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] flex items-center justify-center "> <BiLoaderCircle className="animate-spin" /> </button>  
+                                    :   
+                                    <button onClick={handleNewOrders} type="button" className="w-full block font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] ">Place Order now</button>
                                 }
-                                
-                              
                             </div>
                         </div>
                     </div>

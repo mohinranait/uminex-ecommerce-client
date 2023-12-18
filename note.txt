@@ -4,3 +4,4 @@
 // TODO
 1. Product update page ( brand, category, colors auto select proplem )
 2. unique slug validation problem  
+3. Payment Transaction ID

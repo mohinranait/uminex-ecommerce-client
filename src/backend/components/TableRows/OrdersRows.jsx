@@ -6,7 +6,9 @@ import { useState } from 'react';
 import Modal from '../../global/modal/Modal';
 import { Link } from 'react-router-dom';
 import Select from "react-select"
+import toast from "react-hot-toast"
 import useAxios from '../../../hooks/useAxios';
+import useOrders from '../../../hooks/useOrders';
 
 const orderStatusLists = [
     { value: 'pending', label: 'Pending' },
@@ -18,9 +20,10 @@ const orderStatusLists = [
 
 const OrdersRows = ({order,index}) => {
     const axios = useAxios();
+    const [,refetch] = useOrders();
     const [ isOpenModal, setIsOpenModal] = useState(false);
     const [action, setAction] = useState(false)
-    const {_id,userInfo ,totalItems,createdAt,transactionID ,orderStatus,orderHistory,paymentStatus,paymentMethod   } = order || {};
+    const {_id,userInfo ,totalItems,createdAt,transactionId ,orderStatus,orderHistory,paymentStatus,paymentMethod   } = order || {};
     const closeModal = () => {
         setIsOpenModal(false)
     }
@@ -42,12 +45,12 @@ const OrdersRows = ({order,index}) => {
         try {
             const {data} = await axios.patch(`/udpate-order/${_id}`, obj);
             if(data.success){
-                alert("updated")
+                refetch()
+                toast.success("Successed")
             }
         } catch (error) {
-            alert(error.message)
+            toast.error(error.message)
         }
-        // console.log(e.value);
     }
 
 
@@ -55,7 +58,6 @@ const OrdersRows = ({order,index}) => {
         <>
             <tr onClick={openModal}>
                 <td className="text-gray-400 py-2">{index+1}</td>
-            
                 <td className="text-gray-400 py-2">
                     <div className='flex gpa-1 items-center'>
                         <img src={'https://t4.ftcdn.net/jpg/05/42/36/11/360_F_542361185_VFRJWpR2FH5OiAEVveWO7oZnfSccZfD3.jpg'} className='w-16 rounded-full' alt="" />
@@ -77,11 +79,11 @@ const OrdersRows = ({order,index}) => {
                     <p className="text-gray-700 text-sm">{orderStatus =='pending' ? "Pending" : orderStatus == 'delivery' ? 'Delivery' : orderStatus == 'cancal' ? 'Cancal' : 'Processing' }</p>
                 </td>
                 <td className="text-gray-400 py-2 text-sm">
-                    <p className="text-gray-700 text-sm">M: {paymentMethod} </p>
-                    <p className="text-gray-700 text-sm">P: <span className='bg-red-100 px-1 text-xs capitalize text-red-500 rounded'>{paymentStatus}</span> </p>
-                    {transactionID ? 
-                    <p className="text-gray-700 text-sm">T: <span className='bg-red-100 px-1 text-xs capitalize text-red-500 rounded'>{transactionID.slice(-5)}</span> </p>
-                    :  <p className="text-gray-700 text-xs">D: COD</p>}
+                    <p className="text-gray-700 text-sm uppercase">M: {paymentMethod} </p>
+                    <p className="text-gray-700 text-sm">P: {paymentStatus == 'paid' ? <span className='bg-green-100 px-1 text-xs capitalize text-green-500 rounded'>Paid</span> : <span className='bg-red-100 px-1 text-xs capitalize text-red-500 rounded'>Unpaid</span> }  </p>
+                    {transactionId ? 
+                    <p className="text-gray-700 text-sm">T: <span className=' px-1 text-xs capitalize text-green-500 rounded'>{transactionId.slice(-5)}</span> </p>
+                    :  ''}
                 </td>
                 <td className="text-gray-400 py-2">
                     <p className="text-gray-700 text-sm">{ dateFormater(createdAt)} </p>
@@ -90,7 +92,7 @@ const OrdersRows = ({order,index}) => {
                 <td className=" py-2 ">
                     <div className="flex justify-end gap-3 relative">
                         <span onClick={handleCloseAction} className='cursor-pointer text-gray-600'><BsThreeDotsVertical size={25} /></span>
-                        <div className={`absolute py-2 top-full right-0  w-[100px] bg-white shadow ${action ? 'block':'hidden'} `}>
+                        <div className={`absolute py-2 top-full right-0 z-10 w-[100px] bg-white shadow ${action ? 'block':'hidden'} `}>
                             <div><a onClick={handleCloseAction} className='px-4 hover:bg-gray-100 py-1 text-sm w-full inline-block text-gray-500' href="#">Edit</a></div>
                             <div><a onClick={handleCloseAction} className='px-4 hover:bg-gray-100 py-1 text-sm w-full inline-block text-gray-500' href="#">Delete</a></div>
                             <div><a onClick={handleCloseAction} className='px-4 hover:bg-gray-100 py-1 text-sm w-full inline-block text-gray-500' href="#">View</a></div>

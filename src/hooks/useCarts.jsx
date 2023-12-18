@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 const useCarts = () => {
     const {user,loading} = useAuth();
     const axios = useAxios();
-    const {data:carts={},refetch} = useQuery({
+    const {data:carts={},refetch,isPending} = useQuery({
         queryKey: ['carts'],
         enabled: !loading,
         queryFn: async () => {
@@ -17,7 +17,7 @@ const useCarts = () => {
         }
     })
 
-    return [carts,refetch]
+    return [carts,refetch,isPending]
 };
 
 export default useCarts;
