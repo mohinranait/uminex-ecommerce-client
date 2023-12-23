@@ -23,7 +23,7 @@ const Products = () => {
     const axiosPublic = useAxiosPublic();
     const axios = useAxios()
     const [accourding, setAccording] = useState(true);
-    const [color, setColor] = useState('Red');
+    const [color, setColor] = useState( null );
     const [size, setSize] = useState("2GB");
     const [quantity, setQuantity] = useState(1);
     const {user} = useAuth();
@@ -33,11 +33,13 @@ const Products = () => {
         queryKey: ['getSingleProductBySlug'],
         queryFn: async () => {
             const {data} = await axiosPublic.get(`/product-by-slug/${slug}`);
+            setColor(data?.product?.colors[0].label)
             return data.product;
         }
     })
-    const {name,media,brand, category,price,isStock
+    const {name,media,brand,colors, category,price,isStock
     ,product_type} = product || {};
+    
 
     const handleAccording = () => {
         setAccording(!accourding)
@@ -88,7 +90,6 @@ const Products = () => {
             if(size){
                 varientArr = [...varientArr, {label:'Size', value:size}]
             }
-
             const cartObject = {
                 user : user?._id,
                 product : product?._id,
@@ -96,13 +97,11 @@ const Products = () => {
                 varient : varientArr,
             }
 
-           
             const response = await axios.post("/carts", cartObject);
             if(response.data.success){
                 refetch();
                 toast.success("Shopping cart added")
             }
-           
            
         } catch (error) {
             console.log("Shopping cart ",error.message);
@@ -144,17 +143,17 @@ const Products = () => {
                                         </div>
                                         <hr />
                                         <ul className='text-base py-2 space-y-3'>
-                                        <li> <span className='text-3xl font-bold text-primary'>${price?.sellingPrice}</span> <span className='text-xl line-through text-mute'>$300</span> <span className='py-1 px-3 bg-[#fde9e9] text-secondary text-sm font-medium rounded-md'>12% discounts</span>  </li>
+                                        <li> <span className='text-3xl font-bold text-primary'>${price?.sellingPrice}</span> {price?.discountPrice > 0 && <> <span className='text-xl line-through text-mute'>${price?.productPrice}</span> <span className='py-1 px-3 bg-[#fde9e9] text-secondary text-sm font-medium rounded-md'>{ 100 - ((price?.discountPrice * 100) / price?.productPrice) }% discounts</span> </> } </li>
                                             <li> <span className='font-semibold'>Brand:</span> <a href="#">{brand?.name}</a></li>
                                             <li> <span className='font-semibold'>Stock:</span> {isStock} Available</li>
                                             <li> <span className='font-semibold'>Product:</span> Mobile</li>
                                             <li> <span className='font-semibold'>Type:</span> <a href="#" className='capitalize'>{product_type}</a></li>
                                             <li className='flex flex-col gap-2'> <span className='font-semibold'>Color: <span className='font-medium'>{color}</span> </span> 
                                                 <ul className='flex items-center gap-2'>
-                                                    <li className={`border-2  rounded-md w-8 h-8 ${color == 'Red' ? 'border-primary' : 'border-slate-200' } `} ><span onClick={() => colorVariant('Red')} className='w-7 h-7 cursor-pointer scale-95 rounded border bg-red-600 inline-block'></span></li>
-                                                    <li className={`border-2  rounded-md w-8 h-8 ${color == 'Green' ? 'border-primary' : 'border-slate-200' } `} ><span onClick={() => colorVariant('Green')} className='w-7 h-7 cursor-pointer scale-95 rounded border bg-green-600 inline-block'></span></li>
-                                                    <li className={`border-2  rounded-md w-8 h-8 ${color == 'Blue' ? 'border-primary' : 'border-slate-200' } `} ><span onClick={() => colorVariant('Blue')} className='w-7 h-7 cursor-pointer scale-95 rounded border bg-blue-600 inline-block'></span></li>
-                                                    <li className={`border-2  rounded-md w-8 h-8 ${color == 'White' ? 'border-primary' : 'border-slate-200' } `} ><span onClick={() => colorVariant('White')} className='w-7 h-7 cursor-pointer scale-95 rounded border bg-white inline-block'></span></li>
+                                                    {
+                                                        colors?.map(color =>   <li key={color?.value} className={`border-2  rounded-md w-8 h-8 ${color == color?.label ? 'border-primary' : 'border-slate-200' } `} ><span onClick={() => colorVariant(color?.label)} className='w-7 h-7 cursor-pointer scale-95 rounded border inline-block' style={{backgroundColor:color?.value}}></span></li> )
+                                                    }
+
                                                 </ul>
                                             </li>
                                             <li className='flex flex-col gap-2'> <span className='font-semibold'>Size: <span className='font-medium'>{size}</span> </span> 
@@ -236,8 +235,6 @@ const Products = () => {
                 <div className="box">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                         <div className='order-2 lg:order-1 space-y-4'>
-
-
 
         {/* <div className='bg-slate-200'>
             <ul>

@@ -7,17 +7,34 @@ import useAuth from "../../../hooks/useAuth";
 import useAxios from "../../../hooks/useAxios";
 import { BiLoaderCircle } from "react-icons/bi";
 import toast from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import AddressForm from "../../components/form/AddressForm";
 
 const Checkout = () => {
     const [isLoading, setIsLoading] = useState(false);
+    const [isAddress, setIsAddress] = useState(false)
     const axios = useAxios();
     const [paymentOption, setPaymentOption] = useState('stripe');
-    const [carts, refetch] = useCarts();
+    const [carts] = useCarts();
     const getShoppingCarts = carts?.items || [];
-    const {user} = useAuth();
+    const {user, loading} = useAuth();
     const navigate = useNavigate();
     const domainName = location.origin;
 
+
+    // get user shipping address
+    const {data:userAddress=[], refetch} = useQuery({
+        queryKey: ['userAddress',user],
+        enabled: !loading,
+        queryFn: async () => {
+            if(user?._id){
+                const {data} = await axios.get(`/address/${user?._id}`)
+                return data.address;
+            }
+        }
+    })
+
+    // Place order method
     const handleNewOrders = async () => {
         try {
             const shopHistory = getShoppingCarts?.map(cart => {
@@ -36,7 +53,7 @@ const Checkout = () => {
                 setIsLoading(true)
                 const obj = {
                     userInfo : user?._id,
-                    deliveryAddress : 'address Id',
+                    deliveryAddress : userAddress[0]?._id,
                     paymentMethod : paymentOption,
                     totalItems: getShoppingCarts?.reduce((total,current) => total + current?.quantity ,0),
                     orderHistory: shopHistory,
@@ -58,7 +75,9 @@ const Checkout = () => {
     }
 
 
-
+    const handleEditAddress = async () => {
+        setIsAddress((prev) => !prev)
+    }
 
 
     return (
@@ -81,12 +100,15 @@ const Checkout = () => {
                                     <span className="text-xl font-bold text-center text-secondary">Cash On Delevery</span>
                                 </div>
                             </div>
-                            <div className="bg-white py-8 space-y-2 px-5">
-                                <p>Delevery to : Barishal</p>
-                                <p className="text-sm"><span className="px-3 py-[2px] bg-green-100 text-green-600 ">Home</span> 01728068200 | Barguna Sadar, Barguna, Barishal, | <span className="text-primary text-xs">Change</span></p>
-                                <p className="text-sm"> Billing to the same address | <span className="text-primary text-xs">Edit</span></p>
+                           
+                            {
+                                userAddress?.length > 0 &&  <div className="bg-white py-8 space-y-2 px-5">
+                                <p>Delevery to : {userAddress[0]?.division}</p>
+                                <p className="text-sm"><span className="px-3 py-[2px] bg-green-100 text-green-600 capitalize">{userAddress[0]?.deliveryLocation}</span> {userAddress[0]?.mobile} | {userAddress[0]?.policeStation}, {userAddress[0]?.district}, {userAddress[0]?.division}, </p>
+                                <p className="text-sm "> Billing to address | <span onClick={() => handleEditAddress(userAddress[0]?._id)} className="text-primary cursor-pointer text-xs">Edit</span></p>
                             </div>
-                         
+                            }
+                            {  userAddress?.length === 0 || isAddress &&  <AddressForm refetch={refetch} setIsAddress={setIsAddress} singleAddress={userAddress[0]} /> }
                             {
                                 getShoppingCarts?.map(product =>  <div key={product?._id} className="grid bg-white grid-cols-4 px-5 py-3 lg:py-1 relative items-center ">
                                 <div className="col-span-3 row-span-2 lg:row-span-1 lg:col-span-2 flex  py-2  md:lg:flex-row lg:items-center gap-3">
@@ -144,7 +166,7 @@ const Checkout = () => {
                                     isLoading ?   
                                     <button type="button" className="w-full  font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] flex items-center justify-center "> <BiLoaderCircle className="animate-spin" /> </button>  
                                     :   
-                                    <button onClick={handleNewOrders} type="button" className="w-full block font-semibold rounded-md text-center py-3 bg-primary text-[#deecff] ">Place Order now</button>
+                                    <button onClick={handleNewOrders} type="button" disabled={userAddress?.length  === 0 || getShoppingCarts.length ===0 } className={`w-full block font-semibold rounded-md text-center py-3  text-[#deecff] ${userAddress?.length === 0 || getShoppingCarts.length ===0 ? 'bg-blue-500': 'bg-primary' }`}>Place Order now</button>
                                 }
                             </div>
                         </div>

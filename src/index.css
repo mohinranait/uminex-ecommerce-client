@@ -5,6 +5,9 @@
 @tailwind utilities;
 
 @layer components {
+  .switch{
+    @apply block relative bg-blue-900 w-14 h-8 p-1 rounded-full before:absolute  before:w-6 before:h-6  before:p-1 before:rounded-full before:transition-all before:duration-500
+  }
   .box {
     @apply px-2 lg:px-5 2xl:container 
   }

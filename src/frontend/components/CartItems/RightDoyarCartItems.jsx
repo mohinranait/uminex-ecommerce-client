@@ -1,25 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types"
 import toast from 'react-hot-toast';
 import useAxios from '../../../hooks/useAxios';
 import useAuth from '../../../hooks/useAuth';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const RightDoyarCartItems = ({cart,refetch}) => {
+    const queryClient = useQueryClient()
     const axios = useAxios();
     const {user} = useAuth();
     const {quantity,product,_id} =cart || {};
     const [cartQuantity, setCartQuantity] = useState(quantity);
-    const handleCartIncrement = () => {
 
-        setCartQuantity(cartQuantity + 1);
-        
+    const {mutate:updateShoppingCart} = useMutation({
+        mutationFn : async (reciveData) => {
+            const {updateData, id} = reciveData;
+            await axios.patch(`/shopping_update/${id}?email=${user?.email}`,updateData) 
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['carts'])
+        }
+    })
+
+    const handleCartIncrement = () => {
+        setCartQuantity(cartQuantity + 1); 
+        const sendObject = {
+            updateData : {
+                quantity : quantity+1,
+            },
+            id : _id,
+        }
+        updateShoppingCart(sendObject)
     }
     const handleCartDecrement = () => {
-
         if( cartQuantity > 1 ){
             setCartQuantity(cartQuantity - 1)
+            const sendObject = {
+                updateData : {
+                    quantity : quantity-1,
+                },
+                id : _id,
+            }
+            updateShoppingCart(sendObject)
         }
     }
 
@@ -36,6 +60,10 @@ const RightDoyarCartItems = ({cart,refetch}) => {
             toast.error(error.message);
         }
     }
+
+    useEffect(() => {
+        setCartQuantity(cart?.quantity)
+    },[cart?.quantity])
     return (
         <>
             <li className="bg-white border border-gray-100 gap-2 rounded pl-2 py-3 flex relative ">

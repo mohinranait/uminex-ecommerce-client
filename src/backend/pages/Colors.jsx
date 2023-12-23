@@ -3,31 +3,26 @@ import useColors from "../../hooks/useColors";
 import ColorRows from "../components/TableRows/ColorRows";
 import { IoAddOutline } from "react-icons/io5";
 import ColorForm from "../components/form/ColorForm";
+import useAxios from "../../hooks/useAxios";
 
 const Colors = () => {
+    const axios = useAxios();
     const [colors,refetch] = useColors();
     const [color, setColor] = useState(null)
-    const [ isOpenModal, setIsOpenModal] = useState(false);
 
-
-
-    const closeModal = () => {
-        setIsOpenModal(false)
-    }
-
-    const openModal = () => {
-        setIsOpenModal(true)
-    }
-
-
-    const handleGetColorId = (id) => {
-        console.log(id);
+    const handleGetColorId = async (id) => {
+        try {
+            const {data} = await axios.get(`/color/${id}`)
+            setColor(data.color);
+        } catch (error) {
+            
+        }
     }
     return (
         <>
            <div className="grid grid-cols-12 gap-5">
                 <div className="col-span-4">
-                    <ColorForm />
+                    <ColorForm refetch={refetch} color={color} />
                 </div>
                 <div className="col-span-8">
                     <div className="bg-white px-5 py-5">
@@ -63,7 +58,7 @@ const Colors = () => {
                                     <tr>
                                         <th className="text-left text-gray-600 py-3">ID</th>
                                         <th className="text-left text-gray-600 py-3">Name</th>
-                                        <th className="text-left text-gray-600 py-3">Image</th>
+                                        <th className="text-left text-gray-600 py-3">Color</th>
                                         <th className="text-left text-gray-600 py-3">Visibility</th>
                                         <th className=" text-gray-600 py-3 text-right">Status</th>
                                     </tr>

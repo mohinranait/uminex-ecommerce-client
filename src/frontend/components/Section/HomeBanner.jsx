@@ -12,10 +12,9 @@ import CategorysLists from '../../global/Categorys/CategorysLists';
 import { useEffect, useState } from 'react';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import SliderPlaceholder from '../Loding/SliderPlaceholder';
+import { charecterLimit } from '../../../services/charecterLimit';
 
-
-
-const HomeBanner = () => {
+const HomeBanner = ({products,isPending}) => {
     const axiosPublic = useAxiosPublic();
     const [isLoading, setIsLoading] = useState(false);
     const [sliders, setSliders] = useState([]);
@@ -138,11 +137,12 @@ const HomeBanner = () => {
                                         className="mySwiper"
                                     >
                                         {
-                                            bannerProducts?.map(product => <SwiperSlide key={product._id}>
+                                            products?.slice(0,5)?.map(product => <SwiperSlide key={product._id}>
                                                 
-                                                <div className='flex min-h-full flex-col py-2 px-1 rounded-md bg-white'>
-                                                    <Link className=''><img className='mx-auto' src={product?.image} alt="" /></Link>
-                                                    <Link className='text-center'>{product?.title}</Link>
+                                                <div className='flex min-h-[165px] flex-col py-2 px-1 rounded-md bg-white'>
+                                                    <Link to={`/${product?.category?.slug}/${product?.slug}`} className=''><img className='mx-auto' src={product?.media?.images[0]} alt={product?.name} /></Link>
+                                                    <div className='flex-grow'></div>
+                                                    <Link className='text-center'>{ charecterLimit(product?.name,10, true) }</Link>
                                                 </div>
                                             </SwiperSlide>  )
                                         }

@@ -12,7 +12,7 @@ const Home = () => {
     
     return (
         <>
-            <HomeBanner />
+            <HomeBanner products={getProducts} isPending={isPending} />
             <CoverProduct />
             <ProductSection products={getProducts} isPending={isPending} />
 

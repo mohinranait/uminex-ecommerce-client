@@ -9,11 +9,14 @@ import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import queryString from "query-string"
 import useBrands from '../../../hooks/useBrands';
 import ProductPlaceholder from '../../components/Loding/ProductPlaceholder';
+import useColors from '../../../hooks/useColors';
 
 
 const Shops = () => {
     const {slug} = useParams();
     const [brands] = useBrands();
+    const [colors] = useColors();
+    console.log(colors);
     const [params, setParams] = useSearchParams();
     const [isCategory, setIsCategory] = useState({});
     const navigate = useNavigate();
@@ -93,10 +96,7 @@ const Shops = () => {
     const {data:products=[], isPending} = useQuery({
         queryKey: ['categoriesProducts',slug,brand,color],
         queryFn: async () => {
-            // const {data} = await axiosPublic.get(`/category-slug/${slug}`);
-            // const brands = await axiosPublic.get(`/`)
-            const products = await axiosPublic.get(`/category-wish-product/${slug}?brand=${brand}`)
-            console.log(products?.data?.products);
+            const products = await axiosPublic.get(`/category-wish-product/${slug}?brand=${brand}&color=${color}`)
             return products?.data?.products;
         }
     })
@@ -109,8 +109,7 @@ const Shops = () => {
         if(location.search){
             currentQuery = queryString.parse(location.search)
         }
-
-        const updateQuery = {...currentQuery , brand: value.toLowerCase()};           
+        const updateQuery = {...currentQuery , brand: value.toLowerCase()?.split(' ').join('-')};           
         const url = queryString.stringifyUrl({
             url: `/category/${slug}`,
             query : updateQuery
@@ -127,7 +126,7 @@ const Shops = () => {
             
         }
 
-        const updateQuery = {...currentQuery , color: value.toLowerCase()};           
+        const updateQuery = {...currentQuery , color: value.toLowerCase()?.split(' ')?.join('-')};           
         const url = queryString.stringifyUrl({
             url: `/category/${slug}`,
             query : updateQuery
@@ -201,68 +200,26 @@ const Shops = () => {
                                             </label>
                                         </li> )
                                         }
-                                       
-                                        <li className='' onClick={() => handleBrand('canon')}>
-                                            <label htmlFor="Canon" className='cursor-pointer relative'>
-                                                <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
-                                                    <input type="checkbox" id='Canon' className='opacity-0 peer' />
-                                                    <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
-                                                        <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
-                                                    </span>
-                                                </span>
-                                                <span className='ml-1'>Canon</span>
-                                            </label>
-                                        </li>
-                                        <li className='' onClick={() => handleBrand('sony')}>
-                                            <label htmlFor="Sony" className='cursor-pointer relative'>
-                                                <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
-                                                    <input type="checkbox" id='Sony' className='opacity-0 peer' />
-                                                    <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
-                                                        <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
-                                                    </span>
-                                                </span>
-                                                <span className='ml-1'>Sony</span>
-                                            </label>
-                                        </li>
                                     </ul>
                                 </div>
                                 <div className='mt-6'>
                                     <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Colors</p>
                                     <ul className='space-y-2'>
-
-                                        <li className='' onClick={() => handleColor('red')}>
-                                            <label htmlFor="red" className='cursor-pointer relative'>
+                                        {
+                                            colors?.map(color => <li key={color?._id} className='' onClick={() => handleColor(color?.name)}>
+                                            <label htmlFor={color?.name} className='cursor-pointer relative'>
                                                 <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
-                                                    <input type="checkbox" id='red' className='opacity-0 peer' />
+                                                    <input type="checkbox" id={color?.name} className='opacity-0 peer' />
                                                     <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
                                                         <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
                                                     </span>
                                                 </span>
-                                                <span className='ml-1'>Red</span>
+                                                <span className='ml-1'>{color?.name}</span>
                                             </label>
-                                        </li>
-                                        <li className='' onClick={() => handleColor('green')}>
-                                            <label htmlFor="green" className='cursor-pointer relative'>
-                                                <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
-                                                    <input type="checkbox" id='green' className='opacity-0 peer' />
-                                                    <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
-                                                        <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
-                                                    </span>
-                                                </span>
-                                                <span className='ml-1'>Canon</span>
-                                            </label>
-                                        </li>
-                                        <li className='' onClick={() => handleColor('blue')}>
-                                            <label htmlFor="blue" className='cursor-pointer relative'>
-                                                <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
-                                                    <input type="checkbox" id='blue' className='opacity-0 peer' />
-                                                    <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
-                                                        <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
-                                                    </span>
-                                                </span>
-                                                <span className='ml-1'>Blue</span>
-                                            </label>
-                                        </li>
+                                        </li> )
+                                        }
+                                        
+                                       
                                     </ul>
                                 </div>
                             </div>

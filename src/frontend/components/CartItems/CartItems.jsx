@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types"
@@ -17,8 +17,7 @@ const CartItems = ({cart,handleCartDeletes}) => {
     const {mutate:updateShoppingCart} = useMutation({
         mutationFn : async (reciveData) => {
             const {updateData, id} = reciveData;
-            const {data} = await axios.patch(`/shopping_update/${id}?email=${user?.email}`,updateData) 
-            console.log(data);
+            await axios.patch(`/shopping_update/${id}?email=${user?.email}`,updateData) 
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['carts'])
@@ -47,6 +46,10 @@ const CartItems = ({cart,handleCartDeletes}) => {
             updateShoppingCart(sendObject)
         }
     }
+
+    useEffect(() => {
+        setQuantity(cart?.quantity)
+    },[cart?.quantity])
     return (
         <>
             <div className="grid grid-cols-4 px-5 py-3 lg:py-1 relative items-center ">

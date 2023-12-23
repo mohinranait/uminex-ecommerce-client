@@ -12,6 +12,7 @@ import useAuth from '../../../hooks/useAuth';
 import { uploadImage } from '../../../services/UploadImage';
 // import { dateFormater } from '../../../services/DateFormater';
 import toast from "react-hot-toast"
+import useColors from '../../../hooks/useColors';
 
 const productTypes = [
     {
@@ -44,21 +45,33 @@ const productTypes = [
     },
 ]
 
-const colors = [
-    { value: 'red', label: 'Red' },
-    { value: 'green', label: 'Green' },
-    { value: 'blue', label: 'Blue' },
-    { value: 'white', label: 'White' },
-    { value: 'yellow', label: 'Yellow' },
+
+const featuresProducts = [
+    {
+        label: 'Active',
+        value : 'active',
+    },
+    {
+        label: 'In-active',
+        value : 'pending',
+    },
 ]
 
 const ProductForm = ({product}) => {
 
-    // console.log(new Date());
-    // console.log(new Date( product && product?.publish_date));
+    const [colors] = useColors();
+    const formateColors = colors?.map(color => { 
+        return {
+            value : color?.colorCode,
+            label : color?.name,
+            slug : color?.name?.toLowerCase()?.split(' ')?.join('-')
+        }    
+    })
+
     const axios = useAxios(); 
     const [isSlug, setIsSlug] = useState( product?.slug || '');
-    const [selectColors, setSelectColors] = useState('')
+    const [deliveryToggle, setDeliveryToggle] = useState(true);
+    const [selectColors, setSelectColors] = useState(product?.colors || null)
     const [selected, setSelected] = useState( new Date( product ? product?.publish_date : new Date()));
     const [imgText1, setImgText1] = useState('Upload Image');
     const [imgText2, setImgText2] = useState('Upload Image');
@@ -71,9 +84,9 @@ const ProductForm = ({product}) => {
         slugError: ''
     })
     
-    const [sellingPrice, setSillingPrice] = useState(0)
-    const [isPrice, setIsPrice] = useState(0);
-    const [isOfferPrice, setIsOfferPrice] = useState(0)
+    const [sellingPrice, setSillingPrice] = useState(product ? product?.price?.sellingPrice : 0)
+    const [isPrice, setIsPrice] = useState(product ? product?.price?.productPrice : 0 );
+    const [isOfferPrice, setIsOfferPrice] = useState(product ? product?.price?.discountPrice : 0)
 
     const [categorys] = useCategorys({search:'',status:true});
     const categoryFormates = categorys?.map(category => {
@@ -134,12 +147,14 @@ const ProductForm = ({product}) => {
 
 
 
+
     const handleProduct = async (e) => {
         e.preventDefault();
 
         const form = e.target;
         const brand = form.brand.value;
         const category = form.category.value;
+        const isFeature = form.featureProduct.value;
         const details = form.details.value;
         const isStock = Number(form.isStock.value);
         const minStock = Number(form.minStock.value);
@@ -153,6 +168,7 @@ const ProductForm = ({product}) => {
         const file2 = form.image2.files[0];
         const file3 = form.image3.files[0];
         const file4 = form.image4.files[0];
+        console.log(form.colors.value);
 
   
         if( isPrice < isOfferPrice ){
@@ -193,20 +209,25 @@ const ProductForm = ({product}) => {
                 author: user?._id,
                 brand, 
                 category,
+                isFeature,
                 colors:selectColors, 
                 details,
-                isStock,
-                minStock,
+                delivery: {
+                    deliveryStatus : deliveryToggle ? 'pay': 'free',
+                    deliveryCharge : deliveryToggle ? form.deliveryCharge.value : 0,
+                },
+                isStock: isStock  || 10,
+                minStock : minStock || 2,
                 name,
                 price: {
-                    sellingPrice : Number(sellingPrice),
-                    productPrice : Number(isPrice),
-                    discountPrice : Number(isPrice - sellingPrice),
+                    sellingPrice : Number(isOfferPrice ? isOfferPrice : isPrice) || 0,
+                    productPrice : Number(isPrice) || 0,
+                    discountPrice : Number(isOfferPrice) || 0,
                 }, 
                 product_type: product_type || 'physical',
                 publish_date:publishDate,
                 status : status || 'active', 
-                slug:isSlug,
+                slug:isSlug || Math.random().toString(36).substring(2,9),
                 short_details, 
                 skuCode : skuCode || Math.random().toString(36).substring(2,7),
                 media : {
@@ -218,10 +239,14 @@ const ProductForm = ({product}) => {
             // console.log(productObject);
             if( !product ){
                 const response = await axios.post('/products', productObject);
-                console.log(response.data);
+                if(response.data.success){
+                    toast.success("Created Successfull");
+                }
             }else{
                 const response = await axios.patch(`/products/${product?._id}`, productObject);
-                console.log(response.data);
+                if(response.data.success){
+                    toast.success("Updated Successfull");
+                }
             }
             
         } catch (error) {
@@ -240,6 +265,9 @@ const ProductForm = ({product}) => {
     ]
     const selectIndexTypes = productTypesOptions.findIndex(item => item?.value === product?.product_type)
     
+    // Feature selected
+    const selectedFeatures = featuresProducts?.findIndex(item => item?.value == product?.isFeature) || 0
+
     // Product status
     const productStatusOptions = [
         {value:"active", label:'Active'},
@@ -321,7 +349,7 @@ const ProductForm = ({product}) => {
                                             </div>
                                             <div className=''>
                                                 <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Offer price (Optional) </label>
-                                                <input type="number" onChange={handleOfferPrice} name="discount" defaultValue={product?.price?.sellingPrice || ''} className="py-2 px-3 w-full border outline-primary focus:pl-5 rounded-md border-gray-200" placeholder="discount" />
+                                                <input type="number" onChange={handleOfferPrice} name="discount" defaultValue={product?.price?.discountPrice || ''} className="py-2 px-3 w-full border outline-primary focus:pl-5 rounded-md border-gray-200" placeholder="discount" />
                                                 {
                                                     error.offerPriceError && <p className='text-xs text-red-500'>{error.offerPriceError}</p>
                                                 }
@@ -462,6 +490,31 @@ const ProductForm = ({product}) => {
                     <div>
                         <div className='bg-white mb-5 '>
                             <div className="flex items-center justify-between px-5 py-4">
+                                <p>Delivery </p>
+                            </div>
+                            <hr />
+                            <div className='px-5 py-4'>
+                                <div>
+                                    <div className="flex items-center w-full my-3">
+                                        
+                                        <label htmlFor="toggle" className="flex items-center cursor-pointer">
+                                            {/* <input  type="checkbox"  id="toggle" className="sr-only peer" /> */}
+                                            <div onClick={() => setDeliveryToggle(!deliveryToggle)} className={`switch    ${deliveryToggle ? 'before:left-7 before:bg-white' :'before:left-1 before:bg-blue-600'} `}></div>
+                                        </label>
+                                        <span className="text-xs mx-5">Toggle me!</span>
+                                    </div>
+                                </div>
+                                {
+                                    deliveryToggle &&  <div className='mb-5'>
+                                    <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Delivery Charge</label>
+                                    <input type="number" name="deliveryCharge" defaultValue={ 100} required className="py-2 px-3 w-full border transition-all outline-primary focus:pl-5 rounded-md border-gray-200" placeholder="Price" />
+                                </div>
+                                }
+                               
+                            </div>
+                        </div>
+                        <div className='bg-white mb-5 '>
+                            <div className="flex items-center justify-between px-5 py-4">
                                 <p>Additional Information</p>
                             </div>
                             <hr />
@@ -477,6 +530,14 @@ const ProductForm = ({product}) => {
                                 <div className='mb-5'>
                                     <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">SKU code</label>
                                     <input type="text" name="skuCode" defaultValue={product?.skuCode || ''} className="py-2 px-3 w-full border transition-all outline-primary focus:pl-5 rounded-md border-gray-200" placeholder="Price" />
+                                </div>
+                                <div className='mb-5'>
+                                    <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Feature Product</label>
+                                    <Select
+                                        name='featureProduct'
+                                        defaultValue={featuresProducts[selectedFeatures]}
+                                        options={featuresProducts}
+                                    />
                                 </div>
                                 <div className='mb-5'>
                                     <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Product type</label>
@@ -504,13 +565,13 @@ const ProductForm = ({product}) => {
                             <div className='px-5 py-4'>
                                 <div className='mb-5'>
                                     <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Product color</label>
+                                    
                                     <Select 
                                         name='colors'
                                         value={selectColors}
-                                        options={colors} 
+                                        options={formateColors} 
                                         isMulti
                                         onChange={(e) => setSelectColors(e) }
-                                        defaultValue={[colors[1],colors[2]]}
                                     />
                                    
                                 </div>

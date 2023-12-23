@@ -1,7 +1,7 @@
 
 
 const ColorRows = ({color, refetch,handleGetColorId,index}) => {
-    const {name, slug,_id,status} = color || {}
+    const {name, slug,_id,status,colorCode} = color || {}
 
     const handleDeleteColor = () => {
         console.log('');
@@ -15,6 +15,9 @@ const ColorRows = ({color, refetch,handleGetColorId,index}) => {
                     <p className="text-xs text-gray-400">{slug}</p>
                 </td>
                
+                <td className="text-gray-400 py-2">
+                    <span className="w-8 h-8 rounded inline-block border border-gray-200" style={{backgroundColor:colorCode}}></span>
+                </td>
                 <td className="text-gray-400 py-2">{status ? "Public" : "Unpublic" }</td>
                 <td className="text-gray-400 py-2 w-[200px]">
                     <div className="flex justify-end gap-3">
