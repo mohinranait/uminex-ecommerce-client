@@ -14,15 +14,14 @@ const Account = () => {
             return data;
         }
     })
-    console.log(userDashboardAnalitycs);
     return (
         <>
             <div>
                 <p className="mb-5">Welcome <span className="font-semibold">{user?.name}</span> </p>
                 <div className="grid grid-cols-3 gap-2 md:gap-5 mb-6">
-                    <SummeryCard name="Orders" value={userDashboardAnalitycs?.totalOrders} />
-                    <SummeryCard name="Cart" value={userDashboardAnalitycs?.totalCarts} />
-                    <SummeryCard name="Wishlists" value={3} />
+                    <SummeryCard name="Orders" value={userDashboardAnalitycs?.totalOrders || 0} />
+                    <SummeryCard name="Cart" value={userDashboardAnalitycs?.totalCarts || 0} />
+                    <SummeryCard name="Wishlists" value={userDashboardAnalitycs?.wishlists || 0} />
                 </div>
                 <div>
                     <p className="mb-1 text-gray-700 text-lg font-semibold">Account Details</p>

@@ -8,8 +8,10 @@ import "./Header.css"
 import CategorysLists from "../Categorys/CategorysLists";
 import useAuth from "../../../hooks/useAuth";
 import useCarts from "../../../hooks/useCarts";
+import useWishlists from "../../../hooks/useWishlists";
 
 const Header = ({toggleCartDoyarHandler}) => {
+    const [wishlists] = useWishlists();
     const [carts] = useCarts();
     const location = useLocation();
     const {logOut,user} = useAuth();
@@ -75,7 +77,7 @@ const Header = ({toggleCartDoyarHandler}) => {
                                     <a href="#" className="flex items-center gap-2">
                                         <div className="relative">
                                             <IoMdHeartEmpty className="text-3xl text-text-color" />
-                                            <span className="select-count">2</span>
+                                            <span className="select-count">{wishlists?.wishlists?.length || 0}</span>
                                         </div>
                                     </a>
                                 </li>

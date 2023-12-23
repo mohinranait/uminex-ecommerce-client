@@ -14,6 +14,8 @@ import useAuth from '../../../hooks/useAuth';
 import useAxios from '../../../hooks/useAxios';
 import toast from "react-hot-toast"
 import useCarts from '../../../hooks/useCarts';
+import useWishlists from '../../../hooks/useWishlists';
+
 
 
 
@@ -27,6 +29,7 @@ const Products = () => {
     const [size, setSize] = useState("2GB");
     const [quantity, setQuantity] = useState(1);
     const {user} = useAuth();
+    const [,wishlistRefetch] = useWishlists(user)
     const navigate = useNavigate();
 
     const {data:product} = useQuery({
@@ -37,7 +40,7 @@ const Products = () => {
             return data.product;
         }
     })
-    const {name,media,brand,colors, category,price,isStock
+    const {_id , name,media,brand,colors, category,price,isStock
     ,product_type} = product || {};
     
 
@@ -105,6 +108,28 @@ const Products = () => {
            
         } catch (error) {
             console.log("Shopping cart ",error.message);
+        }
+    }
+
+
+    const handleWishListAdd = async () => {
+        if(!user?.email){
+            navigate("/login")
+            return ;
+        }
+        try {
+            if(user?._id){
+                const wishlistObj = {userInfo : user?._id, product: _id}
+                const {data} = await axios.post(`/wishlist/${user?.email}`,wishlistObj);
+                if(data.success == 'isExists'){
+                    toast("This product already exists")
+                }else{
+                    toast.success("Wishlist added")
+                    wishlistRefetch()
+                }
+            }
+        } catch (error) {
+            toast.error(error.message)
         }
     }
 
@@ -176,7 +201,7 @@ const Products = () => {
                                             <button onClick={productShoppingCartAdd} className='px-8 sm:px-5 md:px-3 xl:w-full py-2 bg-secondary uppercase rounded font-semibold text-white'>Add to cart</button>
                                         </div>
                                         <ul className='text-gray-700 flex gap-5 py-5'>
-                                            <li className='flex cursor-pointer text-sm items-center gap-2'> <LuHeart /> <span className='uppercase font-semibold'>Add wishlist</span> </li>
+                                            <li onClick={handleWishListAdd} className='flex cursor-pointer text-sm items-center gap-2'> <LuHeart /> <span className='uppercase font-semibold'>Add wishlist</span> </li>
                                             <li className='flex cursor-pointer text-sm items-center gap-2'> <LuLayers /> <span className='uppercase font-semibold'>Add Compare</span> </li>
                                             <li className='flex cursor-pointer text-sm items-center gap-2 ml-auto'> <LuShare2 /></li>
                                         </ul>
