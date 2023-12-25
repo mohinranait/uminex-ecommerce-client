@@ -1,17 +1,20 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ProductRating from '../../global/ProductRating';
 import { LuPlusSquare } from 'react-icons/lu';
 import useAuth from '../../../hooks/useAuth';
 import useCarts from '../../../hooks/useCarts';
 import useAxios from '../../../hooks/useAxios';
 import toast from 'react-hot-toast';
+import { IoCloseOutline } from 'react-icons/io5';
 
-const ProductCard = ({product}) => {
+const ProductCard = ({product,another}) => {
     const { media, price,category, name,slug, _id} = product || {};
     const {user} = useAuth();
     const [,refetch] = useCarts();
     const axios = useAxios();
+    const location = useLocation();
+
 
     const handleAddtoCart = async () => {
         try {
@@ -35,9 +38,17 @@ const ProductCard = ({product}) => {
         }
     }
 
+    const handleRemoveProduct = (id) => {
+        another?.functionName(id)
+    } 
+
     return (
         <>
-            <div className='rounded-md group bg-white  min-h-[350px] flex flex-col pb-2 '>
+            <div className='rounded-md group bg-white  min-h-[350px] flex flex-col pb-2 relative'>
+                {
+                    // for Wishlists page
+                    location?.pathname == "/user/wishlists" && <span onClick={() => handleRemoveProduct(_id)} className='productCloseIcon'><IoCloseOutline /></span>
+                }
                 <div className='block  p-1   pb-7'>
                     <Link to={`/${category?.slug}/${slug}`} >
                         <img src={media?.images[0]} className='h-44 mx-auto' alt="" />
@@ -65,6 +76,7 @@ const ProductCard = ({product}) => {
 
 ProductCard.propTypes = {
     product : PropTypes.object.isRequired,
+    another : PropTypes.object
 }
 
 export default ProductCard;

@@ -24,6 +24,7 @@ import Colors from '../backend/pages/Colors';
 import Checkout from '../frontend/pages/Checkout/Checkout';
 import Orders from '../backend/pages/Orders';
 import PaymentSuccess from '../frontend/pages/PaymentSuccess/PaymentSuccess';
+import Wishlists from '../frontend/pages/User/Wishlists';
 
 const myRoutes = createBrowserRouter([
     {
@@ -53,6 +54,10 @@ const myRoutes = createBrowserRouter([
                     {
                         path: "profile",
                         element : <UserProfile />
+                    },
+                    {
+                        path: "wishlists",
+                        element : <Wishlists />
                     },
                     {
                         path: "address",

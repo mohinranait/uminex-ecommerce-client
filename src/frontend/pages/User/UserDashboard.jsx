@@ -7,18 +7,21 @@ const UserDashboard = () => {
     return (
         <section className="my-6">
             <div className="box">
-                <div className="bg-white px-10 py-10 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-5 ">
+                <div className="usermenuWrap ">
                     <div className="col-span-1 ">
                         <div >
                             <ul className="space-y-2 dashboardActive">
                                 <li>
-                                    <NavLink to={'/user/dashboard'} className="py-2 flex items-center gap-2 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200 transition-all px-5 w-full rounded" > <MdDashboard /> Account</NavLink>
+                                    <NavLink to={'/user/dashboard'} className="userDashboardMenu" > <MdDashboard /> Account</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={'/user/orders'} className="py-2 flex items-center gap-2 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200 transition-all px-5 w-full rounded" > <MdAddShoppingCart /> Orders</NavLink>
+                                    <NavLink to={'/user/orders'} className="userDashboardMenu" > <MdAddShoppingCart /> Orders</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={'/user/profile'} className="py-2 flex items-center gap-2 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200 transition-all px-5 w-full rounded" > <GoPerson /> Profile</NavLink>
+                                    <NavLink to={'/user/profile'} className="userDashboardMenu" > <GoPerson /> Profile</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to={'/user/wishlists'} className="userDashboardMenu" > <GoPerson /> Wishlists</NavLink>
                                 </li>
                                 <li>
                                     <button className="py-2 flex items-center gap-2 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200 transition-all px-5 w-full rounded" > <MdOutlineLogout /> Logout</button>

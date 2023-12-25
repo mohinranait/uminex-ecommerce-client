@@ -1,6 +1,6 @@
 
 import { useContext, useEffect, useState } from 'react';
-import { Link, useLoaderData, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { IoChevronBack, IoChevronForwardOutline, IoCloseOutline } from 'react-icons/io5';
 import { OnclickContext } from '../../Providers/OnclickProvider';
@@ -10,7 +10,7 @@ import queryString from "query-string"
 import useBrands from '../../../hooks/useBrands';
 import ProductPlaceholder from '../../components/Loding/ProductPlaceholder';
 import useColors from '../../../hooks/useColors';
-import { IoIosClose } from "react-icons/io";
+
 
 
 const Shops = () => {
@@ -18,13 +18,11 @@ const Shops = () => {
     const [brands] = useBrands();
     const [colors] = useColors();
     const [filterValue, setFilterValue] = useState({})
-    const [isFilterValue, setIsFilterValue] = useState([])
     const [params, setParams] = useSearchParams();
     const [isCategory, setIsCategory] = useState({});
     const navigate = useNavigate();
     const axiosPublic = useAxiosPublic();
     const {showItem,setShowItem,selectBox,setSelectBox} = useContext(OnclickContext);
-    const getPproducts = useLoaderData();
     // const [products, setProducts] = useState(getPproducts);
     const [filterProducts, setFilterProducts] = useState(10)
   
@@ -37,6 +35,7 @@ const Shops = () => {
 
     const brand = params.get('brand');
     const color = params.get('color');
+    const delivery = params.get('delivery');
 
 
     const handleSelectMenu = () => {
@@ -96,9 +95,9 @@ const Shops = () => {
     },[slug])
 
     const {data:products=[], isPending} = useQuery({
-        queryKey: ['categoriesProducts',slug,brand,color],
+        queryKey: ['categoriesProducts',slug,brand,color,delivery],
         queryFn: async () => {
-            const products = await axiosPublic.get(`/category-wish-product/${slug}?brand=${brand}&color=${color}`)
+            const products = await axiosPublic.get(`/category-wish-product/${slug}?brand=${brand}&color=${color}&delivery=${delivery}`)
             return products?.data?.products;
         }
     })
@@ -114,7 +113,7 @@ const Shops = () => {
 
         const obj = { ...filterValue , brand: value}
         setFilterValue(obj);
-        console.log(obj);
+
         const updateQuery = {...currentQuery , brand: value.toLowerCase()?.split(' ').join('-')};           
         const url = queryString.stringifyUrl({
             url: `/category/${slug}`,
@@ -123,10 +122,26 @@ const Shops = () => {
         navigate(url)
     }
 
+    // Handle free delivery
+    const handleFreeDelivery = (value) => {
+        let currentQuery = {};
+        if(location.search){
+            currentQuery = queryString.parse(location.search)
+        }
 
+        const obj = { ...filterValue ,  delivery: value}
+        setFilterValue(obj);
+
+        const updateQuery = {...currentQuery , delivery: value.toLowerCase()?.split(' ')?.join('-')};           
+        const url = queryString.stringifyUrl({
+            url: `/category/${slug}`,
+            query : updateQuery
+        })
+        navigate(url)
+    }
+
+    // Handle color
     const handleColor = (value) => {
-
-       
         let currentQuery = {};
         if(location.search){
             currentQuery = queryString.parse(location.search)
@@ -167,6 +182,14 @@ const Shops = () => {
             setFilterValue(obj);
         }
 
+        // Clear Delivery
+        if(value == 'delivery'){
+            delete currentQuery.delivery;
+            const obj = { ...filterValue}
+            delete obj.delivery;
+            setFilterValue(obj);
+        }
+
 
 
         const url = queryString.stringifyUrl({
@@ -195,7 +218,7 @@ const Shops = () => {
                                 <div>
                                     <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Promotion & Services</p>
                                     <ul className='space-y-2'>
-                                        <li className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i4/O1CN01Tp04IC1x3IWhZt8RK_!!6000000006387-2-tps-72-72.png" alt="" /> <span className='text-sm'>Free Delivery</span></span></li>
+                                        <li onClick={() => handleFreeDelivery('free')} className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i4/O1CN01Tp04IC1x3IWhZt8RK_!!6000000006387-2-tps-72-72.png" alt="" /> <span className='text-sm'>Free Delivery</span></span></li>
                                         <li className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i4/O1CN01pr1AG92A8sM4YKlmy_!!6000000008159-2-tps-72-72.png" alt="" /> <span className='text-sm'>Best Price Guaranteed</span></span></li>
                                         <li className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i2/O1CN01sEvCqG1M7ICGGpTXv_!!6000000001387-2-tps-72-72.png" alt="" /> <span className='text-sm'>Cash On Delivery</span></span></li>
                                     </ul>
@@ -259,7 +282,7 @@ const Shops = () => {
                                                 <span className='text-sm'>Show</span>
                                                 <div className='relative w-[80px]'>
                                                     <span onClick={handleShowItem} className='px-5 text-center py-[5px] cursor-pointer border inline-bolck border-gray-200 inline-block w-full'>{perViews}</span>
-                                                    <ul className={`absolute left-0 transition-all  bg-white shadow w-full  overflow-hidden ${showItem ? 'top-full h-[140px]' : 'top-full h-0'}`}>
+                                                    <ul className={`absolute left-0 transition-all z-20  bg-white shadow w-full  overflow-hidden ${showItem ? 'top-full h-[140px]' : 'top-full h-0'}`}>
                                                         <li onClick={() => handlePerViews(10)} className='custom-select-box'><span className='text-sm block text-center'>10</span></li>
                                                         <li onClick={() => handlePerViews(20)} className='custom-select-box'><span className='text-sm block text-center'>20</span></li>
                                                         <li onClick={() => handlePerViews(50)} className='custom-select-box'><span className='text-sm block text-center'>50</span></li>
@@ -271,7 +294,7 @@ const Shops = () => {
                                             </div>
                                             <div className='relative min-w-[160px]'>
                                                 <span onClick={handleSelectMenu} className='px-5 py-[5px] cursor-pointer border border-gray-200 inline-block w-full'>{selectValues}</span>
-                                                <ul className={`customFilters ${selectBox ? 'top-full h-[160px]' : 'top-full h-0'}`}>
+                                                <ul className={`customFilters  z-20 ${selectBox ? 'top-full h-[160px]' : 'top-full h-0'}`}>
                                                     <li onClick={() => handleFeatures('Price top to low')} className='custom-select-box'><span>Price top to low</span></li>
                                                     <li onClick={() => handleFeatures('Price low to top')} className='custom-select-box'><span>Price low to top</span></li>
                                                     <li onClick={() => handleFeatures('Latest')} className='custom-select-box'><span>Latest</span></li>
@@ -286,6 +309,7 @@ const Shops = () => {
                             <div className='mb-4 flex gap-3'>
                                 {filterValue?.brand &&  <span  className='bg-white capitalize pr-1 py-[1px] pl-2 text-sm flex items-center gap-1 rounded'>{filterValue?.brand} <IoCloseOutline  size={25} onClick={() => handleClearFilter('brand')} className='px-1 rounded cursor-pointer  inline-block' />  </span> }
                                 {filterValue?.color &&  <span  className='bg-white capitalize pr-1 py-[1px] pl-2 text-sm flex items-center gap-1 rounded'>{filterValue?.color} <IoCloseOutline  size={25} onClick={() => handleClearFilter('color')} className='px-1 rounded cursor-pointer  inline-block' />  </span> }
+                                {filterValue?.delivery &&  <span  className='bg-white capitalize pr-1 py-[1px] pl-2 text-sm flex items-center gap-1 rounded'>{filterValue?.delivery} <IoCloseOutline  size={25} onClick={() => handleClearFilter('delivery')} className='px-1 rounded cursor-pointer  inline-block' />  </span> }
                              
                             </div>
                             <div className='shopGrid relative'>

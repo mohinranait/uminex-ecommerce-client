@@ -74,12 +74,12 @@ const Header = ({toggleCartDoyarHandler}) => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="flex items-center gap-2">
+                                    <Link to={`/user/wishlists`} className="flex items-center gap-2">
                                         <div className="relative">
                                             <IoMdHeartEmpty className="text-3xl text-text-color" />
                                             <span className="select-count">{wishlists?.wishlists?.length || 0}</span>
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <button onClick={toggleCartDoyarHandler} className="flex items-center pl-2 gap-4">
@@ -114,7 +114,6 @@ const Header = ({toggleCartDoyarHandler}) => {
                             <span className="absolute left-0 h-[50%] w-[1px] bg-slate-200"></span>
                             <ul className="lg:flex items-center pl-3 gap-5 menu">
                                 <li><NavLink to={'/'} className="link-menu py-2 px-1">Home</NavLink></li>
-                                <li><NavLink to={'/carts'} className="link-menu py-2 px-1">Cart</NavLink></li>
                                 {
                                     user?.email ? <>
                                     {user?.role == 'admin' &&  <li><NavLink to={'/admin'} className="link-menu py-2 px-1">Admin</NavLink></li>}

@@ -2,7 +2,7 @@
 const ProductPlaceholder = () => {
     return (
         <>
-            <div className=" shadow-sm bg-white rounded-md p-3 max-w-sm w-full mx-auto">
+            <div className=" shadow-sm bg-white rounded-md p-2 max-w-sm w-full mx-auto">
                 <div className="animate-pulse  space-x-4">
                     <div className="flex-1 flex flex-col space-y-4 py-1">
                         <div className="h-[180px] bg-slate-200 rounded"></div>

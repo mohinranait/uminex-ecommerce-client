@@ -42,6 +42,11 @@
   .shopLeftFilter {
     @apply bg-white lg:bg-transparent w-[80vw] sm:w-[60vw]  md:w-[30vw] z-50 top-0  bottom-0 transition-all lg:static  lg:w-auto fixed shadow lg:shadow-none
   }
+  .usermenuWrap { @apply bg-white px-10 py-10 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-5 }
+  .userDashboardMenu {
+    @apply py-2 flex items-center gap-2 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200 transition-all px-5 w-full rounded
+  }
+  .productCloseIcon { @apply w-7 h-7 cursor-pointer left-3 top-3 absolute bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-full shadow-md items-center justify-center flex }
   .shop-header { @apply flex justify-center md:justify-between gap-3 flex-wrap bg-white px-4 items-center py-3 mb-3 border-b-2 border-gray-100 }
   .customFilters { @apply absolute left-0 transition-all  bg-white shadow w-full overflow-hidden }
   .shopGrid { @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 }
