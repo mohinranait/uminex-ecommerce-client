@@ -13,13 +13,22 @@ import ProductPlaceholder from "../Loding/ProductPlaceholder";
 
 
 const ProductSection = ({products,isPending}) => {
-    const {isMobileTab,setIsMobileTab} = useContext(OnclickContext)
+    const {isMobileTab,setIsMobileTab} = useContext(OnclickContext);
+    const [features, setFeatures] = useState([]);
 
     const [selectCategory, setSelectCategory] = useState('Top Sell')
+
     const handleCategory = (category) => {
         setSelectCategory(category)
         setIsMobileTab(!isMobileTab)
+
+        if(category == 'Feature'){
+            const isFeatures = products?.filter(product => product?.isFeature == 'active')
+            setFeatures(isFeatures)
+        }
+
     }
+
 
     return (
         <section className='py-7 bg-[#dcdcdc1a]'>
@@ -82,6 +91,11 @@ const ProductSection = ({products,isPending}) => {
                             </SwiperSlide>  )
                         }
                         {
+                            selectCategory == 'Feature' ? 
+                            features?.map(product =>  <SwiperSlide key={product._id}  >
+                                <ProductCard product={product} />
+                            </SwiperSlide>  )
+                            : 
                             products?.map(product =>  <SwiperSlide key={product._id}  >
                                 <ProductCard product={product} />
                             </SwiperSlide>  )

@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useLoaderData, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import ProductCard from '../../components/ProductCard/ProductCard';
-import { IoChevronBack, IoChevronForwardOutline } from 'react-icons/io5';
+import { IoChevronBack, IoChevronForwardOutline, IoCloseOutline } from 'react-icons/io5';
 import { OnclickContext } from '../../Providers/OnclickProvider';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
@@ -10,13 +10,15 @@ import queryString from "query-string"
 import useBrands from '../../../hooks/useBrands';
 import ProductPlaceholder from '../../components/Loding/ProductPlaceholder';
 import useColors from '../../../hooks/useColors';
+import { IoIosClose } from "react-icons/io";
 
 
 const Shops = () => {
     const {slug} = useParams();
     const [brands] = useBrands();
     const [colors] = useColors();
-    console.log(colors);
+    const [filterValue, setFilterValue] = useState({})
+    const [isFilterValue, setIsFilterValue] = useState([])
     const [params, setParams] = useSearchParams();
     const [isCategory, setIsCategory] = useState({});
     const navigate = useNavigate();
@@ -109,6 +111,10 @@ const Shops = () => {
         if(location.search){
             currentQuery = queryString.parse(location.search)
         }
+
+        const obj = { ...filterValue , brand: value}
+        setFilterValue(obj);
+        console.log(obj);
         const updateQuery = {...currentQuery , brand: value.toLowerCase()?.split(' ').join('-')};           
         const url = queryString.stringifyUrl({
             url: `/category/${slug}`,
@@ -119,12 +125,15 @@ const Shops = () => {
 
 
     const handleColor = (value) => {
-        
+
+       
         let currentQuery = {};
         if(location.search){
             currentQuery = queryString.parse(location.search)
-            
         }
+
+        const obj = { ...filterValue ,  color: value}
+        setFilterValue(obj);
 
         const updateQuery = {...currentQuery , color: value.toLowerCase()?.split(' ')?.join('-')};           
         const url = queryString.stringifyUrl({
@@ -141,9 +150,24 @@ const Shops = () => {
         if( location.search ){
             currentQuery = queryString.parse(location.search);
         }
+
+        // Clear brand
         if(value == 'brand'){
             delete currentQuery.brand
+            const obj = { ...filterValue}
+            delete obj.brand;
+            setFilterValue(obj);
         }
+
+        // Clear color
+        if(value == 'color'){
+            delete currentQuery.color;
+            const obj = { ...filterValue}
+            delete obj.color;
+            setFilterValue(obj);
+        }
+
+
 
         const url = queryString.stringifyUrl({
             url: `/category/${slug}`,
@@ -203,7 +227,7 @@ const Shops = () => {
                                     </ul>
                                 </div>
                                 <div className='mt-6'>
-                                    <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Colors</p>
+                                    <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'>Colors <span onClick={() => handleClearFilter('color')} className='text-sm cursor-pointer'>Clear</span> </p>
                                     <ul className='space-y-2'>
                                         {
                                             colors?.map(color => <li key={color?._id} className='' onClick={() => handleColor(color?.name)}>
@@ -258,6 +282,11 @@ const Shops = () => {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div className='mb-4 flex gap-3'>
+                                {filterValue?.brand &&  <span  className='bg-white capitalize pr-1 py-[1px] pl-2 text-sm flex items-center gap-1 rounded'>{filterValue?.brand} <IoCloseOutline  size={25} onClick={() => handleClearFilter('brand')} className='px-1 rounded cursor-pointer  inline-block' />  </span> }
+                                {filterValue?.color &&  <span  className='bg-white capitalize pr-1 py-[1px] pl-2 text-sm flex items-center gap-1 rounded'>{filterValue?.color} <IoCloseOutline  size={25} onClick={() => handleClearFilter('color')} className='px-1 rounded cursor-pointer  inline-block' />  </span> }
+                             
                             </div>
                             <div className='shopGrid relative'>
                                 {
