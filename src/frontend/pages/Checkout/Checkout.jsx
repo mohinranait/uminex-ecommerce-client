@@ -108,7 +108,8 @@ const Checkout = () => {
                                 <p className="text-sm "> Billing to address | <span onClick={() => handleEditAddress(userAddress[0]?._id)} className="text-primary cursor-pointer text-xs">Edit</span></p>
                             </div>
                             }
-                            {  userAddress?.length === 0 || isAddress &&  <AddressForm refetch={refetch} setIsAddress={setIsAddress} singleAddress={userAddress[0]} /> }
+                            {  userAddress?.length === 0 &&  <AddressForm refetch={refetch} setIsAddress={setIsAddress} singleAddress={userAddress[0]} /> }
+                            {   isAddress &&  <AddressForm refetch={refetch} setIsAddress={setIsAddress} singleAddress={userAddress[0]} /> }
                             {
                                 getShoppingCarts?.map(product =>  <div key={product?._id} className="grid bg-white grid-cols-4 px-5 py-3 lg:py-1 relative items-center ">
                                 <div className="col-span-3 row-span-2 lg:row-span-1 lg:col-span-2 flex  py-2  md:lg:flex-row lg:items-center gap-3">

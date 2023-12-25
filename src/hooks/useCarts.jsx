@@ -11,7 +11,7 @@ const useCarts = () => {
         queryFn: async () => {
             if(user?.email){
                 const {data} = await axios.get(`/shopping_carts?user_id=${user?._id}`);
-                console.log(data);
+                // console.log(data);
                 return data;
             }
         }

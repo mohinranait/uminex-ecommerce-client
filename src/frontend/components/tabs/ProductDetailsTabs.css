@@ -1,0 +1,8 @@
+
+.tabActive a.active {
+    color: #55e6a5;
+}
+.tabActive a.active {
+    color: white;
+    background-color: rgb(43, 56, 209);
+}

@@ -1,5 +1,5 @@
 import { IoClose } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import RightDoyarCartItems from "../../components/CartItems/RightDoyarCartItems";
 import useCarts from "../../../hooks/useCarts";
@@ -57,7 +57,7 @@ const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
                             </div>
                             <div className="flex gap-3 items-center justify-between">
                                 <button onClick={handleRedirectCartPage} className="btn btn-primary w-full">Cart</button>
-                                <button className="btn w-full btn-secondary">Checkout</button>
+                                <Link to={'/checkout'} className="btn w-full btn-secondary">Checkout</Link>
                             </div>
                         </div>
                     </div>
