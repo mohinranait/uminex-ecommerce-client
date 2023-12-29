@@ -14,7 +14,7 @@ import useColors from '../../../hooks/useColors';
 
 
 const Shops = () => {
-    const {slug} = useParams();
+    // const {slug} = useParams();
     const [brands] = useBrands();
     const [colors] = useColors();
     const [filterValue, setFilterValue] = useState({})
@@ -35,7 +35,9 @@ const Shops = () => {
 
     const brand = params.get('brand');
     const color = params.get('color');
+    const category = params.get('category');
     const delivery = params.get('delivery');
+    const search = params.get('search');
 
 
     const handleSelectMenu = () => {
@@ -88,16 +90,16 @@ const Shops = () => {
     
     useEffect(() => {
         const fetchCategory = async () => {
-            const {data} = await axiosPublic.get(`/category-slug/${slug}`);
+            const {data} = await axiosPublic.get(`/category-slug/${category}`);
             setIsCategory(data.category)
         }
         fetchCategory();
-    },[slug])
+    },[category])
 
     const {data:products=[], isPending} = useQuery({
-        queryKey: ['categoriesProducts',slug,brand,color,delivery],
+        queryKey: ['categoriesProducts',category,brand,color,delivery,search],
         queryFn: async () => {
-            const products = await axiosPublic.get(`/category-wish-product/${slug}?brand=${brand}&color=${color}&delivery=${delivery}`)
+            const products = await axiosPublic.get(`/category-wish-product/${category}?brand=${brand}&color=${color}&delivery=${delivery}&search=${search}`)
             return products?.data?.products;
         }
     })
@@ -116,7 +118,7 @@ const Shops = () => {
 
         const updateQuery = {...currentQuery , brand: value.toLowerCase()?.split(' ').join('-')};           
         const url = queryString.stringifyUrl({
-            url: `/category/${slug}`,
+            url: `/shop`,
             query : updateQuery
         })
         navigate(url)
@@ -134,7 +136,7 @@ const Shops = () => {
 
         const updateQuery = {...currentQuery , delivery: value.toLowerCase()?.split(' ')?.join('-')};           
         const url = queryString.stringifyUrl({
-            url: `/category/${slug}`,
+            url: `/shop`,
             query : updateQuery
         })
         navigate(url)
@@ -152,7 +154,7 @@ const Shops = () => {
 
         const updateQuery = {...currentQuery , color: value.toLowerCase()?.split(' ')?.join('-')};           
         const url = queryString.stringifyUrl({
-            url: `/category/${slug}`,
+            url: `/shop`,
             query : updateQuery
         })
         navigate(url)
@@ -193,7 +195,7 @@ const Shops = () => {
 
 
         const url = queryString.stringifyUrl({
-            url: `/category/${slug}`,
+            url: `/shop`,
             query : currentQuery
         })
 

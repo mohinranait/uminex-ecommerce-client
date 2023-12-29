@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { IoCallOutline, IoHeartSharp, IoPersonSharp } from "react-icons/io5";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { LuMenu, LuShoppingCart } from "react-icons/lu";
@@ -9,18 +9,47 @@ import CategorysLists from "../Categorys/CategorysLists";
 import useAuth from "../../../hooks/useAuth";
 import useCarts from "../../../hooks/useCarts";
 import useWishlists from "../../../hooks/useWishlists";
+import useCategorys from "../../../hooks/useCategorys";
+import { useState } from "react";
+import qs from "query-string"
 
 const Header = ({toggleCartDoyarHandler}) => {
+    const [params, setParams] = useSearchParams();
+    const [search, setSearch] = useState('');
     const [wishlists] = useWishlists();
     const [carts] = useCarts();
+    const [categorys] = useCategorys({search:'',status:true});
+    const [category, setCategory] = useState('');
     const location = useLocation();
     const {logOut,user} = useAuth();
     const navigate = useNavigate();
     
-
+    // User Logout
     const handleLogout = async () => {
         await logOut();
         navigate('/')
+    }
+
+    // handle search product
+    const handleSearchButton = () => {
+        let cuerentQuery = {}
+        if(location?.search){
+            cuerentQuery = qs.parse(location?.search)
+        }
+
+        let updateQuery = {...cuerentQuery }
+        if(category){
+            updateQuery.category = category;
+        }
+        if(search){
+            updateQuery.search = search;
+        }
+        const url = qs.stringifyUrl({
+            url: "/shop",
+            query : updateQuery,
+        })
+        // console.log(url);
+        navigate(url)
     }
     
     return (
@@ -49,15 +78,15 @@ const Header = ({toggleCartDoyarHandler}) => {
                         <div className="col-span-6">
                             <div className="flex rounded-md ">
                                 <div className="border-2  py-2 border-r-0 w-full border-[#3E5E8EC] rounded-md rounded-r-none flex ">
-                                    <select name="" className="w-[290px] px-3 outline-none " id="">
-                                        <option value="">Category</option>
-                                        <option value="">Apple</option>
-                                        <option value="">Samsung</option>
-                                        <option value="">Mens</option>
+                                    <select name="" onChange={(e) => setCategory(e.target.value)} className="w-[290px] px-3 outline-none " id="">
+                                        <option value={""}>Category</option>
+                                        {
+                                            categorys?.map(category =>   <option key={category?._id} value={category?.slug}>{category?.name}</option> )
+                                        }
                                     </select>
-                                    <input type="search" className="w-full border-l ml-2 rounded-md outline-none px-3 " placeholder="Search products..." />
+                                    <input type="search" onChange={(e) => setSearch(e.target.value)} className="w-full border-l ml-2 rounded-md outline-none px-3 " placeholder="Search products..." />
                                 </div>
-                                <button className="px-8 bg-primary rounded-r-md text-white text-sm font-semibold">Search</button>
+                                <button onClick={handleSearchButton} className="px-8 bg-primary rounded-r-md text-white text-sm font-semibold">Search</button>
                             </div>
                         </div>
                         <div className="col-span-3">
@@ -114,6 +143,7 @@ const Header = ({toggleCartDoyarHandler}) => {
                             <span className="absolute left-0 h-[50%] w-[1px] bg-slate-200"></span>
                             <ul className="lg:flex items-center pl-3 gap-5 menu">
                                 <li><NavLink to={'/'} className="link-menu py-2 px-1">Home</NavLink></li>
+                                <li><NavLink to={'/shop'} className="link-menu py-2 px-1">Shops</NavLink></li>
                                 {
                                     user?.email ? <>
                                     {user?.role == 'admin' &&  <li><NavLink to={'/admin'} className="link-menu py-2 px-1">Admin</NavLink></li>}
@@ -121,9 +151,6 @@ const Header = ({toggleCartDoyarHandler}) => {
                                     </> :    
                                     <li><NavLink to={'/login'} className="link-menu py-2 px-1">Login</NavLink></li>
                                 }
-
-                             
-                               
                             </ul>
                         </div>
                         <div className="">

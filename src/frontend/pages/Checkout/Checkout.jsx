@@ -43,7 +43,7 @@ const Checkout = () => {
                     price: cart?.product?.price?.sellingPrice, 
                     quantity:cart?.quantity,
                     totalPrice: cart?.product?.price?.sellingPrice * cart?.quantity, 
-                    varient : cart?.varient ,
+                    varient : cart?.varient,
                 }
             })
             if(paymentOption === 'stripe'){
@@ -61,7 +61,7 @@ const Checkout = () => {
                 }
                 if(getShoppingCarts.length > 0){
                     const response = await axios.post(`/checkout-cash-on-delivery`, obj)
-                    console.log(response.data);
+                    // console.log(response.data);
                     if(response.data.success){
                         setIsLoading(false)
                         navigate('/success?method=cod')
@@ -91,12 +91,8 @@ const Checkout = () => {
                                    {paymentOption == 'stripe'?  <span className="text-xl text-green-600 absolute right-3 top-2"><FaRegCircleCheck /></span> : ''}
                                     <img className="h-8 mx-auto" src="https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/9928bafb-558e-4bf3-98be-58b003ab4358.png?auto=format,compress&size=150" alt="" />
                                 </div>
-                                {/* <div onClick={() => setPaymentOption('paypal')} className="bg-white px-4 py-3 cursor-pointer rounded-sm ">
-                                    <img className="h-8 mx-auto" src="https://1000logos.net/wp-content/uploads/2021/04/Paypal-logo.png" alt="" />
-                                </div> */}
                                 <div onClick={() => setPaymentOption('cod')} className={`bg-white px-4 py-3 text-center cursor-pointer rounded-sm relative ${paymentOption =='cod' ? 'ring-2 ring-blue-700' :''} `}>
                                 {paymentOption == 'cod'?  <span className="text-xl text-green-600 absolute right-3 top-2"><FaRegCircleCheck /></span> : ''}
-                                    {/* <img className="h-8 mx-auto" src={codImg} alt="" /> */}
                                     <span className="text-xl font-bold text-center text-secondary">Cash On Delevery</span>
                                 </div>
                             </div>
@@ -118,7 +114,6 @@ const Checkout = () => {
                                     </span>
                                     <div>
                                         <Link to={'/products'} className="block font-semibold text-sm sm:text-base  text-gray-700">{product?.product?.name}</Link>
-                                     
                                     </div>
                                 </div>
                                 <div>

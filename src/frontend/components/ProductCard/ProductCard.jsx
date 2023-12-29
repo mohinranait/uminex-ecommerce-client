@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { IoCloseOutline } from 'react-icons/io5';
 
 const ProductCard = ({product,another}) => {
-    const { media, price,category,reviews,rating, name,slug, _id} = product || {};
+    const { media, price,category,reviews,rating,isStock, name,slug, _id} = product || {};
     const {user} = useAuth();
     const [,refetch] = useCarts();
     const axios = useAxios();
@@ -61,12 +61,12 @@ const ProductCard = ({product,another}) => {
                         <div className=' flex items-center gap-2'>
                             <ProductRating rating={`${rating}`}  /> <span className='text-xs text-gray-500'>({reviews || 0} Reviews)</span>
                         </div>
-                        <p className='text-xs '>Stock 5 left product</p>
+                        <p className='text-xs '> {isStock > 0 ? 'Stock available':'Out of Stock'}</p>
                     </div>
                 </div>
                 <div className='px-4 flex justify-between items-center'>
                     <div ><span className='text-primary font-bold text-lg'>${price?.sellingPrice}.00</span> {price?.discountPrice > 0 && <del className='text-xs text-gray-400'>${price?.productPrice}</del> }  </div>
-                    <button onClick={handleAddtoCart} className='py-2 flex items-center justify-center rounded-sm transition-all text-gray-700 w-8 h-8 hover:bg-primary hover:text-white'> <LuPlusSquare className='text-2xl' /> </button>
+                    <button onClick={handleAddtoCart} disabled={isStock == 0} className={`py-2 flex items-center justify-center rounded-sm transition-all text-gray-700 w-8 h-8  hover:text-white ${isStock == 0 ? 'hover:bg-secondary':"hover:bg-primary"} `}> <LuPlusSquare className='text-2xl' /> </button>
                 </div>
             </div>
         </>

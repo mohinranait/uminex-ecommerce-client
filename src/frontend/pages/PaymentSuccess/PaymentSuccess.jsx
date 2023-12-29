@@ -1,5 +1,5 @@
 import { FaCheck } from "react-icons/fa6";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link,  useSearchParams } from "react-router-dom";
 import useAxios from "../../../hooks/useAxios";
 import useCarts from "../../../hooks/useCarts";
 import useAuth from "../../../hooks/useAuth";
@@ -12,7 +12,8 @@ const PaymentSuccess = () => {
     const axios = useAxios();
     const [params, setParams] = useSearchParams();
     const session_id =  params.get('session_id');
-    const payPethod =  params.get('method');
+    const payMethod =  params.get('method');
+
 
 
     const createOrders = async () => {
@@ -27,14 +28,14 @@ const PaymentSuccess = () => {
         })
         const obj = {
             userInfo : user?._id,
-            deliveryAddress : 'address Id',
-            paymentMethod : payPethod == 'stripe' ? 'stripe':'cod',
+            deliveryAddress : "65871fc52ab62ff94b6a912d",
+            paymentMethod : payMethod == 'stripe' ? 'stripe':'cod',
             totalItems: getShoppingCarts?.reduce((total,current) => total + current?.quantity ,0),
             orderHistory: shopHistory,
             cartItems : getShoppingCarts?.map(item => item?._id ),
         }
         if(getShoppingCarts.length > 0){
-            if(payPethod == 'stripe' ){
+            if(payMethod == 'stripe' ){
                 const res = await axios.post(`/success?session_id=${session_id}`, {...obj,paymentStatus:'paid'} )
                 console.log(res.data);
                 refetch()

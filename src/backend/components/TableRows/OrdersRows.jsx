@@ -12,9 +12,11 @@ import useOrders from '../../../hooks/useOrders';
 
 const orderStatusLists = [
     { value: 'pending', label: 'Pending' },
-    { value: 'cancel', label: 'Cancel' },
+    { value: 'shift', label: 'Shift' },
     { value: 'delivery', label: 'Delivery' },
     { value: 'proccessing', label: 'Proccessing' },
+    { value: 'return', label: 'Return' },
+    { value: 'cancel', label: 'Cancel' },
 ]
 
 
@@ -54,6 +56,20 @@ const OrdersRows = ({order,index}) => {
     }
 
 
+    // Handle delete order
+    const handleDeleteOrder = async (e) =>{
+        e.stopPropagation()
+        try {
+            const {data} = await axios.delete(`/delete-order/${_id}`)
+            if(data.success){
+                refetch()
+                toast.success("Successed")
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
     return (
         <>
             <tr onClick={openModal}>
@@ -66,7 +82,6 @@ const OrdersRows = ({order,index}) => {
                             <p className='text-sm'>{userInfo?.email}</p>
                         </div>
                     </div>
-                 
                 </td>
                 <td className="text-gray-400 py-2">
                     <p className="text-gray-700 text-sm">${orderHistory?.reduce((total,current) => total + current?.totalPrice,0)} </p>
@@ -76,7 +91,7 @@ const OrdersRows = ({order,index}) => {
                 </td>
             
                 <td className="text-gray-400 py-2">
-                    <p className="text-gray-700 text-sm">{orderStatus =='pending' ? "Pending" : orderStatus == 'delivery' ? 'Delivery' : orderStatus == 'cancal' ? 'Cancal' : 'Processing' }</p>
+                    <p className="text-gray-700 text-sm">{orderStatus =='pending' ? "Pending" : orderStatus == 'delivery' ? 'Delivery' : orderStatus == 'cancal' ? 'Cancal' : orderStatus == 'shift' ? "Shift" : orderStatus == 'return' ? "Return" :  'Processing' }</p>
                 </td>
                 <td className="text-gray-400 py-2 text-sm">
                     <p className="text-gray-700 text-sm uppercase">M: {paymentMethod} </p>
@@ -94,11 +109,10 @@ const OrdersRows = ({order,index}) => {
                         <span onClick={handleCloseAction} className='cursor-pointer text-gray-600'><BsThreeDotsVertical size={25} /></span>
                         <div className={`absolute py-2 top-full right-0 z-10 w-[100px] bg-white shadow ${action ? 'block':'hidden'} `}>
                             <div><a onClick={handleCloseAction} className='px-4 hover:bg-gray-100 py-1 text-sm w-full inline-block text-gray-500' href="#">Edit</a></div>
-                            <div><a onClick={handleCloseAction} className='px-4 hover:bg-gray-100 py-1 text-sm w-full inline-block text-gray-500' href="#">Delete</a></div>
+                            <div><a onClick={handleDeleteOrder} className='px-4 hover:bg-gray-100 py-1 text-sm w-full inline-block text-gray-500' href="#">Delete</a></div>
                             <div><a onClick={handleCloseAction} className='px-4 hover:bg-gray-100 py-1 text-sm w-full inline-block text-gray-500' href="#">View</a></div>
                         </div>
-                        {/* <Link  className="px-3 py-1 inline-block bg-green-50 text-green-700">Edit</Link>
-                        <button className="px-3 py-1 inline-block bg-red-50 text-red-700">Delete</button> */}
+                       
                     </div>
                 </td>
             </tr>   
@@ -189,8 +203,6 @@ const OrdersRows = ({order,index}) => {
                                     }
                                 </tbody>
                             </table>
-
-                        
                         </div>
                         <Link  className="flex justify-center gap-1 items-center w-full py-3 px-3 bg-primary text-white rounded text-sm">Preview and update order</Link>
                     </div>

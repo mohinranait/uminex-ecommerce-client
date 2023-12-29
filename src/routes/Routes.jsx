@@ -33,7 +33,7 @@ const myRoutes = createBrowserRouter([
         element : <MainLayout />,
         children : [
             { index : true, element : <Home /> },
-            { path : "/category/:slug", element : <Shops /> },
+            { path : "/shop", element : <Shops /> },
             { path : "/:slug/:slug", element : <Products /> },
             { path : "/carts", element : <Carts /> },
             { path : "/checkout", element : <Checkout /> },
