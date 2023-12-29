@@ -3,7 +3,7 @@ import Rating from "react-rating";
 
 const ProductRatingItem = ({index,rating}) => {
     const {reviews,width} = rating || {};
-    console.log(rating);
+
     return (
         <>
             <li className="flex gap-5 items-center">

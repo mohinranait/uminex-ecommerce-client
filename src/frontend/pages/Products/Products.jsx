@@ -3,11 +3,12 @@ import ProductRating from '../../global/ProductRating';
 import { useState } from 'react';
 import { LuHeart, LuLayers, LuMapPin, LuShare2 } from 'react-icons/lu';
 import { IoCashOutline, IoCheckmarkDoneCircleOutline, IoChevronDown, IoShieldCheckmarkOutline, IoSwapHorizontalOutline } from 'react-icons/io5';
-import { FaTruckMoving } from 'react-icons/fa';
+import {  FaTruckMoving } from 'react-icons/fa';
 import { PiStackSimpleBold } from "react-icons/pi";
 import ProductGallary from '../../components/ProductGallary/ProductGallary';
 import { HiMiniChevronLeft, HiMiniChevronRight } from 'react-icons/hi2';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link as ScrolLink } from 'react-scroll';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import useAuth from '../../../hooks/useAuth';
@@ -16,6 +17,7 @@ import toast from "react-hot-toast"
 import useCarts from '../../../hooks/useCarts';
 import useWishlists from '../../../hooks/useWishlists';
 import ProductDetailsTabs from '../../components/tabs/ProductDetailsTabs';
+import ChatApp from '../../components/liveChat/ChatApp';
 
 
 
@@ -25,7 +27,7 @@ const Products = () => {
     const {slug} = useParams();  
     const axiosPublic = useAxiosPublic();
     const axios = useAxios()
-    
+    const [chatModal, setChatModal] = useState(false)
     const [color, setColor] = useState( null );
     const [size, setSize] = useState("2GB");
     const [quantity, setQuantity] = useState(1);
@@ -41,7 +43,7 @@ const Products = () => {
             return data.product;
         }
     })
-    const {_id , name,media,brand,colors, category,price,isStock
+    const {_id , name,media,brand,colors,rating, reviews, category,price,isStock
     ,product_type} = product || {};
     
     const {data:categoryProducts} = useQuery({
@@ -176,7 +178,17 @@ const Products = () => {
                                         <div className='pb-5'>
                                             <h1 className='text-xl mb-1 font-medium'>{name}</h1>
                                             <div className='flex items-center  gap-3'>
-                                                <ProductRating rating={'4'} /> <span className='text-sm'>/</span> <span className='text-sm'>2 Reviews</span> <span className='text-sm'>/</span> <span className='text-sm'>Write reviews</span>
+                                                <ProductRating rating={`${rating}`} /> 
+                                                <span className='text-sm'>/</span> 
+                                                <span className='text-sm'>{reviews || 0} Reviews</span> 
+                                                <span className='text-sm'>/</span> 
+                                                <ScrolLink 
+                                                to='comments' 
+                                                spy={true} 
+                                                smooth={true} 
+                                                offset={-60} 
+                                                duration={500} 
+                                                className='text-sm cursor-pointer'>Write reviews</ScrolLink>
                                             </div>
                                         </div>
                                         <hr />
@@ -283,7 +295,7 @@ const Products = () => {
                                         categoryProducts?.products?.map(product =>  <li key={product?._id} className='py-2'>
                                         <div className='flex gap-2'>
                                             <div className='w-22 h-22'>
-                                                <img className='w-24 h-24' src={product?.media?.images[0]} alt="" />
+                                                <img className='w-24 h-24' src={product?.media?.images[0] || ''} alt="" />
                                             </div>
                                             <div>
                                                 <p><Link to={`/${category?.slug}/${product?.slug}`} className='font-medium text-gray-600'>{product?.name}</Link></p>
@@ -291,7 +303,7 @@ const Products = () => {
                                                 <span className='text-sm flex items-center gap-2 cursor-pointer font-medium text-gray-500 hover:text-secondary transition-all'><PiStackSimpleBold /> Add to compare </span>
                                                     <div className='flex items-center gap-3'>
                                                         <span className='font-semibold text-gray-600'>${product?.price?.sellingPrice}</span> 
-                                                        <ProductRating rating={4} />
+                                                        <ProductRating rating={'4'} />
                                                     </div> 
                                                    
                                                 </div>
@@ -321,7 +333,7 @@ const Products = () => {
                                                 <span className='text-sm flex items-center gap-2 cursor-pointer font-medium text-gray-500 hover:text-secondary transition-all'><PiStackSimpleBold /> Add to compare </span>
                                                     <div className='flex items-center gap-3'>
                                                         <span className='font-semibold text-gray-600'>$120</span> 
-                                                        <ProductRating rating={4} />
+                                                        <ProductRating rating={'4'} />
                                                     </div> 
                                                    
                                                 </div>
@@ -339,6 +351,12 @@ const Products = () => {
                     </div>
                 </div>
             </section>
+
+         
+           
+           {/* Realtime chat app */}
+            {/* <ChatApp product={product} chatModal={chatModal} setChatModal={setChatModal} />                          */}
+           
         </>
     );
 };

@@ -4,12 +4,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCcoJPt4n0QMuPPOlVJOrb5mGTpo9S4drc",
-  authDomain: "uminex-mern-app.firebaseapp.com",
-  projectId: "uminex-mern-app",
-  storageBucket: "uminex-mern-app.appspot.com",
-  messagingSenderId: "919644719631",
-  appId: "1:919644719631:web:0350bdea28049d6074717a"
+  apiKey: import.meta.env.VITE_APIKEY,
+  authDomain: import.meta.env.VITE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_PROJECTID,
+  storageBucket: import.meta.env.VITE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_APPID,
 };
 
 // Initialize Firebase

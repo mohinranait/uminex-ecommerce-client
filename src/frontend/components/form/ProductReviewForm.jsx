@@ -4,8 +4,10 @@ import RatingCreate from "../Ratings/RatingCreate";
 import useAuth from "../../../hooks/useAuth";
 import useAxios from "../../../hooks/useAxios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ProductReviewForm = ({productId}) => {
+    const navigate = useNavigate();
     const [rating, setRating] = useState(5);
     const [error, setError] = useState(null)
     const {user} = useAuth();
@@ -14,6 +16,8 @@ const ProductReviewForm = ({productId}) => {
     const handleSubmitReview = async (e) => {
         e.preventDefault();
 
+       
+        // Reviews input
         const review = e.target.reviewText.value;
         if(review.length == 0){
             return setError("Invalid form data")
@@ -34,8 +38,10 @@ const ProductReviewForm = ({productId}) => {
                 if(data.success == 'isExists'){
                     toast.success("You have reviewd this product", {icon: '🙅‍♂️'})
                 }else{
-                    toast("Reviews successfull")
+                    toast("Reviews successfull", {icon: '❤️‍🔥'})
                 }
+            }else{
+                navigate("/login")
             }
         } catch (error) {
             toast.error(error.message)

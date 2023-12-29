@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 const ProductGallary = ({media}) => {
     const {images} = media || {};
-    const [sliderImage, setSliderImage] = useState();
+    const [sliderImage, setSliderImage] = useState(null);
 
     const handleSliderImage = (image) => {
         setSliderImage(image);
@@ -55,7 +55,7 @@ const ProductGallary = ({media}) => {
 };
 
 ProductGallary.propTypes = {
-    media: PropTypes.object.isRequired
+    media: PropTypes.object
 }
 
 export default ProductGallary;

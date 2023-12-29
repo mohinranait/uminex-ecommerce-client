@@ -4,9 +4,10 @@ import ProductRatingItem from "./ProductRatingItem";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types"
 
 
-const RatingDisplay = () => {
+const RatingDisplay = ({product}) => {
     const axiosPublic = useAxiosPublic();
     const [ratOne, setRatOne] = useState(0)
     const [ratTwo, setRatTwo] = useState(0)
@@ -20,10 +21,12 @@ const RatingDisplay = () => {
         return avarage
     }
 
+
     const {data:totalRatings} = useQuery({
-        queryKey : ['reviewsCalc'],
+        queryKey : ['reviewsCalc',product?._id],
         queryFn : async () => {
-            const {data} = await axiosPublic.get(`/reviews/65746463d7b03beef0d8f1a2`);
+            const {data} = await axiosPublic.get(`/reviews/${product?._id}`);
+
             const oneRatings = data?.reviews?.filter(d => d.rating === 1 );
             const twoRatings = data?.reviews?.filter(d => d.rating === 2 );
             const threeRatings = data?.reviews?.filter(d => d.rating === 3 );
@@ -37,6 +40,7 @@ const RatingDisplay = () => {
             return data?.reviews
         }
     })
+
 
     useEffect(() => {
         const ratings = [
@@ -54,23 +58,23 @@ const RatingDisplay = () => {
         <>
             <div className="lg:grid grid-cols-3 pb-5 gap-5">
                 <div className=" space-y-2 mb-6 lg:mb-0">
-                    <div className="flex items-center gap-2"><span className="text-3xl font-bold">4.5</span> <span className="text-white bg-[#FD8C00] text-xs py-1 px-5">  Top Rated</span> </div>
+                    <div className="flex items-center gap-2"><span className="text-3xl font-bold">{ product?.rating?.toFixed(1) || 0}/<span className="text-2xl">5</span></span> <span className="text-white bg-[#FD8C00] text-xs py-1 px-3">  Top Rated</span> </div>
                     <div className="flex items-center gap-2"> 
                         {
                             <Rating
-                                initialRating={ 3.5 }
+                                initialRating={`${product?.rating}` }
                                 readonly
                                 emptySymbol={<FaStar size={18} color="#E5E5E5"  className="mr-1" />}
                                 fullSymbol={<FaStar size={18} color="#FD8C00" className="mr-1" />}
                             />
                         }
                     </div>
-                    <p className="text-gray500 text-xs font-medium text-gray-600">142 Ratings</p>
+                    <p className="text-gray500 text-xs font-medium text-gray-600">{product?.reviews || 0} Ratings</p>
                 </div>
                 <div className="col-span-2">
                     <ul className="space-y-1">
                         {
-                            ratings?.map((rating,index) =>  <ProductRatingItem key={index} index={index} rating={rating} /> )
+                            ratings?.map((rating,index) =>  <ProductRatingItem key={index} index={index} rating={rating} product={product} /> )
                         }
                     </ul>
                 </div>
@@ -79,4 +83,8 @@ const RatingDisplay = () => {
     );
 };
 
+
+RatingDisplay.propTypes = {
+    product: PropTypes.object.isRequired
+}
 export default RatingDisplay;

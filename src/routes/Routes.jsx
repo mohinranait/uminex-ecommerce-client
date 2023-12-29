@@ -25,6 +25,7 @@ import Checkout from '../frontend/pages/Checkout/Checkout';
 import Orders from '../backend/pages/Orders';
 import PaymentSuccess from '../frontend/pages/PaymentSuccess/PaymentSuccess';
 import Wishlists from '../frontend/pages/User/Wishlists';
+import LiveChatFromAdmin from '../backend/pages/LiveChatFromAdmin';
 
 const myRoutes = createBrowserRouter([
     {
@@ -89,6 +90,10 @@ const myRoutes = createBrowserRouter([
                 path: 'new-product',
                 element : <ProductCreate />
             },
+            // {
+            //     path: 'live-chat',
+            //     element : <LiveChatFromAdmin />
+            // },
             {
                 path: 'update-product/:id',
                 element : <EditProduct />,

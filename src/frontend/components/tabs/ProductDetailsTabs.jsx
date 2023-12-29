@@ -9,7 +9,6 @@ import ProductReviewForm from "../form/ProductReviewForm";
 
 import RatingDisplay from "../Ratings/RatingDisplay";
 const ProductDetailsTabs = ({product}) => {
- 
     
     const [accourding, setAccording] = useState(true);
     const handleAccording = () => {
@@ -20,8 +19,8 @@ const ProductDetailsTabs = ({product}) => {
     return (
         <>
             <div className='space-y-4 '>
-                <div className="sticky bg-white top-0">
-                    <ul className='flex gap-4 items-center px-4 tabActive py-2'>
+                <div className="sticky  z-10 bg-white top-0">
+                    <ul className='flex gap-4   items-center px-4 tabActive py-2'>
                             <Link
                             to='specification' 
                             smooth={true} 
@@ -76,7 +75,7 @@ const ProductDetailsTabs = ({product}) => {
                     </div>
                     <div className={` px-7  transition-all duration-500 overflow-hidden ${accourding ? " target:max-h-[300px] py-4":'h-0'} `}>
                         <div>
-                            <RatingDisplay />
+                            <RatingDisplay product={product} />
                             <hr className="py-3"/>
                             <ProductReviewForm productId={product?._id} />
                         </div>
