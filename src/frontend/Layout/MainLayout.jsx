@@ -14,8 +14,9 @@ const MainLayout = () => {
     }
     const {
         showItem,setShowItem,
+        headerSearchHistoryBox, setHeaderSearchHistoryBox,
         selectBox,setSelectBox,
-        isMobileTab,setIsMobileTab
+        isMobileTab,setIsMobileTab,
     } = useContext(OnclickContext);
 
     const handleAllClickEvent = () => {
@@ -31,6 +32,10 @@ const MainLayout = () => {
         // Shop page price low to high 
         if(selectBox){
             setSelectBox(false)
+        }
+        // Shop page price low to high 
+        if(headerSearchHistoryBox){
+            setHeaderSearchHistoryBox(false)
         }
         // Mobile Product tab for home page product slider section
         if(isMobileTab){

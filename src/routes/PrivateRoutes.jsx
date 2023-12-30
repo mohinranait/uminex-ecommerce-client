@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 
+import LoaderOne from '../components/Loader/LoaderOne';
 import useAuth from '../hooks/useAuth';
 import { Navigate, useLocation } from 'react-router-dom';
 
@@ -9,9 +10,7 @@ const PrivateRoutes = ({children}) => {
 
     console.log(loading);
     if( loading ){
-        return <div>
-            <p className='text-center pt-16 text-red-600 font-bold '>Loading...</p>
-        </div>
+        return <LoaderOne />
     }
 
     if(user?.email){

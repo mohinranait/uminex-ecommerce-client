@@ -28,7 +28,7 @@ const PaymentSuccess = () => {
         })
         const obj = {
             userInfo : user?._id,
-            deliveryAddress : "65871fc52ab62ff94b6a912d",
+            deliveryAddress : user?.address,
             paymentMethod : payMethod == 'stripe' ? 'stripe':'cod',
             totalItems: getShoppingCarts?.reduce((total,current) => total + current?.quantity ,0),
             orderHistory: shopHistory,

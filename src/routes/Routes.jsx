@@ -26,11 +26,13 @@ import Orders from '../backend/pages/Orders';
 import PaymentSuccess from '../frontend/pages/PaymentSuccess/PaymentSuccess';
 import Wishlists from '../frontend/pages/User/Wishlists';
 import LiveChatFromAdmin from '../backend/pages/LiveChatFromAdmin';
+import Notfound from '../frontend/pages/Notfound';
 
 const myRoutes = createBrowserRouter([
     {
         path : "/",
         element : <MainLayout />,
+        errorElement : <Notfound />,
         children : [
             { index : true, element : <Home /> },
             { path : "/shop", element : <Shops /> },

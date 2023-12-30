@@ -1,6 +1,6 @@
-import { Link, NavLink, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { IoCallOutline, IoHeartSharp, IoPersonSharp } from "react-icons/io5";
-import { IoMdHeartEmpty } from "react-icons/io";
+import { IoMdClose, IoMdHeartEmpty } from "react-icons/io";
 import { LuMenu, LuShoppingCart } from "react-icons/lu";
 import { GoPerson } from "react-icons/go";
 import PropTypes from "prop-types"
@@ -10,12 +10,16 @@ import useAuth from "../../../hooks/useAuth";
 import useCarts from "../../../hooks/useCarts";
 import useWishlists from "../../../hooks/useWishlists";
 import useCategorys from "../../../hooks/useCategorys";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import qs from "query-string"
+import { OnclickContext } from "../../Providers/OnclickProvider";
+import { v4 as uuidv4 } from 'uuid';
+import { getSearcHistoryFromLsData } from "../../../services/localStorage";
 
 const Header = ({toggleCartDoyarHandler}) => {
-    const [params, setParams] = useSearchParams();
     const [search, setSearch] = useState('');
+    const [searchHistorys, setSearchHistorys] = useState([]);
+    const [filterHistorys, setFilterHistorys] = useState([])
     const [wishlists] = useWishlists();
     const [carts] = useCarts();
     const [categorys] = useCategorys({search:'',status:true});
@@ -23,6 +27,7 @@ const Header = ({toggleCartDoyarHandler}) => {
     const location = useLocation();
     const {logOut,user} = useAuth();
     const navigate = useNavigate();
+    const {setHeaderSearchHistoryBox,headerSearchHistoryBox} = useContext(OnclickContext)
     
     // User Logout
     const handleLogout = async () => {
@@ -48,9 +53,67 @@ const Header = ({toggleCartDoyarHandler}) => {
             url: "/shop",
             query : updateQuery,
         })
-        // console.log(url);
         navigate(url)
+
+        // get LS history
+        let getSearchHistorys = getSearcHistoryFromLsData()
+        const lsSearchHistory = {
+            value : search,
+            url,
+            _id: uuidv4()
+        }
+        const isExists = getSearchHistorys?.find(item => item?.value == search );
+        if(!isExists){
+            getSearchHistorys.push(lsSearchHistory)
+            localStorage.setItem('searchHistory', JSON.stringify(getSearchHistorys))
+        }
     }
+
+    // Handle search on click
+    const handleSearchClick = (e) => {
+        
+        setHeaderSearchHistoryBox(true)
+        e.stopPropagation()
+
+        const filter = filterHistorys?.filter(item => item?.value.toLowerCase().includes(inputValue.toLowerCase()) )
+        if( filter ){ 
+            setSearchHistorys(filter)
+            setHeaderSearchHistoryBox(true)
+        }
+
+        let getSearchHistorys = getSearcHistoryFromLsData()
+        setSearchHistorys(getSearchHistorys)
+        setFilterHistorys(getSearchHistorys)
+    }
+
+    // Handle search input onChange 
+    const handleOnChange = (e) => {
+        const inputValue = e.target.value;
+        e.stopPropagation()
+        setSearch(inputValue)
+
+        const filter = filterHistorys?.filter(item => item?.value.toLowerCase().includes(inputValue.toLowerCase()) )
+        if( filter ){ 
+            setSearchHistorys(filter)
+            setHeaderSearchHistoryBox(true)
+        }
+
+    }
+
+    
+
+    // Handle remove search history 
+    const hendleDeleteHistory = (e,value) => {
+        e.preventDefault()
+        e.stopPropagation();
+        
+        // localhostoreage from search history
+        let getSearchHistorys = getSearcHistoryFromLsData()
+        const filter = getSearchHistorys?.filter(item => item?._id !== value);
+        setSearchHistorys(filter)
+        localStorage.setItem('searchHistory', JSON.stringify(filter))
+    }
+
     
     return (
         <header className="hidden lg:block">
@@ -61,8 +124,14 @@ const Header = ({toggleCartDoyarHandler}) => {
                             <li className='flex items-center gap-1'> <IoCallOutline /> <span> Call us:  <a href="tel:1-888-345-6789" className='font-semibold'>1-888-345-6789</a> </span></li>
                         </ul>
                         <ul className='flex items-center justify-end gap-3 text-xs divide-x '>
-                            <li className=''><a href="#" className='flex items-center gap-1'><IoPersonSharp className='text-sm' /> My Account</a></li>
-                            <li className=' pl-3'><a href="#" className='flex items-center gap-1'><IoHeartSharp className='text-sm' /> Wishlist</a></li>
+                            {
+                                user?._id ? 
+                                <li className=''><Link to="/user/profile" className='flex items-center gap-1'><IoPersonSharp className='text-sm' /> My Account</Link></li>
+                                : 
+                                <li className=''><Link to="/login" className='flex items-center gap-1'><IoPersonSharp className='text-sm' /> Sign In</Link></li>
+                             }
+                           
+                            <li className=' pl-3'><Link to="/user/wishlists" className='flex items-center gap-1'><IoHeartSharp className='text-sm' /> Wishlist</Link></li>
                             <li className=' pl-3'><a href="#" className='flex items-center gap-1'>USD</a></li>
                             <li className=' pl-3'><a href="#" className='flex items-center gap-1'>BD</a></li>
                         </ul>
@@ -75,7 +144,7 @@ const Header = ({toggleCartDoyarHandler}) => {
                         <div className="col-span-3">
                             <Link to={'/'} className="text-3xl font-bold uppercase">Store<span className="text-primary">MI</span></Link>
                         </div>
-                        <div className="col-span-6">
+                        <div className="col-span-6 relative">
                             <div className="flex rounded-md ">
                                 <div className="border-2  py-2 border-r-0 w-full border-[#3E5E8EC] rounded-md rounded-r-none flex ">
                                     <select name="" onChange={(e) => setCategory(e.target.value)} className="w-[290px] px-3 outline-none " id="">
@@ -84,10 +153,38 @@ const Header = ({toggleCartDoyarHandler}) => {
                                             categorys?.map(category =>   <option key={category?._id} value={category?.slug}>{category?.name}</option> )
                                         }
                                     </select>
-                                    <input type="search" onChange={(e) => setSearch(e.target.value)} className="w-full border-l ml-2 rounded-md outline-none px-3 " placeholder="Search products..." />
+                                    <input type="search" onClick={handleSearchClick}  onChange={ handleOnChange} className="w-full border-l ml-2 rounded-md outline-none px-3 " placeholder="Search products..." />
                                 </div>
                                 <button onClick={handleSearchButton} className="px-8 bg-primary rounded-r-md text-white text-sm font-semibold">Search</button>
                             </div>
+
+                            {
+                                searchHistorys.length > 0 && headerSearchHistoryBox &&   <div className="top-[50px] bg-gray-100 left-0 w-full absolute ">
+                                <ul className="space-y-1 relative z-50 bg-white w-full shadow">
+                                    {
+                                        searchHistorys?.map((search, index) => {
+                                       
+
+                                            return (
+                                                <li key={index} className="flex justify-between items-center hover:bg-gray-100 px-3">
+                                                    <Link to={search?.url} className="py-2 w-full "> 
+                                                        <div>
+                                                            <span className="text-sm text-gray-800">{search?.value}</span> 
+                                                        </div>
+                                                    
+                                                    </Link>
+                                                    <div onClick={(e) => hendleDeleteHistory(e,search?._id)} className="w-8 h-8 flex justify-center items-center cursor-pointer rounded-full text-gray-800 bg-gray-50">
+                                                        <IoMdClose />
+                                                    </div>
+                                                </li>
+                                            )
+                                        } )
+                                    }
+                                    
+                                </ul>
+                            </div>
+                            }
+                           
                         </div>
                         <div className="col-span-3">
                             <ul className="flex items-center justify-end lg:gap-5">

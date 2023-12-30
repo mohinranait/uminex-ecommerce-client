@@ -1,6 +1,6 @@
 
 import { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { IoChevronBack, IoChevronForwardOutline, IoCloseOutline } from 'react-icons/io5';
 import { OnclickContext } from '../../Providers/OnclickProvider';

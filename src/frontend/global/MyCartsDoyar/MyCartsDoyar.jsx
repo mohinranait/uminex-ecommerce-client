@@ -33,7 +33,15 @@ const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
                     </div>
                     <div className='px-4 flex-grow overflow-y-auto'>
                         <ul className=" h-full  py-3 space-y-4">
-                            
+                            {
+                                carts?.items?.length == 0 && (
+                                <div className="flex h-[90%] items-center justify-center">
+                                    <span>
+                                        <p className="mb-3">Your Shopping cart is empty</p>
+                                        <img className="w-[120px] mx-auto" src="https://media.istockphoto.com/id/1201115991/vector/shopping-cart.jpg?s=612x612&w=0&k=20&c=5GyX3yP_D8bDmUDEjR06osSzPjVtVfsdU1_zeohpOxk=" alt="" />
+                                    </span>
+                                </div> )
+                            }
                             {
                                 carts?.items?.map(cart => <RightDoyarCartItems key={cart?._id} refetch={refetch} cart={cart} /> )
                             }

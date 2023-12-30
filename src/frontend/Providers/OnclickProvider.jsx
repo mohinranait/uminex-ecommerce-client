@@ -11,12 +11,15 @@ const OnclickProvider = ({children}) => {
     const [selectBox, setSelectBox] = useState(false);
     // Home page mobile version product tabs
     const [isMobileTab, setIsMobileTab] = useState(false);
+    // Header search history box setup
+    const [headerSearchHistoryBox, setHeaderSearchHistoryBox] = useState(false)
 
 
     const clickState = {
         showItem,setShowItem,
         selectBox,setSelectBox,
-        isMobileTab,setIsMobileTab
+        isMobileTab,setIsMobileTab,
+        headerSearchHistoryBox, setHeaderSearchHistoryBox
     }
 
     return (
