@@ -160,7 +160,7 @@ const Header = ({toggleCartDoyarHandler}) => {
 
                             {
                                 searchHistorys.length > 0 && headerSearchHistoryBox &&   <div className="top-[50px] bg-gray-100 left-0 w-full absolute ">
-                                <ul className="space-y-1 relative z-50 bg-white w-full shadow">
+                                <ul className="space-y-1 relative z-50 bg-white w-full shadow max-h-48 overflow-y-auto">
                                     {
                                         searchHistorys?.map((search, index) => {
                                        

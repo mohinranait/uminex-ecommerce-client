@@ -11,13 +11,14 @@ import useBrands from '../../../hooks/useBrands';
 import ProductPlaceholder from '../../components/Loding/ProductPlaceholder';
 import useColors from '../../../hooks/useColors';
 import { Helmet } from 'react-helmet-async';
+import { ListPlaceholder } from '../../components/Loding/LeftSidebarCategoryPlaceholder';
 
 
 
 const Shops = () => {
     // const {slug} = useParams();
-    const [brands] = useBrands();
-    const [colors] = useColors();
+    const [brands,,brandPending] = useBrands();
+    const [colors,,isColorPending] = useColors();
     const [filterValue, setFilterValue] = useState({})
     const [params, setParams] = useSearchParams();
     const [isCategory, setIsCategory] = useState({});
@@ -249,17 +250,20 @@ const Shops = () => {
                                                 <li className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i2/O1CN01sEvCqG1M7ICGGpTXv_!!6000000001387-2-tps-72-72.png" alt="" /> <span className='text-sm'>Cash On Delivery</span></span></li>
                                             </ul>
                                         </div>
-                                        <div className='mt-6'>
+                                        {/* <div className='mt-6'>
                                             <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Categorys</p>
                                             <ul className='space-y-2'>
                                                 <li className=''><Link className='block hover:text-gray-900 cursor-pointer text-gray-600'> DSLR </Link></li>
                                                 <li className=''><Link className='block hover:text-gray-900 cursor-pointer text-gray-600'> Body only </Link></li>
                                                 <li className=''><Link className='block hover:text-gray-900 cursor-pointer text-gray-600'> Lents </Link></li>
                                             </ul>
-                                        </div>
+                                        </div> */}
                                         <div className='mt-6'>
                                             <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'><span>Brands</span> <span onClick={() => handleClearFilter('brand')} className='text-sm cursor-pointer'>Clear</span></p>
                                             <ul className='space-y-2'>
+                                                {
+                                                    brandPending && [0,1,2,3,4,5,6].map(item => <ListPlaceholder key={item} /> )
+                                                }
                                                 {
                                                     brands?.map(brand =>  <li key={brand?._id} className='' onClick={() => handleBrand(brand?.slug)}>
                                                     <label htmlFor={brand?.slug} className='cursor-pointer relative'>
@@ -278,6 +282,9 @@ const Shops = () => {
                                         <div className='mt-6'>
                                             <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'>Colors <span onClick={() => handleClearFilter('color')} className='text-sm cursor-pointer'>Clear</span> </p>
                                             <ul className='space-y-2'>
+                                                {
+                                                    isColorPending && [0,1,2,3,4,5,6].map(item => <ListPlaceholder key={item} /> )
+                                                }
                                                 {
                                                     colors?.map(color => <li key={color?._id} className='' onClick={() => handleColor(color?.name)}>
                                                     <label htmlFor={color?.name} className='cursor-pointer relative'>
