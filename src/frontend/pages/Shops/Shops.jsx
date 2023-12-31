@@ -238,7 +238,7 @@ const Shops = () => {
                             }
                             `}>
                                 <div className='bg-white  px-5 py-4 relative '>
-                                    <span onClick={() => setIsLeftFilter(!isLeftFilter)} className='z-[999] lg:hidden w-[30px] h-[50px] bg-primary absolute -right-[30px] flex items-center justify-center top-2 text-lg text-white rounded-r cursor-pointer'> {isLeftFilter ? <IoChevronBack /> : <IoChevronForwardOutline /> }  </span>
+                                    <span onClick={() => setIsLeftFilter(!isLeftFilter)} className='z-[999] lg:hidden w-[30px] h-[50px] bg-primary absolute -right-[30px] flex items-center justify-center top-10 text-lg text-white rounded-r cursor-pointer'> {isLeftFilter ? <IoChevronBack /> : <IoChevronForwardOutline /> }  </span>
                                     <div className='h-screen lg:h-auto overflow-y-auto lg:overflow-y-clip pb-20 lg:pb-0'>
                                         <p className='text-xl font-semibold text-gray-800 mb-4'>Filters</p>
                                         <div>
@@ -302,7 +302,7 @@ const Shops = () => {
                         <div className='col-span-3'>
                             <div>
                                 <div className='shop-header '>
-                                    <div className='text-lg font-semibold text-text-color'><span className='text-primary'>{isCategory?.name}  </span> <span className='text-sm'> - ({products?.length}) Products</span> </div>
+                                    <div className='text-lg font-semibold text-text-color'><span className='text-primary'>{isCategory?.name } {isCategory?.name && '-'}   </span> <span className='text-sm'>  ({products?.length}) Products</span> </div>
                                     <div className="relative">
                                         
                                         <div className={` flex flex-wrap gap-4 `}>

@@ -7,9 +7,11 @@ import { useContext, useState } from 'react';
 import { OnclickContext } from '../Providers/OnclickProvider';
 import MyCartsDoyar from '../global/MyCartsDoyar/MyCartsDoyar';
 import ScrollToTop from '../../components/ScrollToTop';
+import MobileSearch from '../components/MobileSearch/MobileSearch';
 
 const MainLayout = () => {
     const [cartDoyar, setCartDoyar] = useState(false);
+    const [isMobileSearch, setIsMobileSearch] = useState(false)
     const toggleCartDoyarHandler = () => {
         setCartDoyar(!cartDoyar)
     }
@@ -45,10 +47,11 @@ const MainLayout = () => {
     }
     return (
         <div onClick={handleAllClickEvent}>
+            <MobileSearch isMobileSearch={isMobileSearch} setIsMobileSearch={setIsMobileSearch} />
             <Header toggleCartDoyarHandler={toggleCartDoyarHandler} />
             <Outlet />
             <Footer />
-            <MobileMenu toggleCartDoyarHandler={toggleCartDoyarHandler} />
+            <MobileMenu toggleCartDoyarHandler={toggleCartDoyarHandler} isMobileSearch={isMobileSearch} setIsMobileSearch={setIsMobileSearch}/>
             <MyCartsDoyar toggleCartDoyarHandler={toggleCartDoyarHandler} cartDoyar={cartDoyar} />
             <ScrollToTop />
         </div>
