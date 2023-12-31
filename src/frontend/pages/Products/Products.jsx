@@ -18,6 +18,7 @@ import useCarts from '../../../hooks/useCarts';
 import useWishlists from '../../../hooks/useWishlists';
 import ProductDetailsTabs from '../../components/tabs/ProductDetailsTabs';
 import ChatApp from '../../components/liveChat/ChatApp';
+import { Helmet } from 'react-helmet-async';
 
 
 
@@ -148,9 +149,14 @@ const Products = () => {
         }
     }
 
+    console.log(product);
     return (
         <>
+              { product?.name &&  <Helmet>
+                <title> {name} | Store MI</title>
+            </Helmet> }
             <section>
+         
                 <div className="box py-4 flex items-center justify-between">
                     <ul className='flex flex-wrap items-center gap-1 font-medium text-base text-[#8D979E] '>
                         <li><a href='#' className='hover:text-text-color'>Home</a></li> <span>/</span>

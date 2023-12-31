@@ -53,7 +53,7 @@ const AddressForm = ({refetch,singleAddress, setIsAddress}) => {
         <>
             <form onSubmit={handleSubmit(handleAddressForm)} className="bg-white py-8 space-y-2 px-5">
                 <div className="grid md:grid-cols-2 gap-x-10 gap-y-4 mb-10">
-                    <div className="col-span-2"> 
+                    <div className="md:col-span-2"> 
                         <label htmlFor="" className="text-gray-600 text-sm">Full name</label>
                         <input type="text" name="fullname" {...register("fullname", { required: "Full name is require" })} defaultValue={ fullName ? fullName :   user?.name || ''} className="py-2 w-full border outline-primary pl-3 border-gray-300 rounded-md" />
                         {errors.fullname && <p className="text-xs text-red-500">{errors.fullname.message}</p>}

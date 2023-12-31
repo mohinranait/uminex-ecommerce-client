@@ -5,6 +5,7 @@ import ProductSection from "../../components/Section/ProductSection";
 import CoverProduct from "../../components/Section/CoverProduct";
 import DisplayProducts from "../../components/Section/DisplayProducts";
 import useProducts from "../../../hooks/useProducts";
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
     const [products,,isPending] = useProducts();
@@ -12,6 +13,9 @@ const Home = () => {
     
     return (
         <>
+            <Helmet>
+                <title> Store mi ecommerce app</title>
+            </Helmet>
             <HomeBanner products={getProducts} isPending={isPending} />
             <CoverProduct />
             <ProductSection products={getProducts} isPending={isPending} />

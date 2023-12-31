@@ -24,7 +24,7 @@
       @apply px-5 py-2 inline-block text-text-color hover:bg-primary w-full hover:text-white transition-all duration-300
   }
   .mobilemenu-icon{
-      @apply py-2  inline-block text-gray-700 hover:text-gray-900
+      @apply py-2   text-gray-700 hover:text-gray-900 flex items-center justify-center
   }
   .mobilembttom{
       @apply fixed bottom-0 border-t border-slate-100 z-[100] left-0 w-full py-1 bg-white
@@ -33,7 +33,7 @@
       @apply  w-[90vw]  sm:w-[310px] z-50  top-0 fixed bottom-0 bg-white shadow
   }
   .countMobile{
-    @apply absolute top-4 right-2 w-5 h-5 text-xs text-white bg-secondary rounded-full flex items-center justify-center
+    @apply absolute top-1 right-1 w-5 h-5 text-xs text-white bg-secondary rounded-full flex items-center justify-center
   }
   .mobileCartStyle { 
     @apply w-14 h-14  bg-primary border-4 border-white shadow-lg rounded-full flex items-center justify-center
@@ -42,7 +42,7 @@
   .shopLeftFilter {
     @apply bg-white lg:bg-transparent w-[80vw] sm:w-[60vw]  md:w-[30vw] z-50 top-0  bottom-0 transition-all lg:static  lg:w-auto fixed shadow lg:shadow-none
   }
-  .usermenuWrap { @apply bg-white px-10 py-10 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-5 }
+  .usermenuWrap { @apply bg-white px-2 md:px-10 py-10 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-5 }
   .userDashboardMenu {
     @apply py-2 flex items-center gap-2 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200 transition-all px-5 w-full rounded
   }

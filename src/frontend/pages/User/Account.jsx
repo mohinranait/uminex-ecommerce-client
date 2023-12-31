@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
 import SummeryCard from '../../components/User/SummeryCard';
 import useAxios from '../../../hooks/useAxios';
+import { Helmet } from 'react-helmet-async';
 
 const Account = () => {
     const axios = useAxios();
@@ -16,6 +17,9 @@ const Account = () => {
     })
     return (
         <>
+            <Helmet>
+                <title> {user?.name} dashboard | Store MI</title>
+            </Helmet>
             <div>
                 <p className="mb-5">Welcome <span className="font-semibold">{user?.name}</span> </p>
                 <div className="grid grid-cols-3 gap-2 md:gap-5 mb-6">

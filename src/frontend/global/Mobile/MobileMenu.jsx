@@ -4,12 +4,17 @@ import { Link } from 'react-router-dom';
 import { IoHomeOutline, IoPersonOutline } from 'react-icons/io5';
 import { HiBars3BottomLeft, HiMiniXMark, HiOutlineShoppingCart } from 'react-icons/hi2';
 import { LuSearch } from 'react-icons/lu';
+import useCategorys from '../../../hooks/useCategorys';
+import useCarts from '../../../hooks/useCarts';
+import useAuth from '../../../hooks/useAuth';
+
 
 const MobileMenu = ({toggleCartDoyarHandler}) => {
-
+    const [carts] = useCarts();
+    const [categorys] = useCategorys({search:'',status:true});
     const [isToggle, setIsToggle] = useState(false);
     const [isActiveMenu, setIsActiveMenu] = useState('category');
-
+    const {user} = useAuth();
     const handleMobileMenuTab = (value) => {
         setIsActiveMenu(value)
     }
@@ -40,17 +45,17 @@ const MobileMenu = ({toggleCartDoyarHandler}) => {
                     {
                         isActiveMenu =='category' ? 
                         <div>
-                            <li><Link onClick={handleMobileMenuShowup} className='mobilemenu' >Furniture</Link></li>
-                            <li><Link onClick={handleMobileMenuShowup} className='mobilemenu' >Cookis</Link></li>
-                            <li><Link onClick={handleMobileMenuShowup} className='mobilemenu' >Mobile</Link></li>
-                            <li><Link onClick={handleMobileMenuShowup} className='mobilemenu' >Laptops</Link></li>
+                            {
+                                categorys.length > 0 && categorys?.map(item => <li key={item?._id}><Link onClick={handleMobileMenuShowup} to={`/shop?category=${item?.slug}`} className='mobilemenu' >{item?.name}</Link></li> ) 
+                            }
+                          
                         </div>
                         : 
                         <div>
-                            <li><Link onClick={handleMobileMenuShowup} to={'/'} className='mobilemenu' >home</Link></li>
-                            <li><Link onClick={handleMobileMenuShowup} to={'/shops'} className='mobilemenu' >Shops</Link></li>
+                            <li><Link onClick={handleMobileMenuShowup} to={'/'} className='mobilemenu' >Home</Link></li>
+                            <li><Link onClick={handleMobileMenuShowup} to={'/shop'} className='mobilemenu' >Shops</Link></li>
                             <li><Link onClick={handleMobileMenuShowup} to={'/carts'} className='mobilemenu' >My Cart</Link></li>
-                            <li><Link onClick={handleMobileMenuShowup}  className='mobilemenu' >Login</Link></li>
+                            <li><Link onClick={handleMobileMenuShowup} to={'/login'}  className='mobilemenu' >Login</Link></li>
                         </div>
                     }
                 </ul>
@@ -60,19 +65,22 @@ const MobileMenu = ({toggleCartDoyarHandler}) => {
             </div>
             <div className='mobilembttom'>
                 <ul className='flex items-center justify-around'>
-                    <li><button onClick={ handleToggleMenu } className='mobilemenu-icon'> <HiBars3BottomLeft className='text-xl' /></button></li>
-                    <li><Link to={'/'} className='mobilemenu-icon'> <IoHomeOutline className='text-xl' /></Link></li>
-                    <li className='cartLi'>
-                        <button onClick={toggleCartDoyarHandler} className='mobilemenu-icon -top-12   absolute'>
-                            <span className='mobileCartStyle '>
+                    <li className='w-full  text-center'><button onClick={ handleToggleMenu } className='mobilemenu-icon w-full text-center'> <HiBars3BottomLeft className='text-xl' /></button></li>
+                    <li className='w-full text-center'><Link to={'/'} className='mobilemenu-icon w-full text-center'> <IoHomeOutline className='text-xl' /></Link></li>
+                    <li className='cartLi w-full text-center'>
+                        <button onClick={toggleCartDoyarHandler} className='mobilemenu-icon w-full text-center -top-12   absolute'>
+                            <span className='mobileCartStyle relative '>
                                 <HiOutlineShoppingCart className='text-3xl text-white' />  
-                                <span className='countMobile'>2</span>
+                                <span className='countMobile'>{ carts?.totalCarts > 0 ? carts?.totalCarts : 0 }</span>
                             </span>
                         </button>
                     </li>
                     {/* <span className='absolute -top-1 -right-2 w-5 h-5 text-xs text-white bg-primary rounded-full flex items-center justify-center'>2</span> */}
-                    <li><button className='mobilemenu-icon relative'> <LuSearch  className='text-xl' /> </button></li>
-                    <li><Link to={'/login'} className='mobilemenu-icon'> <IoPersonOutline className='text-xl' /></Link></li>
+                    <li className='w-full  text-center'><button className='mobilemenu-icon w-full text-center relative'> <LuSearch  className='text-xl' /> </button></li>
+                    <li className='w-full text-center'>
+                        <Link to={ user?._id ? '/user/dashboard' : '/login'} className='mobilemenu-icon w-full text-center'> <IoPersonOutline className='text-xl' /></Link>
+                        
+                    </li>
                 </ul>
             </div>
         </div>

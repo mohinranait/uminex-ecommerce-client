@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import useAuth from '../../../hooks/useAuth';
 import toast from 'react-hot-toast';
+import { Helmet } from 'react-helmet-async';
 
 const Login = () => {
     const {loginUser} = useAuth();
@@ -44,6 +45,9 @@ const Login = () => {
 
     return (
         <section className=''>
+            <Helmet>
+                <title>Login | Store mi ecommerce app</title>
+            </Helmet>
             <div className=' min-h-screen py-28' >
                 <div className="container flex items-start">
                     <div className=" w-[300px] md:w-[450px] overflow-hidden  mx-auto rounded-lg">

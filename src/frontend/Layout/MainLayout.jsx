@@ -6,6 +6,7 @@ import Footer from '../global/Footer/Footer';
 import { useContext, useState } from 'react';
 import { OnclickContext } from '../Providers/OnclickProvider';
 import MyCartsDoyar from '../global/MyCartsDoyar/MyCartsDoyar';
+import ScrollToTop from '../../components/ScrollToTop';
 
 const MainLayout = () => {
     const [cartDoyar, setCartDoyar] = useState(false);
@@ -49,6 +50,7 @@ const MainLayout = () => {
             <Footer />
             <MobileMenu toggleCartDoyarHandler={toggleCartDoyarHandler} />
             <MyCartsDoyar toggleCartDoyarHandler={toggleCartDoyarHandler} cartDoyar={cartDoyar} />
+            <ScrollToTop />
         </div>
     );
 };

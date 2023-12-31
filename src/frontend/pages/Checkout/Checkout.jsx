@@ -9,6 +9,7 @@ import { BiLoaderCircle } from "react-icons/bi";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import AddressForm from "../../components/form/AddressForm";
+import { Helmet } from "react-helmet-async";
 
 const Checkout = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -82,6 +83,9 @@ const Checkout = () => {
 
     return (
         <>
+            <Helmet>
+                <title> Place your order | Store MI</title>
+            </Helmet>
             <section className="my-4">
                 <div className="box">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-5">
@@ -108,7 +112,7 @@ const Checkout = () => {
                             {   isAddress &&  <AddressForm refetch={refetch} setIsAddress={setIsAddress} singleAddress={userAddress[0]} /> }
                             {
                                 getShoppingCarts?.map(product =>  <div key={product?._id} className="grid bg-white grid-cols-4 px-5 py-3 lg:py-1 relative items-center ">
-                                <div className="col-span-3 row-span-2 lg:row-span-1 lg:col-span-2 flex  py-2  md:lg:flex-row lg:items-center gap-3">
+                                <div className="col-span-4 col-span-3 row-span-2 lg:row-span-1 lg:col-span-2 flex  py-2  md:lg:flex-row lg:items-center gap-3">
                                     <span>
                                         <img className="w-16 h-16 sm:w-24 sm:h-24 " src={product?.product?.media?.images[0]} alt="" />
                                     </span>
@@ -116,14 +120,14 @@ const Checkout = () => {
                                         <Link to={'/products'} className="block font-semibold text-sm sm:text-base  text-gray-700">{product?.product?.name}</Link>
                                     </div>
                                 </div>
-                                <div>
-                                    <p className="flex text-sm justify-end items-center"><span className="text-gray-500  sm:text-sm  font-semibold">Price: <span className="w-[80px] inline-block text-right">${product?.product?.price?.sellingPrice}</span> </span></p>
-                                    <p className="flex text-sm justify-end items-center"><span className="text-gray-500  sm:text-sm  font-semibold">Items: <span className="w-[80px] inline-block text-right">{product?.quantity}</span></span>  </p>
-                                    <p className="flex text-sm justify-end items-center"><span className="text-gray-500  sm:text-sm  font-semibold">Total: <span className="w-[80px] inline-block text-right">${product?.quantity * product?.product?.price?.sellingPrice}</span> </span>  </p>
+                                <div className="col-span-4 lg:col-span-1 divide-y lg:divide-y-0">
+                                    <p className="flex text-sm justify-between w-full py-1 lg:py-0 items-center"><span className="text-gray-500  sm:text-sm  font-semibold w-full flex justify-between">Price: <span className="w-[80px]  inline-block text-right">${product?.product?.price?.sellingPrice}</span> </span></p>
+                                    <p className="flex text-sm justify-between w-full py-1 lg:py-0 items-center"><span className="text-gray-500  sm:text-sm  font-semibold w-full flex justify-between">Items: <span className="w-[80px]  inline-block text-right">{product?.quantity}</span></span>  </p>
+                                    <p className="flex text-sm justify-between w-full py-1 lg:py-0 items-center"><span className="text-gray-500  sm:text-sm  font-semibold w-full flex justify-between">Total: <span className="w-[80px]  inline-block text-right">${product?.quantity * product?.product?.price?.sellingPrice}</span> </span>  </p>
                                 </div>
                               
                                 <div className=" flex justify-end gap-10">
-                                    <div className='absolute left-1 top-2/4 -translate-y-2/4 lg:static lg:translate-y-0 '>
+                                    <div className='absolute left-1 top-1/4 -translate-y-1/4 lg:static lg:translate-y-0 '>
                                         <span  className="lg:h-9 lg:w-9 rounded-full border cursor-pointer flex items-center justify-center bg-white"><IoCloseSharp /></span>
                                     </div>
                                 </div>

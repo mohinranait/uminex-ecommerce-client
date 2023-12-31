@@ -4,6 +4,7 @@ import useAxios from "../../../hooks/useAxios";
 import useWishlists from "../../../hooks/useWishlists";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import ProductPlaceholder from "../../components/Loding/ProductPlaceholder";
+import { Helmet } from "react-helmet-async";
 
 
 const Wishlists = () => {
@@ -28,9 +29,12 @@ const Wishlists = () => {
 
     return (
         <>
+            <Helmet>
+                <title> Favorite Products | Store MI</title>
+            </Helmet>
             <div>
                 <p className="mb-1 text-gray-700 text-lg font-semibold">Wishlists ({wishlists?.wishlists?.length})</p>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {
                         isPending  && [0,1,2,3].map( item => <ProductPlaceholder key={item} /> )
                     }

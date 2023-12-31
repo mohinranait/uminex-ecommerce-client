@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import useAuth from "../../../hooks/useAuth";
 import useOrders from "../../../hooks/useOrders";
 import { dateFormater } from "../../../services/DateFormater";
@@ -7,9 +8,12 @@ const UserOrders = () => {
     const [orders] = useOrders(`user&userId=${user?._id}&email=${user?.email}`)
     return (
         <>
-            <div>
+            <Helmet>
+                <title> Order information | Store MI</title>
+            </Helmet>
+            <div className="overflow-x-auto">
                 <p className="mb-1 text-gray-700 text-lg font-semibold">Orders</p>
-                <table className="border-collapse w-full border">
+                <table className="border-collapse min-w-[500px] w-full border">
                     <thead>
                         <tr>
                             <th className="py-2 text-left px-5 border-b border-r text-gray-600">SI</th>

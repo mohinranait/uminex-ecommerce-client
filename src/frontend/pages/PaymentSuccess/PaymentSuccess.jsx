@@ -4,6 +4,7 @@ import useAxios from "../../../hooks/useAxios";
 import useCarts from "../../../hooks/useCarts";
 import useAuth from "../../../hooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 
 const PaymentSuccess = () => {
     const [carts, refetch] = useCarts();
@@ -49,6 +50,9 @@ const PaymentSuccess = () => {
 
     return (
         <div>
+             <Helmet>
+                <title> Success order | Store MI</title>
+            </Helmet> 
             <div className="container flex items-center justify-center py-10">
                 <div className="bg-white min-w-[300px] px-5 py-10">
                     <div className="flex items-center justify-center mb-8">

@@ -20,14 +20,14 @@ const ProductDetailsTabs = ({product}) => {
         <>
             <div className='space-y-4 '>
                 <div className="sticky  z-10 bg-white top-0">
-                    <ul className='flex gap-4   items-center px-4 tabActive py-2'>
+                    <ul className='flex gap-1 sm:gap-4 flex-wrap  items-center px-2 sm:px-4 tabActive py-2'>
                             <Link
                             to='specification' 
                             smooth={true} 
                             spy={true} 
                             offset={-60} 
                             duration={500} 
-                            className={`cursor-pointer px-5 py-2 inline-block bg-white rounded-md text-base font-medium text-gray-900 `} >Specification</Link>
+                            className={`cursor-pointer px-2 sm:px-5 py-2 inline-block bg-white rounded-md text-base font-medium text-gray-900 `} >Specification</Link>
                   
                             <Link
                             to='overview' 
@@ -35,7 +35,7 @@ const ProductDetailsTabs = ({product}) => {
                             spy={true} 
                             offset={-60} 
                             duration={500} 
-                            className={`cursor-pointer px-5 py-2 inline-block bg-white rounded-md text-base font-medium text-gray-900 `} >Overview</Link>
+                            className={`cursor-pointer px-2 sm:px-5 py-2 inline-block bg-white rounded-md text-base font-medium text-gray-900 `} >Overview</Link>
                  
                             <Link
                             to='comments' 
@@ -43,7 +43,7 @@ const ProductDetailsTabs = ({product}) => {
                             smooth={true} 
                             offset={-60} 
                             duration={500} 
-                            className={`cursor-pointer px-5 py-2 inline-block bg-white rounded-md text-base font-medium text-gray-900 `} >Reviews</Link>
+                            className={`cursor-pointer px-2 sm:px-5 py-2 inline-block bg-white rounded-md text-base font-medium text-gray-900 `} >Reviews</Link>
                  
                     </ul>
                 </div>

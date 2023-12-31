@@ -189,9 +189,12 @@ const Header = ({toggleCartDoyarHandler}) => {
                         <div className="col-span-3">
                             <ul className="flex items-center justify-end lg:gap-5">
                                 <li>
-                                    <Link to={'/user/dashboard'} className="flex items-center gap-2">
-                                        <div>
-                                            <GoPerson className="text-3xl text-text-color" />
+                                    <Link to={'/user/dashboard'} className="flex items-center gap-1">
+                                        <div className="flex items-center">
+                                            {
+                                                user?._id ? ( <span className="w-10 h-10 rounded-full inline-block"><img className="w-10 h-10 rounded-full" src={'https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2220431045.jpg'} alt="" /></span> ) : (  <GoPerson className="text-3xl text-text-color" />)
+                                            }
+                                          
                                         </div>
                                         <div className="hidden xl:block">
                                             <p className="text-xs leading-3 font-medium"> {user?.email ? user?.name.split(' ')[0] : 'Login'  } </p>

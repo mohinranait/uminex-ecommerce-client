@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import ProductCard from '../ProductCard/ProductCard';
 import ProductPlaceholder from '../Loding/ProductPlaceholder';
+import { Link } from 'react-router-dom';
 
 
 const DisplayProducts = ({products,isPending}) => {
@@ -11,7 +12,7 @@ const DisplayProducts = ({products,isPending}) => {
                     <div className='flex justify-between bg-white px-4 items-center py-3 mb-3 border-b-2 border-gray-100 '>
                         <div className='text-lg font-semibold text-text-color '><span className='text-primary'>Just  </span>For You</div>
                         <ul className='flex items-center gap-4'>
-                            <li><a href="#" className='text-base text-primary border border-primary py-2 px-4 rounded-md hover:bg-primary hover:text-white transition-all font-semibold '>Shop More</a></li>
+                            <li><Link to="/shop" className='text-base text-primary border border-primary py-2 px-4 rounded-md hover:bg-primary hover:text-white transition-all font-semibold '>Shop More</Link></li>
                         </ul>
                     </div>
                 </div>

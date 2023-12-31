@@ -12,7 +12,7 @@ const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
     
     const handleRedirectCartPage = () => {
         toggleCartDoyarHandler()
-        navigate('/carts');
+        // navigate('/carts');
     }
 
     const handlePropagration = (e) => {
@@ -64,8 +64,8 @@ const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
                                 </p>
                             </div>
                             <div className="flex gap-3 items-center justify-between">
-                                <button onClick={handleRedirectCartPage} className="btn btn-primary w-full">Cart</button>
-                                <Link to={'/checkout'} className="btn w-full btn-secondary">Checkout</Link>
+                                <Link onClick={handleRedirectCartPage} to={'/carts'} className="btn btn-primary w-full">Cart</Link>
+                                <Link onClick={handleRedirectCartPage} to={'/checkout'} className="btn w-full btn-secondary">Checkout</Link>
                             </div>
                         </div>
                     </div>

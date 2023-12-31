@@ -6,6 +6,7 @@ import useCarts from "../../../hooks/useCarts";
 import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast"
+import { Helmet } from "react-helmet-async";
 
 const Carts = () => {
     const [carts,refetch] = useCarts();
@@ -28,6 +29,9 @@ const Carts = () => {
 
     return (
         <>
+            <Helmet>
+                <title> Shoppings carts | Store MI</title>
+            </Helmet>
             <section className="my-4">
                 <div className="box">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-5">

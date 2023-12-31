@@ -1,8 +1,11 @@
-import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const UserProfile = () => {
     return (
         <>
+            <Helmet>
+                <title> Update profile information | Store MI</title>
+            </Helmet>
             <div>
                 <form action="">
                     <div className='flex flex-col md:flex-row gap-5 mb-5'>

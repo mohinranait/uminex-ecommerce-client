@@ -1,9 +1,18 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { MdAddShoppingCart, MdDashboard, MdOutlineLogout } from "react-icons/md";
 import "./UserDashboard.css"
 import { GoPerson } from "react-icons/go";
+import useAuth from "../../../hooks/useAuth";
+import { IoIosHeartEmpty } from "react-icons/io";
 
 const UserDashboard = () => {
+    const navigate = useNavigate();
+    const {logOut} = useAuth();
+    // User Logout
+    const handleLogout = async () => {
+        await logOut();
+        navigate('/')
+    }
     return (
         <section className="my-6">
             <div className="box">
@@ -21,10 +30,10 @@ const UserDashboard = () => {
                                     <NavLink to={'/user/profile'} className="userDashboardMenu" > <GoPerson /> Profile</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={'/user/wishlists'} className="userDashboardMenu" > <GoPerson /> Wishlists</NavLink>
+                                    <NavLink to={'/user/wishlists'} className="userDashboardMenu" > <IoIosHeartEmpty /> Wishlists</NavLink>
                                 </li>
                                 <li>
-                                    <button className="py-2 flex items-center gap-2 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200 transition-all px-5 w-full rounded" > <MdOutlineLogout /> Logout</button>
+                                    <button onClick={handleLogout} className="py-2 flex items-center gap-2 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200 transition-all px-5 w-full rounded" > <MdOutlineLogout /> Logout</button>
                                 </li>
                             </ul>
                         </div>

@@ -4,6 +4,7 @@ import useAuth from '../../../hooks/useAuth';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
+import { Helmet } from 'react-helmet-async';
 
 
 const Register = () => {
@@ -104,6 +105,9 @@ const Register = () => {
 
     return (
         <section className=''>
+             <Helmet>
+                <title>Register | Store mi ecommerce app</title>
+            </Helmet>
             <div className=' min-h-screen py-28' >
                 <div className="container flex items-start">
                     <div className=" w-[300px] md:w-[450px] overflow-hidden bg-white mx-auto rounded-lg">

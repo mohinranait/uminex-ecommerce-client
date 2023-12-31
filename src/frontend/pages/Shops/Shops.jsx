@@ -10,6 +10,7 @@ import queryString from "query-string"
 import useBrands from '../../../hooks/useBrands';
 import ProductPlaceholder from '../../components/Loding/ProductPlaceholder';
 import useColors from '../../../hooks/useColors';
+import { Helmet } from 'react-helmet-async';
 
 
 
@@ -107,7 +108,13 @@ const Shops = () => {
 
 
     const handleBrand = (value) => {
-        
+        setIsLeftFilter(false)
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+
+
         let currentQuery = {};
         if(location.search){
             currentQuery = queryString.parse(location.search)
@@ -126,6 +133,12 @@ const Shops = () => {
 
     // Handle free delivery
     const handleFreeDelivery = (value) => {
+        setIsLeftFilter(false)
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+
         let currentQuery = {};
         if(location.search){
             currentQuery = queryString.parse(location.search)
@@ -144,6 +157,12 @@ const Shops = () => {
 
     // Handle color
     const handleColor = (value) => {
+        setIsLeftFilter(false)
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+
         let currentQuery = {};
         if(location.search){
             currentQuery = queryString.parse(location.search)
@@ -205,71 +224,78 @@ const Shops = () => {
 
     return (
         <>
+        <Helmet>
+            <title>Shop | Store mi ecommerce app</title>
+        </Helmet>
             <section className='py-6 relative'>
                 <div className="box">
                     <div className='grid lg:grid-cols-4 gap-5 '>
-                        <div className={`
-                        shopLeftFilter
-                         ${
-                            isLeftFilter ? 'translate-x-0 left-0' : '-translate-x-[calc(100%+8px)] lg:translate-x-0 '
-                         }
-                         `}>
-                            <div className='bg-white  px-5 py-4 relative'>
-                                <span onClick={() => setIsLeftFilter(!isLeftFilter)} className='z-[999] lg:hidden w-[30px] h-[50px] bg-primary absolute -right-[30px] flex items-center justify-center top-2 text-lg text-white rounded-r cursor-pointer'> {isLeftFilter ? <IoChevronBack /> : <IoChevronForwardOutline /> }  </span>
-                                <p className='text-xl font-semibold text-gray-800 mb-4'>Filters</p>
-                                <div>
-                                    <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Promotion & Services</p>
-                                    <ul className='space-y-2'>
-                                        <li onClick={() => handleFreeDelivery('free')} className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i4/O1CN01Tp04IC1x3IWhZt8RK_!!6000000006387-2-tps-72-72.png" alt="" /> <span className='text-sm'>Free Delivery</span></span></li>
-                                        <li className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i4/O1CN01pr1AG92A8sM4YKlmy_!!6000000008159-2-tps-72-72.png" alt="" /> <span className='text-sm'>Best Price Guaranteed</span></span></li>
-                                        <li className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i2/O1CN01sEvCqG1M7ICGGpTXv_!!6000000001387-2-tps-72-72.png" alt="" /> <span className='text-sm'>Cash On Delivery</span></span></li>
-                                    </ul>
-                                </div>
-                                <div className='mt-6'>
-                                    <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Categorys</p>
-                                    <ul className='space-y-2'>
-                                        <li className=''><Link className='block hover:text-gray-900 cursor-pointer text-gray-600'> DSLR </Link></li>
-                                        <li className=''><Link className='block hover:text-gray-900 cursor-pointer text-gray-600'> Body only </Link></li>
-                                        <li className=''><Link className='block hover:text-gray-900 cursor-pointer text-gray-600'> Lents </Link></li>
-                                    </ul>
-                                </div>
-                                <div className='mt-6'>
-                                    <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'><span>Brands</span> <span onClick={() => handleClearFilter('brand')} className='text-sm cursor-pointer'>Clear</span></p>
-                                    <ul className='space-y-2'>
-                                        {
-                                            brands?.map(brand =>  <li key={brand?._id} className='' onClick={() => handleBrand(brand?.slug)}>
-                                            <label htmlFor={brand?.slug} className='cursor-pointer relative'>
-                                                <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
-                                                    <input type="checkbox" id={brand?.slug} className='opacity-0 peer' />
-                                                    <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
-                                                        <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
-                                                    </span>
-                                                </span>
-                                                <span className='ml-1'>{brand?.name}</span>
-                                            </label>
-                                        </li> )
-                                        }
-                                    </ul>
-                                </div>
-                                <div className='mt-6'>
-                                    <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'>Colors <span onClick={() => handleClearFilter('color')} className='text-sm cursor-pointer'>Clear</span> </p>
-                                    <ul className='space-y-2'>
-                                        {
-                                            colors?.map(color => <li key={color?._id} className='' onClick={() => handleColor(color?.name)}>
-                                            <label htmlFor={color?.name} className='cursor-pointer relative'>
-                                                <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
-                                                    <input type="checkbox" id={color?.name} className='opacity-0 peer' />
-                                                    <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
-                                                        <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
-                                                    </span>
-                                                </span>
-                                                <span className='ml-1'>{color?.name}</span>
-                                            </label>
-                                        </li> )
-                                        }
-                                        
-                                       
-                                    </ul>
+                        <div className='overflow-y-auto'>
+                            <div className={`
+                            shopLeftFilter 
+                            ${
+                                isLeftFilter ? 'translate-x-0 left-0' : '-translate-x-[calc(100%+8px)] lg:translate-x-0 '
+                            }
+                            `}>
+                                <div className='bg-white  px-5 py-4 relative '>
+                                    <span onClick={() => setIsLeftFilter(!isLeftFilter)} className='z-[999] lg:hidden w-[30px] h-[50px] bg-primary absolute -right-[30px] flex items-center justify-center top-2 text-lg text-white rounded-r cursor-pointer'> {isLeftFilter ? <IoChevronBack /> : <IoChevronForwardOutline /> }  </span>
+                                    <div className='h-screen lg:h-auto overflow-y-auto lg:overflow-y-clip pb-20 lg:pb-0'>
+                                        <p className='text-xl font-semibold text-gray-800 mb-4'>Filters</p>
+                                        <div>
+                                            <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Promotion & Services</p>
+                                            <ul className='space-y-2'>
+                                                <li onClick={() => handleFreeDelivery('free')} className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i4/O1CN01Tp04IC1x3IWhZt8RK_!!6000000006387-2-tps-72-72.png" alt="" /> <span className='text-sm'>Free Delivery</span></span></li>
+                                                <li className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i4/O1CN01pr1AG92A8sM4YKlmy_!!6000000008159-2-tps-72-72.png" alt="" /> <span className='text-sm'>Best Price Guaranteed</span></span></li>
+                                                <li className=''><span className='inline-flex items-center border rounded-md py-1 px-2 cursor-pointer gap-2'> <img className='w-5' src="https://img.alicdn.com/imgextra/i2/O1CN01sEvCqG1M7ICGGpTXv_!!6000000001387-2-tps-72-72.png" alt="" /> <span className='text-sm'>Cash On Delivery</span></span></li>
+                                            </ul>
+                                        </div>
+                                        <div className='mt-6'>
+                                            <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1'>Categorys</p>
+                                            <ul className='space-y-2'>
+                                                <li className=''><Link className='block hover:text-gray-900 cursor-pointer text-gray-600'> DSLR </Link></li>
+                                                <li className=''><Link className='block hover:text-gray-900 cursor-pointer text-gray-600'> Body only </Link></li>
+                                                <li className=''><Link className='block hover:text-gray-900 cursor-pointer text-gray-600'> Lents </Link></li>
+                                            </ul>
+                                        </div>
+                                        <div className='mt-6'>
+                                            <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'><span>Brands</span> <span onClick={() => handleClearFilter('brand')} className='text-sm cursor-pointer'>Clear</span></p>
+                                            <ul className='space-y-2'>
+                                                {
+                                                    brands?.map(brand =>  <li key={brand?._id} className='' onClick={() => handleBrand(brand?.slug)}>
+                                                    <label htmlFor={brand?.slug} className='cursor-pointer relative'>
+                                                        <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
+                                                            <input type="checkbox" id={brand?.slug} className='opacity-0 peer' />
+                                                            <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
+                                                                <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
+                                                            </span>
+                                                        </span>
+                                                        <span className='ml-1'>{brand?.name}</span>
+                                                    </label>
+                                                </li> )
+                                                }
+                                            </ul>
+                                        </div>
+                                        <div className='mt-6'>
+                                            <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'>Colors <span onClick={() => handleClearFilter('color')} className='text-sm cursor-pointer'>Clear</span> </p>
+                                            <ul className='space-y-2'>
+                                                {
+                                                    colors?.map(color => <li key={color?._id} className='' onClick={() => handleColor(color?.name)}>
+                                                    <label htmlFor={color?.name} className='cursor-pointer relative'>
+                                                        <span className='w-[18px] h-[18px] rounded inline-block relative border-2 top-[5px] border-gray-200'>
+                                                            <input type="checkbox" id={color?.name} className='opacity-0 peer' />
+                                                            <span className='w-full absolute -top-[4px] left-0 mt-1 mr-2 h-full peer-checked:border-primary block rounded scale-0 transition-all peer-checked:scale-100'>
+                                                                <span className='w-[10px] h-[6px] mb-[9px] ml-[2px] border-l-2 border-b-2 border-primary inline-block -rotate-45'></span>
+                                                            </span>
+                                                        </span>
+                                                        <span className='ml-1'>{color?.name}</span>
+                                                    </label>
+                                                </li> )
+                                                }
+                                                
+                                            
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -279,8 +305,8 @@ const Shops = () => {
                                     <div className='text-lg font-semibold text-text-color'><span className='text-primary'>{isCategory?.name}  </span> <span className='text-sm'> - ({products?.length}) Products</span> </div>
                                     <div className="relative">
                                         
-                                        <div className={` flex gap-4 `}>
-                                            <div className='flex gap-1 items-center'>
+                                        <div className={` flex flex-wrap gap-4 `}>
+                                            <div className='flex  gap-1 items-center'>
                                                 <span className='text-sm'>Show</span>
                                                 <div className='relative w-[80px]'>
                                                     <span onClick={handleShowItem} className='px-5 text-center py-[5px] cursor-pointer border inline-bolck border-gray-200 inline-block w-full'>{perViews}</span>
