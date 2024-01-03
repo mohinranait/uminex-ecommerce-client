@@ -4,21 +4,19 @@ import HomeBanner from '../../components/Section/HomeBanner';
 import ProductSection from "../../components/Section/ProductSection";
 import CoverProduct from "../../components/Section/CoverProduct";
 import DisplayProducts from "../../components/Section/DisplayProducts";
-import useProducts from "../../../hooks/useProducts";
 import { Helmet } from "react-helmet-async";
 
 const Home = () => {
-    const [products,,isPending] = useProducts();
-    const {products:getProducts} = products || [];
+   
     
     return (
         <>
             <Helmet>
                 <title> Store mi ecommerce app</title>
             </Helmet>
-            <HomeBanner products={getProducts} isPending={isPending} />
+            <HomeBanner />
             <CoverProduct />
-            <ProductSection products={getProducts} isPending={isPending} />
+            <ProductSection  />
 
             <section className="py-5 ">
                 <div className="box">
@@ -34,7 +32,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <DisplayProducts products={getProducts} isPending={isPending} />
+            <DisplayProducts  />
 
         </>
     );

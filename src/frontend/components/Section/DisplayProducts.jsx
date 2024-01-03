@@ -2,9 +2,20 @@ import PropTypes from 'prop-types';
 import ProductCard from '../ProductCard/ProductCard';
 import ProductPlaceholder from '../Loding/ProductPlaceholder';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import useProducts from '../../../hooks/useProducts';
 
 
-const DisplayProducts = ({products,isPending}) => {
+const DisplayProducts = () => {
+    const [getProductRequest, setGetProductRequest] = useState({
+        limit : 12,
+        sort: "asc",
+        sortFiled:'createdAt',
+        request : 'random',
+        page : 1,
+    })
+    const [products,,isPending] = useProducts(getProductRequest) || [];
+    const {products:getProducts} = products || [];
     return (
         <>
             <section className='py-7 bg-[#dcdcdc1a]'>
@@ -22,7 +33,7 @@ const DisplayProducts = ({products,isPending}) => {
                             isPending && [1,2,3,4,5,6,7,8,9,10,11,12].map(item =>   <ProductPlaceholder key={item} />  )
                         }
                         {
-                            products?.map( product => <ProductCard key={product?._id} product={product} /> )
+                            getProducts?.map( product => <ProductCard key={product?._id} product={product} /> )
                         }
                     </div>
                 </div>

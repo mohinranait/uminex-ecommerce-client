@@ -7,7 +7,7 @@ import useAxios from '../../../hooks/useAxios';
 import useAuth from '../../../hooks/useAuth';
 
 const CartItems = ({cart,handleCartDeletes}) => {
-    const {_id,quantity:pQuantity,color,product} = cart || {};
+    const {_id,quantity:pQuantity,color,product, varient} = cart || {};
     const [quantity,setQuantity]  = useState(pQuantity);
     const axios = useAxios();
     const {user} = useAuth();
@@ -59,7 +59,9 @@ const CartItems = ({cart,handleCartDeletes}) => {
                     </span>
                     <div>
                         <Link to={'/products'} className="block font-semibold text-sm sm:text-base md:text-lg text-gray-800">{product?.name}</Link>
-                        <p className="text-sm md:text-base text-gray-500"><span className="font-semibold">Color</span> <span className="text-gray-400">{color}</span></p>
+                        {
+                            varient?.map((vari,index) =>  <p key={index} className="text-xs  text-gray-500"><span className="font-semibold">{vari?.label}</span> <span className="text-gray-400">{vari?.value}</span></p> )
+                        }
                     </div>
                 </div>
                 <div>

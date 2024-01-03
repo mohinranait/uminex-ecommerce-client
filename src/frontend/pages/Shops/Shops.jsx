@@ -26,18 +26,31 @@ const Shops = () => {
     const axiosPublic = useAxiosPublic();
     const {showItem,setShowItem,selectBox,setSelectBox} = useContext(OnclickContext);
     // const [products, setProducts] = useState(getPproducts);
-    const [filterProducts, setFilterProducts] = useState(10)
+    // const [filterProducts, setFilterProducts] = useState(10)
   
-    const [perViews, setPerViews] = useState(10)
+   
     const [selectValues, setSelectValues] = useState('Features')
     const [isLeftFilter, setIsLeftFilter] = useState(false);
 
+    // Pagination
+    const [currentPage, setCurrentPage]  = useState(1)
+    const [perViews, setPerViews] = useState(4)
+    console.log(currentPage);
+    const handleNextPage = (currentPage) => {
+        setCurrentPage(currentPage + 1)
+    }
+    const handlePrevPage = (currentPage) => {
+        setCurrentPage(currentPage - 1)
+    }
+    // asc,desc and price wish filter
+    const [sorting, setSorting] = useState(null)
+    const [sortFiled, setSortFiled] = useState(null)
 
 
 
     const brand = params.get('brand');
     const color = params.get('color');
-    const category = params.get('category');
+    const getCategory = params.get('category');
     const delivery = params.get('delivery');
     const search = params.get('search');
 
@@ -52,39 +65,26 @@ const Shops = () => {
 
     const handlePerViews = (value) => {
         setPerViews(value)
-        setFilterProducts(value);
+        // setFilterProducts(value);
         setShowItem(false)
     }
 
     const handleFeatures = (value) => {
         if(value == 'a-z'){
-            const sorts = products?.sort((a,b)=>{
-                if(a.title.toLowerCase() > b.title.toLowerCase()){
-                    return 1
-                }else{
-                    return -1;
-                }
-            })
-            setProducts(sorts)
+            setSortFiled('name')
+            setSorting('asc')
         }else if(value === 'z-a'){
-            const sorts = products?.sort((a,b)=>{
-                if(a.title.toLowerCase() > b.title.toLowerCase()){
-                    return 1
-                }else{
-                    return -1;
-                }
-            }).reverse()
-            setProducts(sorts);
+            setSortFiled('name')
+            setSorting('desc')
         }else if(value === 'Price top to low'){
-            const sorts = products?.sort((a,b)=>{
-                return a.price - b.price 
-            }).reverse()
-            setProducts(sorts);
+            setSortFiled('price.sellingPrice')
+            setSorting('desc')
         }else if(value === 'Price low to top'){
-            const sorts = products?.sort((a,b)=>{
-                return a.price - b.price 
-            })
-            setProducts(sorts);
+            setSortFiled('price.sellingPrice')
+            setSorting('asc')
+        }else if(value ==='Latest'){
+            setSortFiled('createdAt')
+            setSorting('desc')
         }
         setSelectValues(value)
         setSelectBox(false)
@@ -92,20 +92,24 @@ const Shops = () => {
     
     useEffect(() => {
         const fetchCategory = async () => {
-            const {data} = await axiosPublic.get(`/category-slug/${category}`);
+            const {data} = await axiosPublic.get(`/category-slug/${getCategory}`);
             setIsCategory(data.category)
         }
         fetchCategory();
-    },[category])
+    },[getCategory])
 
-    const {data:products=[], isPending} = useQuery({
-        queryKey: ['categoriesProducts',category,brand,color,delivery,search],
+    const {data:productData={}, isPending} = useQuery({
+        queryKey: ['categoriesProducts',getCategory,brand,color,delivery,search,currentPage, perViews,sorting, sortFiled],
         queryFn: async () => {
-            const products = await axiosPublic.get(`/category-wish-product/${category}?brand=${brand}&color=${color}&delivery=${delivery}&search=${search}`)
-            return products?.data?.products;
+            const products = await axiosPublic.get(`/category-wish-product/${getCategory}?limit=${perViews}&page=${currentPage}&sort=${sorting}&sortFiled=${sortFiled}&brand=${brand}&color=${color}&delivery=${delivery}&search=${search}`)
+            
+            return products?.data;
         }
     })
+    const {products,totalProducts} = productData;
 
+    const countPage = Math.ceil( totalProducts / perViews) || 0;
+   const pages = [...Array(countPage).fill(2)];
 
 
     const handleBrand = (value) => {
@@ -309,7 +313,7 @@ const Shops = () => {
                         <div className='col-span-3'>
                             <div>
                                 <div className='shop-header '>
-                                    <div className='text-lg font-semibold text-text-color'><span className='text-primary'>{isCategory?.name } {isCategory?.name && '-'}   </span> <span className='text-sm'>  ({products?.length}) Products</span> </div>
+                                    <div className='text-lg font-semibold text-text-color'><span className='text-primary'>{isCategory?.name } {isCategory?.name && '-'}   </span> <span className='text-sm'>  ({totalProducts || 0}) Products</span> </div>
                                     <div className="relative">
                                         
                                         <div className={` flex flex-wrap gap-4 `}>
@@ -356,6 +360,13 @@ const Shops = () => {
                                 }
                                 
                             </div>
+                            <ul className='flex gap-1 mt-4'>
+                                <button onClick={() => handlePrevPage(currentPage)} disabled={currentPage == 1} className={`py-1 px-3 border rounded cursor-pointer  ${ currentPage === 1 ? 'bg-transparent text-gray-500':'bg-white'} `}>Prev</button>
+                                {
+                                    pages?.map((page,index) =>  <li key={index} onClick={() => setCurrentPage(index)} className={`py-1 px-3 border rounded cursor-pointer ${currentPage === index+1 ? 'bg-primary text-white':'text-gray-800 bg-white'}`}>{++index}</li> )
+                                }
+                                <button onClick={() => handleNextPage(currentPage)} disabled={countPage === currentPage} className={`py-1 px-3 border rounded cursor-pointer  ${countPage === currentPage ? 'bg-transparent text-gray-500':'bg-white'} `}>Next</button>
+                            </ul>
                             {
                                 products?.length == 0 && <div className="flex mt-10 items-center justify-center">
                                     <div>

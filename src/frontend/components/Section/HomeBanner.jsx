@@ -13,8 +13,20 @@ import { useEffect, useState } from 'react';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import SliderPlaceholder from '../Loding/SliderPlaceholder';
 import { charecterLimit } from '../../../services/charecterLimit';
+import useProducts from '../../../hooks/useProducts';
 
-const HomeBanner = ({products,isPending}) => {
+const HomeBanner = () => {
+    const [getProductRequest, setGetProductRequest] = useState({
+        limit : 5,
+        sort: "desc",
+        sortFiled:'createdAt',
+        request : 'isFeature',
+        page : 1,
+    })
+    
+    const [products,,isPending] = useProducts(getProductRequest) || [];
+    const {products:getProducts} = products || [];
+
     const axiosPublic = useAxiosPublic();
     const [isLoading, setIsLoading] = useState(false);
     const [sliders, setSliders] = useState([]);
@@ -137,7 +149,7 @@ const HomeBanner = ({products,isPending}) => {
                                         className="mySwiper"
                                     >
                                         {
-                                            products?.slice(0,5)?.map(product => <SwiperSlide key={product._id}>
+                                            getProducts?.map(product => <SwiperSlide key={product._id}>
                                                 
                                                 <div className='flex min-h-[165px] flex-col py-2 px-1 rounded-md bg-white'>
                                                     <Link to={`/${product?.category?.slug}/${product?.slug}`} className=''><img className='mx-auto' src={product?.media?.images[0]} alt={product?.name} /></Link>

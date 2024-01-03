@@ -9,26 +9,37 @@ import ProductCard from '../ProductCard/ProductCard';
 import { useContext, useState } from "react";
 import { OnclickContext } from "../../Providers/OnclickProvider";
 import ProductPlaceholder from "../Loding/ProductPlaceholder";
+import useProducts from "../../../hooks/useProducts";
 
 
 
-const ProductSection = ({products,isPending}) => {
-    const {isMobileTab,setIsMobileTab} = useContext(OnclickContext);
-    const [features, setFeatures] = useState([]);
+const ProductSection = () => {
 
-    const [selectCategory, setSelectCategory] = useState('Top Sell')
+    const [selectCategory, setSelectCategory] = useState('Latests')
+    const [getProductRequest, setGetProductRequest] = useState({
+        limit : 10,
+        sort: "desc",
+        sortFiled:'createdAt',
+        request : 'Latests',
+        page : 1,
+    })
+    
+    const [products,,isPending] = useProducts(getProductRequest) || [];
+    const {products:getProducts} = products || [];
+    const {isMobileTab,setIsMobileTab} = useContext(OnclickContext);    
 
     const handleCategory = (category) => {
         setSelectCategory(category)
         setIsMobileTab(!isMobileTab)
 
-        if(category == 'Feature'){
-            const isFeatures = products?.filter(product => product?.isFeature == 'active')
-            setFeatures(isFeatures)
+        if(category === 'Feature'){
+            setGetProductRequest({...getProductRequest, request: 'isFeature' })
+        }else if(category === 'Latests'){
+            setGetProductRequest({...getProductRequest, request: 'Latests' })
+        }else if(category === 'Offers'){
+            setGetProductRequest({...getProductRequest, request: 'Offers' })
         }
-
     }
-
 
     return (
         <section className='py-7 bg-[#dcdcdc1a]'>
@@ -41,9 +52,9 @@ const ProductSection = ({products,isPending}) => {
                             <span><HiMiniChevronDown /></span>
                         </div>
                         <ul className={`w-[150px] lg:w-auto  top-full right-0 z-10 bg-gray-50 lg:bg-transparent px-2 py-2 rounded-md lg:flex items-center gap-4 ${isMobileTab ? 'block absolute lg:static': 'hidden '}`}>
-                            <li><button onClick={() => handleCategory('Top Sell')} className={`text-base font-semibold ${selectCategory == 'Top Sell' ? 'text-primary':'text-text-color'} `}>Top Sell</button></li>
+                            <li><button onClick={() => handleCategory('Latests')} className={`text-base font-semibold ${selectCategory == 'Latests' ? 'text-primary':'text-text-color'} `}>Latests</button></li>
                             <li><button onClick={() => handleCategory('Feature')} className={`text-base font-semibold ${selectCategory == 'Feature' ? 'text-primary':'text-text-color'} `}>Feature</button></li>
-                            <li><button onClick={() => handleCategory('Active')} className={`text-base font-semibold ${selectCategory == 'Active' ? 'text-primary':'text-text-color'} `}>Active</button></li>
+                            <li><button onClick={() => handleCategory('Offers')} className={`text-base font-semibold ${selectCategory == 'Offers' ? 'text-primary':'text-text-color'} `}>Offers</button></li>
                         </ul>
                     </div>
                 </div>
@@ -91,14 +102,9 @@ const ProductSection = ({products,isPending}) => {
                             </SwiperSlide>  )
                         }
                         {
-                            selectCategory == 'Feature' ? 
-                            features?.map(product =>  <SwiperSlide key={product._id}  >
+                            getProducts?.map(product =>  <SwiperSlide key={product._id}  >
                                 <ProductCard product={product} />
-                            </SwiperSlide>  )
-                            : 
-                            products?.map(product =>  <SwiperSlide key={product._id}  >
-                                <ProductCard product={product} />
-                            </SwiperSlide>  )
+                            </SwiperSlide> )
                         }
                     </Swiper>
                 </div>

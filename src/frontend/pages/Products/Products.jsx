@@ -31,7 +31,8 @@ const Products = () => {
     const axios = useAxios()
     const [chatModal, setChatModal] = useState(false)
     const [color, setColor] = useState( null );
-    const [size, setSize] = useState("2GB");
+    const [size, setSize] = useState(null);
+    console.log(size);
     const [quantity, setQuantity] = useState(1);
     const {user} = useAuth();
     const [,wishlistRefetch] = useWishlists(user)
@@ -41,12 +42,16 @@ const Products = () => {
         queryKey: ['getSingleProductBySlug',slug],
         queryFn: async () => {
             const {data} = await axiosPublic.get(`/product-by-slug/${slug}`);
-            setColor(data?.product?.colors[0].label)
+            // console.log(data?.product?.productFeatures?.keyFeatures?.colors[0].label);
+            // console.log(data?.product?.productFeatures?.keyFeatures?.memorys[0].label);
+            const pFeatures = data?.product?.productFeatures
+            setColor(pFeatures?.keyFeatures?.colors?.length > 0 ? pFeatures?.keyFeatures?.colors[0].label : null)
+            setSize(pFeatures?.keyFeatures?.memorys?.length > 0 ? pFeatures?.keyFeatures?.memorys[0].label : null)
             return data.product;
         }
     })
-    const {_id , name,media,brand,colors,rating, reviews, category,price,isStock
-    ,product_type} = product || {};
+    const {_id , name,media,brand,rating, reviews, category,price,isStock
+    ,product_type,productFeatures} = product || {};
     
     const {data:categoryProducts} = useQuery({
         queryKey: ["getCategoryProducts",category?.slug],
@@ -207,23 +212,28 @@ const Products = () => {
                                             <li> <span className='text-3xl font-bold text-primary'>${price?.sellingPrice}</span> {price?.discountPrice > 0 && <> <span className='text-xl line-through text-mute'>${price?.productPrice}</span> <span className='py-1 px-3 bg-[#fde9e9] text-secondary text-sm font-medium rounded-md'>{ 100 - ((price?.discountPrice * 100) / price?.productPrice) }% discounts</span> </> } </li>
                                                 <li> <span className='font-semibold'>Brand:</span> <a href="#">{brand?.name}</a></li>
                                                 <li> <span className='font-semibold'>Stock:</span> {isStock} Available</li>
-                                                <li> <span className='font-semibold'>Product:</span> Mobile</li>
                                                 <li> <span className='font-semibold'>Type:</span> <a href="#" className='capitalize'>{product_type}</a></li>
-                                                <li className='flex flex-col gap-2'> <span className='font-semibold'>Color: <span className='font-medium'>{color}</span> </span> 
+                                                {
+                                                    productFeatures?.keyFeatures?.colors?.length > 0 &&   <li className='flex flex-col gap-2'> <span className='font-semibold'>Color: <span className='font-medium'>{color}</span> </span> 
                                                     <ul className='flex items-center gap-2'>
                                                         {
-                                                            colors?.map(color =>   <li key={color?.value} className={`border-2  rounded-md w-8 h-8 ${color == color?.label ? 'border-primary' : 'border-slate-200' } `} ><span onClick={() => colorVariant(color?.label)} className='w-7 h-7 cursor-pointer scale-95 rounded border inline-block' style={{backgroundColor:color?.value}}></span></li> )
+                                                            productFeatures?.keyFeatures?.colors?.map(color =>   <li key={color?.value} className={`border-2  rounded-md w-8 h-8 ${color == color?.label ? 'border-primary' : 'border-slate-200' } `} ><span onClick={() => colorVariant(color?.label)} className='w-7 h-7 cursor-pointer scale-95 rounded border inline-block' style={{backgroundColor:color?.value}}></span></li> )
                                                         }
                                                     </ul>
                                                 </li>
-                                                <li className='flex flex-col gap-2'> <span className='font-semibold'>Size: <span className='font-medium'>{size}</span> </span> 
+                                                }
+                                              
+                                                {
+                                                    productFeatures?.keyFeatures?.memorys?.length > 0 &&  <li className='flex flex-col gap-2'> <span className='font-semibold'>Size: <span className='font-medium'>{size}</span> </span> 
                                                     <ul className='flex items-center gap-2'>
-                                                        <li className={`border-2  rounded-md h-8 ${size == '2GB' ? 'border-primary' : "border-slate-200" } `}><span onClick={() => sizeVariant("2GB")} className=' h-7 cursor-pointer scale-95 rounded border  px-2 inline-block'>2GB</span></li>
-                                                        <li className={`border-2  rounded-md h-8 ${size == '4GB' ? 'border-primary' : "border-slate-200" } `}><span onClick={() => sizeVariant("4GB")} className=' h-7 cursor-pointer scale-95 rounded border px-2  inline-block'>4GB</span></li>
-                                                        <li className={`border-2  rounded-md h-8 ${size == '8GB' ? 'border-primary' : "border-slate-200" } `}><span onClick={() => sizeVariant("8GB")} className=' h-7 cursor-pointer scale-95 rounded border px-2  inline-block'>8GB</span></li>
-                                                        <li className={`border-2  rounded-md h-8 ${size == '16GB' ? 'border-primary' : "border-slate-200" } `}><span onClick={() => sizeVariant("16GB")} className=' h-7 cursor-pointer scale-95 rounded border px-2 inline-block'>16GB</span></li>
+                                                        {
+                                                            productFeatures?.keyFeatures?.memorys?.map((memo,index) =>    <li key={index} className={`border-2  rounded-md h-8 ${size == memo?.value ? 'border-primary' : "border-slate-200" } `}><span onClick={() => sizeVariant(memo.value)} className=' h-7 cursor-pointer scale-95 rounded border  px-2 inline-block'>{memo?.value}</span></li> )
+                                                        }
+                                                     
                                                     </ul>
                                                 </li>
+                                                }
+                                               
                                             
                                             </ul>
                                             <div className='flex items-center gap-3 flex-wrap lg:flex-nowrap mt-3'> 

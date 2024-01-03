@@ -54,8 +54,20 @@ const ProductDetailsTabs = ({product}) => {
                         <span onClick={handleAccording} className='h-9 w-9 rounded-full bg-slate-50 flex items-center justify-center cursor-pointer'><IoChevronDown /></span>
                     </div>
                     <div className={` px-4  transition-all duration-500 overflow-hidden ${accourding ? " target:max-h-[300px] py-4":'h-0'} `}>
-                        <p className={` `}>The Canon EOS 2000D Digital SLR Camera sensor is CMOS. When it comes to ISO settings, this camera offers Auto. Movies may be recorded at 1920x1080 pixels (1080p HD) or 1280x720 pixels (720p HD). This simple-to-use camera is ideal for beginners, delivering beautiful photos and cinematic Full HD movies full of detail, color, and depth, as well as an excellent low-light performance from a 24.1 Megapixel sensor. With built-in guidance and creative settings in Creative Auto mode, offering partial and full manual photographic controls whenever  ready, live-view shooting with on-screen previews is simple. When using the Canon Camera Connect and Photo Companion apps, you can easily share to social media and shoot remotely by connecting via Wi-Fi or NFC. This camera has to Create stunning photographs and videos by blurring the backdrop. With a big 24.1 Megapixel sensor, shoot detailed shots into the night and produce a lovely background blur. Express your imagination with simple-to-follow the w instructions. With Creative Auto mode, you may shoot with guidelines in mind. Use Creative Filters to create one-of-a-kind effects. Learn about the capabilities of DSLRs and interchangeable lenses with  Photo Companion app. When  ready, add lenses and accessories and switch to manual mode. Shoot with confidence and speed in challenging settings. Capture the moment precisely as you remember it with accurate autofocus, 3.0 f, ps, and DIGIC 4+ processing.</p>
-                        
+                        <div className="overflow-x-hidden">
+                            <table className="w-full min-w-[500px] border-collapse">
+                                <tbody>
+                                    {
+                                        product?.productFeatures?.extraFeatures?.map((item,index) =>  <tr key={index} className="border">
+                                            <td className="border-r py-2 pl-3 w-[200px]">{item?.label}</td>
+                                            <td className=" py-2 pl-3 ">{item?.value}</td>
+                                        </tr> )
+                                    }
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                     
                     </div>
                 </div>
                 <div id='overview' className='bg-white rounded-md'>
@@ -64,8 +76,18 @@ const ProductDetailsTabs = ({product}) => {
                         <span onClick={handleAccording} className='h-9 w-9 rounded-full bg-slate-50 flex items-center justify-center cursor-pointer'><IoChevronDown /></span>
                     </div>
                     <div className={` px-4  transition-all duration-500 overflow-hidden ${accourding ? " target:max-h-[300px] py-4":'h-0'} `}>
-                        <p className={` `}>The Canon EOS 2000D Digital SLR Camera sensor is CMOS. When it comes to ISO settings, this camera offers Auto. Movies may be recorded at 1920x1080 pixels (1080p HD) or 1280x720 pixels (720p HD). This simple-to-use camera is ideal for beginners, delivering beautiful photos and cinematic Full HD movies full of detail, color, and depth, as well as an excellent low-light performance from a 24.1 Megapixel sensor. With built-in guidance and creative settings in Creative Auto mode, offering partial and full manual photographic controls whenever  ready, live-view shooting with on-screen previews is simple. When using the Canon Camera Connect and Photo Companion apps, you can easily share to social media and shoot remotely by connecting via Wi-Fi or NFC. This camera has to Create stunning photographs and videos by blurring the backdrop. With a big 24.1 Megapixel sensor, shoot detailed shots into the night and produce a lovely background blur. Express your imagination with simple-to-follow the w instructions. With Creative Auto mode, you may shoot with guidelines in mind. Use Creative Filters to create one-of-a-kind effects. Learn about the capabilities of DSLRs and interchangeable lenses with  Photo Companion app. When  ready, add lenses and accessories and switch to manual mode. Shoot with confidence and speed in challenging settings. Capture the moment precisely as you remember it with accurate autofocus, 3.0 f, ps, and DIGIC 4+ processing.</p>
-                        
+                        {
+                            product?.short_details && <div className="mb-3">
+                                <p className="text-base font-bold text-gray-600">Short overview</p>
+                                <p>{product?.short_details}</p>
+                            </div>
+                        }
+                        {
+                            product?.details && <div>
+                               <p className="text-base font-bold text-gray-600">overview</p>
+                               <p>{product?.details}</p>
+                            </div>
+                        }
                     </div>
                 </div>
                 <div id='comments' className='bg-white rounded-md'>

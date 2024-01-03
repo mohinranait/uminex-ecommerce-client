@@ -1,4 +1,4 @@
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import Select from "react-select"
 import useCategorys from '../../../hooks/useCategorys';
@@ -13,6 +13,9 @@ import { uploadImage } from '../../../services/UploadImage';
 // import { dateFormater } from '../../../services/DateFormater';
 import toast from "react-hot-toast"
 import useColors from '../../../hooks/useColors';
+import MobileFeatures from '../productFeatures/MobileFeatures';
+import LaptopFeatures from '../productFeatures/LaptopFeatures';
+import { useNavigate } from 'react-router-dom';
 
 const productTypes = [
     {
@@ -24,26 +27,35 @@ const productTypes = [
     },
     {
         _id: 2,
-        icon : 'https://img.lovepik.com/free-png/20210926/lovepik-mobile-phone-icon-png-image_401486772_wh1200.png',
+        icon : 'https://media.istockphoto.com/id/1388505044/vector/laptop-or-computer-line-icon.jpg?s=612x612&w=0&k=20&c=N_luf_FgAxGnLbEgPIbUxXkgwiYdVjFf-D3Dt2eKYa0=',
         title: "Laptop and PC",
         label: "laptop-and-pc",
         items : '10 Items'
     },
     {
         _id: 3,
-        icon : 'https://img.lovepik.com/free-png/20210926/lovepik-mobile-phone-icon-png-image_401486772_wh1200.png',
+        icon : 'https://www.iconpacks.net/icons/2/free-smart-watch-icon-2087-thumb.png',
         title: "Smart watch",
         label: "smart-watch",
         items : '10 Items'
     },
     {
         _id: 4,
-        icon : 'https://img.lovepik.com/free-png/20210926/lovepik-mobile-phone-icon-png-image_401486772_wh1200.png',
+        icon : 'https://cdn-icons-png.flaticon.com/512/9117/9117806.png',
         title: "Smart speaker",
         label: "smart-speaker",
         items : '10 Items'
     },
 ]
+
+const phoneMemorys = [
+    {_id: 1, value : '2/8 GB', label : '2/8 GB' },
+    {_id: 2, value : '2/32 GB', label : '2/32 GB' },
+    {_id: 3, value : '3/32 GB', label : '3/32 GB' },
+    {_id: 4, value : '3/64 GB', label : '3/64 GB' },
+    {_id: 5, value : '4/64 GB', label : '4/64 GB' },
+    {_id: 6, value : '4/128 GB', label: '4/128 GB' },
+] 
 
 
 const featuresProducts = [
@@ -58,7 +70,7 @@ const featuresProducts = [
 ]
 
 const ProductForm = ({product}) => {
-
+    const navigate = useNavigate()
     const [colors] = useColors();
     const formateColors = colors?.map(color => { 
         return {
@@ -68,21 +80,28 @@ const ProductForm = ({product}) => {
         }    
     })
 
+    const [featuresItems, setFeaturesItems] = useState( product ? product?.productFeatures?.extraFeatures :  [
+        {label: '', value:''},
+    ])
+ 
     const axios = useAxios(); 
     const [isSlug, setIsSlug] = useState( product?.slug || '');
     const [deliveryToggle, setDeliveryToggle] = useState(true);
-    const [selectColors, setSelectColors] = useState(product?.colors || null)
+    const [selectColors, setSelectColors] = useState(product?.productFeatures?.keyFeatures?.colors || null)
+    const [selectMemory, setSelectMemory] = useState(product?.productFeatures?.keyFeatures?.memorys || null)
     const [selected, setSelected] = useState( new Date( product ? product?.publish_date : new Date()));
     const [imgText1, setImgText1] = useState('Upload Image');
     const [imgText2, setImgText2] = useState('Upload Image');
     const [imgText3, setImgText3] = useState('Upload Image');
     const [imgText4, setImgText4] = useState('Upload Image');
-    const [categoryType, setCategoryType] = useState(productTypes[0].label)
+    const [categoryType, setCategoryType] = useState( productTypes[0].label)
     const [error,setError] = useState({
         priceError: '',
         offerPriceError: '',
         slugError: ''
     })
+
+
     
     const [sellingPrice, setSillingPrice] = useState(product ? product?.price?.sellingPrice : 0)
     const [isPrice, setIsPrice] = useState(product ? product?.price?.productPrice : 0 );
@@ -92,14 +111,22 @@ const ProductForm = ({product}) => {
     const categoryFormates = categorys?.map(category => {
         return { value : category?._id, label: category?.name }
     })
-    const finedIndexForCategory = categoryFormates.findIndex(item => item?.value == product?.category?._id )
-
 
     const {user} = useAuth();
-
+    const [category, setCategory] = useState(product ? {
+        value: product?.category?._id,
+        label: product?.category?.name,
+    }:null)
     
 
+    useEffect(() => {
+        setCategoryType(product?.categoryType)
+    },[product])
 
+    const [brand, setBrand] = useState(product ? {
+        value: product?.brand?._id,
+        label: product?.brand?.name,
+    } : null);
     const [brands] = useBrands();
     const getBrands = brands?.map(brand => { 
         return {
@@ -107,7 +134,7 @@ const ProductForm = ({product}) => {
             label: brand?.name,
         }
     });
-    const brandSelectIndex = getBrands?.findIndex(item => item?.value === product?.brand?._id );
+  
 
 
 
@@ -152,8 +179,6 @@ const ProductForm = ({product}) => {
         e.preventDefault();
 
         const form = e.target;
-        const brand = form.brand.value;
-        const category = form.category.value;
         const isFeature = form.featureProduct.value;
         const details = form.details.value;
         const isStock = Number(form.isStock.value);
@@ -168,7 +193,7 @@ const ProductForm = ({product}) => {
         const file2 = form.image2.files[0];
         const file3 = form.image3.files[0];
         const file4 = form.image4.files[0];
-        console.log(form.colors.value);
+
 
   
         if( isPrice < isOfferPrice ){
@@ -204,13 +229,13 @@ const ProductForm = ({product}) => {
                 imgArr = [...imgArr, ...existImags]
             }
         
-    
+
             const productObject = {
                 author: user?._id,
-                brand, 
-                category,
+                brand : brand?.value, 
+                category: category?.value,
                 isFeature,
-                colors:selectColors, 
+                // colors:selectColors, 
                 details,
                 delivery: {
                     deliveryStatus : deliveryToggle ? 'pay': 'free',
@@ -234,12 +259,19 @@ const ProductForm = ({product}) => {
                     images: imgArr,
                 },
                 categoryType: categoryType || 'mobile-phone',
+                productFeatures: {
+                keyFeatures : {
+                        colors : selectColors?.length ?  [...selectColors] : [],
+                        memorys : selectMemory?.length > 0 ? [...selectMemory] : [],
+                    },
+                    extraFeatures: featuresItems?.length > 0 ? featuresItems : []
+                }
             };
-            
             // console.log(productObject);
             if( !product ){
                 const response = await axios.post('/products', productObject);
                 if(response.data.success){
+                    navigate('/admin/products')
                     toast.success("Created Successfull");
                 }
             }else{
@@ -250,7 +282,7 @@ const ProductForm = ({product}) => {
             }
             
         } catch (error) {
-            console.log(error.message);
+            console.log('hoy',error.message);
         }
        
         
@@ -275,6 +307,25 @@ const ProductForm = ({product}) => {
     ]
     const selectIndexStatus = productStatusOptions?.findIndex(item => item?.value === product?.status)
 
+    // Add new input for product features
+    const handleAddFeaturesItem = () => {
+        setFeaturesItems([...featuresItems, {label: '', value: ''}])
+    }
+
+    // remove product features UI
+    const handleFeatureDeleteItem = (index) => {
+        const lists = [...featuresItems];
+        lists.splice(index, 1);
+        setFeaturesItems(lists) 
+    }
+
+    // Handle features item label
+    const handleItemLabel = (e, index) => {
+        const {name, value} = e.target
+        const lists = [...featuresItems];
+        lists[index][name] = value
+        setFeaturesItems(lists);
+    }
 
 
     // Day picker footer text
@@ -326,17 +377,19 @@ const ProductForm = ({product}) => {
                                         <div className='mb-5'>
                                             <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Select brand</label>
                                             <Select
-                                                options={getBrands}
                                                 name={'brand'}
-                                                defaultValue={getBrands[brandSelectIndex]}
+                                                options={getBrands}
+                                                onChange={(e) => setBrand(e)}
+                                                value={brand}
                                             />
                                         </div>
                                         <div className='mb-5'>
                                             <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Select category </label>
                                             <Select 
-                                                defaultValue={categoryFormates[finedIndexForCategory]}
-                                                options={categoryFormates}
                                                 name={'category'}
+                                                options={categoryFormates}
+                                                onChange={(e) => setCategory(e)}
+                                                value={category}
                                             />
                                         </div>
                                         <div className='grid lg:grid-cols-2 gap-3'>
@@ -371,6 +424,97 @@ const ProductForm = ({product}) => {
                               
                             </div>
                         </div>
+                        
+
+                        <div className="rounded-md bg-white border border-gray-100 ">
+                            <div className="flex items-center justify-between px-5 py-4">
+                                <p>Product key features</p>
+                                <button>Add brand</button>
+                            </div>
+                            <hr />
+                            <div className="px-5 py-5">
+                                <div className='text-lg font-medium mb-2'>Key features</div>
+                                <div className="grid lg:grid-cols-3 gap-6 mt-1">
+                                    <div>
+                                        <div className='mb-5'>
+                                            <input type="text" readOnly value="Color"  className="py-2 px-3 w-full bg-gray-100 border outline-none transition-all  rounded-md border-gray-200" />
+                                        </div>
+                                    </div>
+                                    <div className='col-span-2'>
+                                        <div className='mb-5'>
+                                            <Select 
+                                                name='colors'
+                                                value={selectColors}
+                                                options={formateColors} 
+                                                isMulti
+                                                onChange={(e) => setSelectColors(e) }
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                {
+                                    categoryType == 'mobile-phone' &&  <div className="grid lg:grid-cols-3 gap-6 mt-1">
+                                    <div>
+                                        <div className='mb-5'>
+                                            <input type="text" readOnly value="Ram/Rom"  className="py-2 px-3 w-full bg-gray-100 border outline-none transition-all  rounded-md border-gray-200" />
+                                        </div>
+                                    </div>
+                                    <div className='col-span-2'>
+                                        <div className='mb-5'>
+                                            <Select 
+                                                name='ramRom'
+                                                value={selectMemory}
+                                                options={phoneMemorys} 
+                                                isMulti
+                                                onChange={(e) => setSelectMemory(e) }
+                                            />
+                                        </div>
+                                    </div>
+                                </div> 
+                                }
+                                <div className='text-lg font-medium mb-2'>Extra features</div>
+                                <div className="grid lg:grid-cols-3 gap-6 mt-2">
+                                    <div>
+                                        <div className='mb-1'>
+                                           Label
+                                        </div>
+                                    </div>
+                                    <div className='col-span-1'>
+                                        <div className='mb-1'>
+                                            Value
+                                        </div>
+                                    </div>
+                                </div>
+                                {
+                                    featuresItems?.map((item ,index) =>  <div key={index} className="grid lg:grid-cols-3 gap-6 mt-1">
+                                    <div>
+                                        <div className='mb-5'>
+                                            <input type="text" name='label' onChange={(e) => handleItemLabel(e,index)}  value={item?.label} className="py-2 px-3 w-full bg-gray-100 border outline-none transition-all  rounded-md border-gray-200" />
+                                        </div>
+                                    </div>
+                                    <div className='col-span-2 '>
+                                        <div className='mb-5 flex gap-2'>
+                                            <input type="text"  name="value" onChange={(e) => handleItemLabel(e,index)} value={item?.value} className="py-2 px-3 w-full border transition-all outline-primary focus:pl-5 rounded-md border-gray-200"  />
+                                            <button type='button' onClick={() => handleFeatureDeleteItem(index)} className='px-2 text-sm rounded bg-red-600 text-white'>Remove</button>
+                                        </div>
+                                    </div>
+                                </div>)
+                                }
+                               
+                                <div className="grid lg:grid-cols-3 gap-6 mt-1">
+                                    <div>
+                                        <div className='mb-5'>
+                                            <button type='button' onClick={handleAddFeaturesItem} className='w-full py-2 bg-gray-200 rounded'>Add Items</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        
+                       
 
                         <div className="rounded-md bg-white border border-gray-100 ">
                             <div className="flex items-center justify-between px-5 py-4">
@@ -563,18 +707,6 @@ const ProductForm = ({product}) => {
                             </div>
                             <hr />
                             <div className='px-5 py-4'>
-                                <div className='mb-5'>
-                                    <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Product color</label>
-                                    
-                                    <Select 
-                                        name='colors'
-                                        value={selectColors}
-                                        options={formateColors} 
-                                        isMulti
-                                        onChange={(e) => setSelectColors(e) }
-                                    />
-                                   
-                                </div>
                                 <div className='mb-5'>
                                     <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Product storage</label>
                                     <input type="text" name="storage"  className="py-2 px-3 w-full border transition-all outline-primary focus:pl-5 rounded-md border-gray-200" placeholder="Storage" />
