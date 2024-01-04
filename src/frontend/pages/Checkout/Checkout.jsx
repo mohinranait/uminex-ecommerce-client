@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import AddressForm from "../../components/form/AddressForm";
 import { Helmet } from "react-helmet-async";
+import { charecterLimit } from "../../../services/charecterLimit";
 
 const Checkout = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -117,13 +118,13 @@ const Checkout = () => {
                                         <img className="w-16 h-16 sm:w-24 sm:h-24 " src={product?.product?.media?.images[0]} alt="" />
                                     </span>
                                     <div>
-                                        <Link to={'/products'} className="block font-semibold text-sm sm:text-base  text-gray-700">{product?.product?.name}</Link>
+                                        <Link to={`/${product?.product?.category?.slug}/${product?.product?.slug}`} className="block font-semibold text-sm sm:text-base text-gray-700">{ charecterLimit(product?.product?.name,20,true) }</Link>
                                     </div>
                                 </div>
                                 <div className="col-span-4 lg:col-span-1 divide-y lg:divide-y-0">
-                                    <p className="flex text-sm justify-between w-full py-1 lg:py-0 items-center"><span className="text-gray-500  sm:text-sm  font-semibold w-full flex justify-between">Price: <span className="w-[80px]  inline-block text-right">${product?.product?.price?.sellingPrice}</span> </span></p>
-                                    <p className="flex text-sm justify-between w-full py-1 lg:py-0 items-center"><span className="text-gray-500  sm:text-sm  font-semibold w-full flex justify-between">Items: <span className="w-[80px]  inline-block text-right">{product?.quantity}</span></span>  </p>
-                                    <p className="flex text-sm justify-between w-full py-1 lg:py-0 items-center"><span className="text-gray-500  sm:text-sm  font-semibold w-full flex justify-between">Total: <span className="w-[80px]  inline-block text-right">${product?.quantity * product?.product?.price?.sellingPrice}</span> </span>  </p>
+                                    <p className="flex text-sm justify-between w-full py-1 lg:py-0 items-center"><span className="text-gray-500  sm:text-sm  font-semibold w-full flex justify-between lg:justify-end">Price: <span className="w-[80px]  inline-block text-right">${product?.product?.price?.sellingPrice}</span> </span></p>
+                                    <p className="flex text-sm justify-between w-full py-1 lg:py-0 items-center"><span className="text-gray-500  sm:text-sm  font-semibold w-full flex justify-between lg:justify-end">Items: <span className="w-[80px]  inline-block text-right">{product?.quantity}</span></span>  </p>
+                                    <p className="flex text-sm justify-between w-full py-1 lg:py-0 items-center"><span className="text-gray-500  sm:text-sm  font-semibold w-full flex justify-between lg:justify-end">Total: <span className="w-[80px]  inline-block text-right">${product?.quantity * product?.product?.price?.sellingPrice}</span> </span>  </p>
                                 </div>
                               
                                 <div className=" flex justify-end gap-10">
@@ -154,7 +155,7 @@ const Checkout = () => {
                                     </li>
                                     <li className="flex items-center justify-between">
                                         <span className="text-gray-500 font-medium text-lg">Additional Service</span>
-                                        <span className="text-[#4773ec] text-lg font-semibold">$20</span>
+                                        <span className="text-[#4773ec] text-lg font-semibold">$0</span>
                                     </li>
                                     <li className="flex items-center justify-between">
                                         <span className="text-gray-800 font-bold text-lg">Total Amount</span>

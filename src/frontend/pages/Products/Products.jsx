@@ -2,9 +2,8 @@
 import ProductRating from '../../global/ProductRating';
 import { useState } from 'react';
 import { LuHeart, LuLayers, LuMapPin, LuShare2 } from 'react-icons/lu';
-import { IoCashOutline, IoCheckmarkDoneCircleOutline, IoChevronDown, IoShieldCheckmarkOutline, IoSwapHorizontalOutline } from 'react-icons/io5';
+import { IoCashOutline, IoCheckmarkDoneCircleOutline, IoShieldCheckmarkOutline, IoSwapHorizontalOutline } from 'react-icons/io5';
 import {  FaTruckMoving } from 'react-icons/fa';
-import { PiStackSimpleBold } from "react-icons/pi";
 import ProductGallary from '../../components/ProductGallary/ProductGallary';
 import { HiMiniChevronLeft, HiMiniChevronRight } from 'react-icons/hi2';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -20,6 +19,7 @@ import ProductDetailsTabs from '../../components/tabs/ProductDetailsTabs';
 import ChatApp from '../../components/liveChat/ChatApp';
 import { Helmet } from 'react-helmet-async';
 import SingleProductPlaceholder from '../../components/Loding/SingleProductPlaceholder';
+import SidebarProduct from '../../components/SidebarProduct/SidebarProduct';
 
 
 
@@ -32,7 +32,7 @@ const Products = () => {
     const [chatModal, setChatModal] = useState(false)
     const [color, setColor] = useState( null );
     const [size, setSize] = useState(null);
-    console.log(size);
+
     const [quantity, setQuantity] = useState(1);
     const {user} = useAuth();
     const [,wishlistRefetch] = useWishlists(user)
@@ -52,16 +52,26 @@ const Products = () => {
     })
     const {_id , name,media,brand,rating, reviews, category,price,isStock
     ,product_type,productFeatures} = product || {};
-    
+    console.log(brand?.slug);
     const {data:categoryProducts} = useQuery({
         queryKey: ["getCategoryProducts",category?.slug],
         enabled : !isPending,
         queryFn: async () => {
-            const {data} = await axiosPublic.get(`/category-wish-product/${category?.slug}`);
-            return data;
+            const {data} = await axiosPublic.get(`/category-wish-product/${category?.slug}?limit=${5}&page=${1}`);
+            return data?.products;
+        }
+    })
+    
+    const {data:brandProducts} = useQuery({
+        queryKey: ["getBrandProducts",category?.slug,brand?.slug],
+        enabled : !isPending,
+        queryFn: async () => {
+            const {data} = await axiosPublic.get(`/category-wish-product/${category?.slug}?limit=${5}&page=${1}&brand=${brand?.slug}`);
+            return data?.products;
         }
     })
 
+    console.log(brandProducts);
     
 
 
@@ -85,14 +95,6 @@ const Products = () => {
             setQuantity(quantity - 1)
         }
     }
-
-
-    const products = [
-        {_id: 1, name: "Camera mobile", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_3.png?v=1681548716&width=1500', quantity:1,color:'Red'},
-        {_id: 2, name: "Game controllers", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_4.png?v=1681548715&width=1500', quantity:2,color:'White'},
-        {_id: 3, name: "Table ipads", img:'https://demo-uminex.myshopify.com/cdn/shop/files/col_3_5.png?v=1681548716&width=1500', quantity:1,color:'Blue'},
-    ]
-
 
     // product shopping cart store
     const productShoppingCartAdd = async (methodType) => {
@@ -308,65 +310,9 @@ const Products = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                         <div className='order-2 lg:order-1 space-y-4'>
 
-                            <div className='bg-white'>
-                                <div className='flex items-center justify-between border-b px-3 py-3'>
-                                    <p className='text-xl font-medium py-1 pl-3  relative before:h-full before:w-[3px] before:bg-secondary before:left-0 before:top-0 before:absolute'>Related Category</p>
-                                    <span className='h-9 w-9 rounded-full bg-slate-50 flex items-center justify-center cursor-pointer'><IoChevronDown /></span>
-                                </div>
-                                <ul>
-                                    {
-                                        categoryProducts?.products?.map(product =>  <li key={product?._id} className='py-2'>
-                                        <div className='flex gap-2'>
-                                            <div className='w-22 h-22'>
-                                                <img className='w-24 h-24' src={product?.media?.images[0] || ''} alt="" />
-                                            </div>
-                                            <div>
-                                                <p><Link to={`/${category?.slug}/${product?.slug}`} className='font-medium text-gray-600'>{product?.name}</Link></p>
-                                                <div className=' gap-4 items-center'> 
-                                                <span className='text-sm flex items-center gap-2 cursor-pointer font-medium text-gray-500 hover:text-secondary transition-all'><PiStackSimpleBold /> Add to compare </span>
-                                                    <div className='flex items-center gap-3'>
-                                                        <span className='font-semibold text-gray-600'>${product?.price?.sellingPrice}</span> 
-                                                        <ProductRating rating={'4'} />
-                                                    </div> 
-                                                   
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>  )
-                                    }
-                                   
-                                </ul>
-                            </div>
+                            <SidebarProduct products={categoryProducts} category={category} titleText={`Related Category`} />
+                            <SidebarProduct products={brandProducts} category={category} titleText={`Related Brand`} />
 
-                            <div className='bg-white'>
-                                <div className='flex items-center justify-between border-b px-3 py-3'>
-                                    <p className='text-xl font-medium py-1 pl-3  relative before:h-full before:w-[3px] before:bg-secondary before:left-0 before:top-0 before:absolute'>Related Product</p>
-                                    <span className='h-9 w-9 rounded-full bg-slate-50 flex items-center justify-center cursor-pointer'><IoChevronDown /></span>
-                                </div>
-                                <ul>
-                                    {
-                                        products?.map(product =>  <li key={product?._id} className='py-2'>
-                                        <div className='flex gap-2'>
-                                            <div className='w-22 h-22'>
-                                                <img className='w-24 h-24' src={product?.img} alt="" />
-                                            </div>
-                                            <div>
-                                                <p><Link className='font-medium text-gray-600'>{product?.name} product naem is required</Link></p>
-                                                <div className=' gap-4 items-center'> 
-                                                <span className='text-sm flex items-center gap-2 cursor-pointer font-medium text-gray-500 hover:text-secondary transition-all'><PiStackSimpleBold /> Add to compare </span>
-                                                    <div className='flex items-center gap-3'>
-                                                        <span className='font-semibold text-gray-600'>$120</span> 
-                                                        <ProductRating rating={'4'} />
-                                                    </div> 
-                                                   
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>  )
-                                    }
-                                   
-                                </ul>
-                            </div>
                         </div>
                         <div className='order-1 lg:order-2 col-span-2 '>
                            <ProductDetailsTabs product={product} />

@@ -73,7 +73,7 @@ const Carts = () => {
                                     </li>
                                     <li className="flex items-center justify-between">
                                         <span className="text-gray-500 font-medium text-lg">Additional Service</span>
-                                        <span className="text-[#4773ec] text-lg font-semibold">$20</span>
+                                        <span className="text-[#4773ec] text-lg font-semibold">$0</span>
                                     </li>
                                     <li className="flex items-center justify-between">
                                         <span className="text-gray-800 font-bold text-lg">Total Amount</span>

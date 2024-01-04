@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import { Helmet } from 'react-helmet-async';
+import Lottie from "lottie-react"
+import lottiImg from "../../../assets/lottie/loginpage.json"
 
 
 const Register = () => {
@@ -108,9 +110,14 @@ const Register = () => {
              <Helmet>
                 <title>Register | Store mi ecommerce app</title>
             </Helmet>
-            <div className=' min-h-screen py-28' >
-                <div className="container flex items-start">
-                    <div className=" w-[300px] md:w-[450px] overflow-hidden bg-white mx-auto rounded-lg">
+            <div className=' min-h-screen py-16' >
+                <div className="container grid md:grid-cols-2 px-5 lg:px-0 items-start">
+
+                    <div className='flex items-center justify-center h-full'>
+                        <Lottie animationData={lottiImg} />
+                    </div>
+
+                    <div className="lg:w-[450px] overflow-hidden bg-white  rounded-lg">
                         
                             <div className='px-5 py-5 md:px-10 md:pb-10 rounded-b-lg  '>
                                 <div className='text-3xl pb-5 font-semibold text-gray-600'>Register Form</div>

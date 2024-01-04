@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import useAxios from '../../../hooks/useAxios';
 import useAuth from '../../../hooks/useAuth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { charecterLimit } from '../../../services/charecterLimit';
 
 const RightDoyarCartItems = ({cart,refetch}) => {
     const queryClient = useQueryClient()
@@ -77,12 +78,12 @@ const RightDoyarCartItems = ({cart,refetch}) => {
                     
                 </div>
                 <div className="w-20">
-                    <div className="w-20">
+                    <Link to={`/${product?.category?.slug}/${product?.slug}`} className="w-20 inline-block">
                         <img src={product?.media?.images[0]} className="w-20  rounded-md " alt="" />
-                    </div>
+                    </Link>
                 </div>
                 <div className="">
-                    <p className=" text-gray-700"><Link>{product?.name}</Link></p>
+                    <p className=" text-gray-700"><Link to={`/${product?.category?.slug}/${product?.slug}`}>{ charecterLimit(product?.name,30,true) }</Link></p>
                     <p className="font-semibold text-gray-600 mt-1">${product?.price?.sellingPrice}</p>
                 </div>
                     <span onClick={handleShoppingCartDelete} className="cart-right-royar group absolute -top-2 shadow-md bg-white -right-2"><IoClose className="group-hover:rotate-90 transition-all text-gray-700 group-hover:text-secondary" /></span>

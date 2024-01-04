@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import useAuth from "../../../hooks/useAuth";
 import useOrders from "../../../hooks/useOrders";
 import { dateFormater } from "../../../services/DateFormater";
+import { Link } from "react-router-dom";
 
 const UserOrders = () => {
     const {user} = useAuth();
@@ -13,13 +14,14 @@ const UserOrders = () => {
             </Helmet>
             <div className="overflow-x-auto">
                 <p className="mb-1 text-gray-700 text-lg font-semibold">Orders</p>
-                <table className="border-collapse min-w-[500px] w-full border">
+                <table className="border-collapse min-w-[600px] w-full border">
                     <thead>
                         <tr>
                             <th className="py-2 text-left px-5 border-b border-r text-gray-600">SI</th>
                             <th className="py-2 text-left px-5 border-b border-r text-gray-600">Date</th>
                             <th className="py-2 text-left px-5 border-b border-r text-gray-600">Items</th>
                             <th className="py-2 text-left px-5 border-b border-r text-gray-600">Price</th>
+                            <th className="py-2 text-left px-5 border-b border-r text-gray-600">Status</th>
                             <th className="py-2 text-left px-5 border-b border-r text-gray-600">Action</th>
                         </tr>
                     </thead>
@@ -31,14 +33,21 @@ const UserOrders = () => {
                                 <td className="py-2 text-left px-5 border-b border-r text-gray-600">{order?.totalItems} Items</td>
                                 <td className="py-2 text-left px-5 border-b border-r text-gray-600">{order?.orderHistory?.reduce((total, current)  => total + current?.totalPrice,0 )} BDT</td>
                                 <td className="py-2 text-left px-5 border-b border-r text-gray-600">
-                                    {
+                                    
+                                    <span>{
                                         order?.orderStatus == 'delivery' ?  <span className="text-green-600 bg-green-100 inline-block text-xs font-semibold rounded py-[2px] px-2">Delivery</span> 
                                         : 
                                         order?.orderStatus == 'pending' ?  <span className="text-red-600 bg-red-100 inline-block text-xs font-semibold rounded py-[2px] px-2">Pending</span> 
                                         : 
                                         order?.orderStatus == 'cancel' ?  <span className="text-yellow-600 bg-yellow-100 inline-block text-xs font-semibold rounded py-[2px] px-2">Cancal</span> 
                                         : <span className="text-pink-600 bg-pink-100 inline-block text-xs font-semibold rounded py-[2px] px-2">Processing</span> 
-                                    }
+                                    }</span>
+                                  
+                                   
+                                </td>
+                                <td className="py-2 text-left px-5 border-b border-r text-gray-600">
+                                  
+                                    <Link to={`/user/order-details/${order?._id}`} className="bg-gray-100 border border-gray-200 rounded-sm inline-block px-3 py-1 hover:bg-gray-200">View</Link>
                                    
                                 </td>
                             </tr>  )

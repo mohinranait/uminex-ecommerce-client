@@ -12,6 +12,7 @@ import ProductPlaceholder from '../../components/Loding/ProductPlaceholder';
 import useColors from '../../../hooks/useColors';
 import { Helmet } from 'react-helmet-async';
 import { ListPlaceholder } from '../../components/Loding/LeftSidebarCategoryPlaceholder';
+import { FaMinus, FaPlus } from 'react-icons/fa';
 
 
 
@@ -19,6 +20,10 @@ const Shops = () => {
     // const {slug} = useParams();
     const [brands,,brandPending] = useBrands();
     const [colors,,isColorPending] = useColors();
+    const [height, setHeight] = useState({
+        height: 250,
+        value : false,
+    })
     const [filterValue, setFilterValue] = useState({})
     const [params, setParams] = useSearchParams();
     const [isCategory, setIsCategory] = useState({});
@@ -53,6 +58,7 @@ const Shops = () => {
     const getCategory = params.get('category');
     const delivery = params.get('delivery');
     const search = params.get('search');
+    const offersSell = params.get('offers');
 
 
     const handleSelectMenu = () => {
@@ -99,9 +105,9 @@ const Shops = () => {
     },[getCategory])
 
     const {data:productData={}, isPending} = useQuery({
-        queryKey: ['categoriesProducts',getCategory,brand,color,delivery,search,currentPage, perViews,sorting, sortFiled],
+        queryKey: ['categoriesProducts',getCategory,brand,color,delivery,search,currentPage, perViews,sorting, sortFiled,offersSell],
         queryFn: async () => {
-            const products = await axiosPublic.get(`/category-wish-product/${getCategory}?limit=${perViews}&page=${currentPage}&sort=${sorting}&sortFiled=${sortFiled}&brand=${brand}&color=${color}&delivery=${delivery}&search=${search}`)
+            const products = await axiosPublic.get(`/category-wish-product/${getCategory}?limit=${perViews}&page=${currentPage}&sort=${sorting}&sortFiled=${sortFiled}&brand=${brand}&color=${color}&delivery=${delivery}&search=${search}&offers=${offersSell}`)
             
             return products?.data;
         }
@@ -226,6 +232,10 @@ const Shops = () => {
         navigate(url);
     }
 
+    const handleHeightDisplay = (height,value) => {
+        setHeight({height, value})
+    }
+
 
     return (
         <>
@@ -264,7 +274,7 @@ const Shops = () => {
                                         </div> */}
                                         <div className='mt-6'>
                                             <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'><span>Brands</span> <span onClick={() => handleClearFilter('brand')} className='text-sm cursor-pointer'>Clear</span></p>
-                                            <ul className='space-y-2'>
+                                            <ul className={`space-y-2 py-2 h-[${height.height}px] transition-all  ${height?.value ? 'overflow-y-auto':'overflow-y-hidden' }`}>
                                                 {
                                                     brandPending && [0,1,2,3,4,5,6].map(item => <ListPlaceholder key={item} /> )
                                                 }
@@ -282,10 +292,16 @@ const Shops = () => {
                                                 </li> )
                                                 }
                                             </ul>
+                                            {
+                                                brands?.length > 7 &&  <p  className='text-secondary text-sm cursor-pointer font-medium mt-2 flex gap-1 items-center'> {
+                                                height.value ? <span onClick={() => handleHeightDisplay(250,false)} className='flex gap-1 items-center'><FaMinus size={10} />View Less</span> : <span onClick={() => handleHeightDisplay(300,true)}  className='flex gap-1 items-center' ><FaPlus size={10} /> View More</span>
+                                            } </p>
+                                            }
+                                           
                                         </div>
                                         <div className='mt-6'>
                                             <p className='text-lg text-gray-600 font-medium mb-1 border-b pb-1 flex justify-between items-center'>Colors <span onClick={() => handleClearFilter('color')} className='text-sm cursor-pointer'>Clear</span> </p>
-                                            <ul className='space-y-2'>
+                                            <ul className={`space-y-2 py-2 h-[${height.height}px] transition-all  ${height?.value ? 'overflow-y-auto':'overflow-y-hidden' }`}>
                                                 {
                                                     isColorPending && [0,1,2,3,4,5,6].map(item => <ListPlaceholder key={item} /> )
                                                 }
@@ -302,9 +318,12 @@ const Shops = () => {
                                                     </label>
                                                 </li> )
                                                 }
-                                                
-                                            
                                             </ul>
+                                            {
+                                                colors?.length > 7 &&  <p  className='text-secondary text-sm cursor-pointer font-medium mt-2 flex gap-1 items-center'> {
+                                                height.value ? <span onClick={() => handleHeightDisplay(250,false)} className='flex gap-1 items-center'><FaMinus size={10} />View Less</span> : <span onClick={() => handleHeightDisplay(300,true)}  className='flex gap-1 items-center' ><FaPlus size={10} /> View More</span>
+                                            } </p>
+                                            }
                                         </div>
                                     </div>
                                 </div>

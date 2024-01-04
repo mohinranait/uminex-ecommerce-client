@@ -50,6 +50,7 @@ const CartItems = ({cart,handleCartDeletes}) => {
     useEffect(() => {
         setQuantity(cart?.quantity)
     },[cart?.quantity])
+    
     return (
         <>
             <div className="grid grid-cols-4 px-5 py-3 lg:py-1 relative items-center ">
@@ -58,7 +59,7 @@ const CartItems = ({cart,handleCartDeletes}) => {
                         <img className="w-16 h-16 sm:w-24 sm:h-24 " src={product?.media?.images[0]} alt="" />
                     </span>
                     <div>
-                        <Link to={'/products'} className="block font-semibold text-sm sm:text-base md:text-lg text-gray-800">{product?.name}</Link>
+                        <Link to={`/${product?.category?.slug}/${product?.slug}`} className="block font-semibold text-sm sm:text-base md:text-lg text-gray-800">{product?.name}</Link>
                         {
                             varient?.map((vari,index) =>  <p key={index} className="text-xs  text-gray-500"><span className="font-semibold">{vari?.label}</span> <span className="text-gray-400">{vari?.value}</span></p> )
                         }

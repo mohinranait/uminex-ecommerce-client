@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import toast from 'react-hot-toast';
 import { Helmet } from 'react-helmet-async';
+import Lottie from "lottie-react"
+import loginLottie from "../../../assets/lottie/login.json"
 
 const Login = () => {
     const {loginUser} = useAuth();
@@ -48,9 +50,12 @@ const Login = () => {
             <Helmet>
                 <title>Login | Store mi ecommerce app</title>
             </Helmet>
-            <div className=' min-h-screen py-28' >
-                <div className="container flex items-start">
-                    <div className=" w-[300px] md:w-[450px] overflow-hidden  mx-auto rounded-lg">
+            <div className=' min-h-screen py-16 flex items-center justify-between' >
+                <div className="container grid md:grid-cols-2 px-5 lg:px-0 items-start">
+                    <div className='flex items-center justify-center'>
+                        <Lottie animationData={loginLottie} className='lg:w-[400px]' />
+                    </div>
+                    <div className="lg:w-[450px] overflow-hidden bg-white  rounded-lg">
                         
                             <div className='px-5 py-5 md:px-10 md:pb-10 rounded-b-lg bg-white '>
                                 <div className='text-3xl pb-5 font-semibold text-gray-500'>Login Form</div>

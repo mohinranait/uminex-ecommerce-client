@@ -17,7 +17,6 @@ const ProductCard = ({product,another}) => {
     const keyFeature = productFeatures?.keyFeatures;
     const [size, setSize] = useState(keyFeature?.memorys?.length > 0 ? keyFeature?.memorys[0].label:null);
     const [color, setColor] = useState(keyFeature?.colors?.length > 0 ? keyFeature?.colors[0].label:null)
-
     const [,refetch] = useCarts();
     const axios = useAxios();
     const location = useLocation();

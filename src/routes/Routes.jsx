@@ -27,6 +27,7 @@ import PaymentSuccess from '../frontend/pages/PaymentSuccess/PaymentSuccess';
 import Wishlists from '../frontend/pages/User/Wishlists';
 import LiveChatFromAdmin from '../backend/pages/LiveChatFromAdmin';
 import Notfound from '../frontend/pages/Notfound';
+import UserOrderDetails from '../frontend/pages/User/UserOrderDetails';
 
 const myRoutes = createBrowserRouter([
     {
@@ -53,6 +54,10 @@ const myRoutes = createBrowserRouter([
                     {
                         path: "orders",
                         element : <UserOrders />
+                    },
+                    {
+                        path: "order-details/:id",
+                        element : <UserOrderDetails />
                     },
                     {
                         path: "profile",
