@@ -3,11 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import RightDoyarCartItems from "../../components/CartItems/RightDoyarCartItems";
 import useCarts from "../../../hooks/useCarts";
-
+import cartImgae from "../../../../public/img/empty-cart.jpg"
 
 const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
     const [carts, refetch] = useCarts();
-    // console.log(carts);
+    console.log(carts);
     const navigate = useNavigate();
     
     const handleRedirectCartPage = () => {
@@ -34,7 +34,7 @@ const MyCartsDoyar = ({toggleCartDoyarHandler,cartDoyar}) => {
                     <div className='px-4 flex-grow overflow-y-auto'>
                         <ul className=" h-full  py-3 space-y-4">
                             {
-                                carts?.items?.length == 0 && (
+                                carts?.totalCarts == 0 && (
                                 <div className="flex h-[90%] items-center justify-center">
                                     <span>
                                         <p className="mb-3">Your Shopping cart is empty</p>

@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import { IoNotificationsOutline, IoSettingsOutline, IoToggleOutline, IoToggleSharp } from "react-icons/io5";
+import useAuth from "../../hooks/useAuth";
 
 const DashboardHeader = ({toggleLeft,setToggleLeft}) => {
+    const {user} = useAuth();
     return (
         <div className='fixed left-0 w-full top-0 right-0 bg-white z-[100]'>
             <header className='px-3 lg:px-0 bg-white gap-5  shadow-sm'>
@@ -30,8 +32,9 @@ const DashboardHeader = ({toggleLeft,setToggleLeft}) => {
                                 </a>
                             </li>
                             <li>
-                                <a href="#"> 
-                                    <img src="https://laravel.pixelstrap.com/xolo/assets/images/dashboard/user.png" className='w-8 h-8 rounded-full' alt="" />
+                                <a href="#" className="flex gap-2 items-center"> 
+                                    <span className="text-sm">{user?.name}</span>
+                                    <img src={user?.avater ? user?.avater : "https://laravel.pixelstrap.com/xolo/assets/images/dashboard/user.png"} className='w-8 h-8 ring-1 ring-gray-200 p-1 rounded-full' alt="" />
                                 </a>
                             </li>
                         

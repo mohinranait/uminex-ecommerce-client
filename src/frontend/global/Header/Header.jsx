@@ -97,7 +97,6 @@ const Header = ({toggleCartDoyarHandler}) => {
             setSearchHistorys(filter)
             setHeaderSearchHistoryBox(true)
         }
-
     }
 
     
@@ -189,7 +188,7 @@ const Header = ({toggleCartDoyarHandler}) => {
                                     <Link to={'/user/dashboard'} className="flex items-center gap-1">
                                         <div className="flex items-center">
                                             {
-                                                user?._id ? ( <span className="w-10 h-10 rounded-full inline-block"><img className="w-10 h-10 rounded-full" src={'https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2220431045.jpg'} alt="" /></span> ) : (  <GoPerson className="text-3xl text-text-color" />)
+                                                user?._id ? ( <span className="w-8 h-8 rounded-full inline-block"><img className="w-8 h-8 rounded-full" src={ user?.avater ? user?.avater : 'https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2220431045.jpg'} alt="" /></span> ) : (  <GoPerson className="text-3xl text-text-color" />)
                                             }
                                           
                                         </div>
@@ -243,7 +242,7 @@ const Header = ({toggleCartDoyarHandler}) => {
                                 <li><NavLink to={'/shop'} className="link-menu py-2 px-1">Shops</NavLink></li>
                                 {
                                     user?.email ? <>
-                                    {user?.role == 'admin' &&  <li><NavLink to={'/admin'} className="link-menu py-2 px-1">Admin</NavLink></li>}
+                                    {user?.role == 'admin' &&  <li><NavLink to={'/admin/dashboard'} className="link-menu py-2 px-1">Admin</NavLink></li>}
                                     <li><button onClick={handleLogout} className="link-menu py-2 px-1">Logout</button></li>
                                     </> :    
                                     <li><NavLink to={'/login'} className="link-menu py-2 px-1">Login</NavLink></li>

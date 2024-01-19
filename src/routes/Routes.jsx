@@ -28,6 +28,7 @@ import Wishlists from '../frontend/pages/User/Wishlists';
 import LiveChatFromAdmin from '../backend/pages/LiveChatFromAdmin';
 import Notfound from '../frontend/pages/Notfound';
 import UserOrderDetails from '../frontend/pages/User/UserOrderDetails';
+import AdminDashboard from '../backend/pages/AdminDashboard';
 
 const myRoutes = createBrowserRouter([
     {
@@ -83,7 +84,7 @@ const myRoutes = createBrowserRouter([
         children: [
             {
                 path: 'dashboard',
-                element : <div>Dashboard</div>
+                element : <AdminDashboard />
             },
             {
                 path: 'orders',

@@ -41,13 +41,7 @@ const HomeBanner = () => {
         getSliders();
     },[axiosPublic])
 
-    const bannerProducts = [
-        {_id: 1, title : "Tablets/lapt", image : "https://demo-uminex.myshopify.com/cdn/shop/files/col_3_1.png?v=1681548716&width=1500"},
-        {_id: 2, title : "Tablets/Ipad", image : "https://demo-uminex.myshopify.com/cdn/shop/files/col_3_2.png?v=1681548716&width=1500"},
-        {_id: 3, title : "Camera/phone", image : "https://demo-uminex.myshopify.com/cdn/shop/files/col_3_3.png?v=1681548716&width=1500"},
-        {_id: 4, title : "Gamepade", image : "https://demo-uminex.myshopify.com/cdn/shop/files/col_3_4.png?v=1681548715&width=1500"},
-        {_id: 5, title : "Tablets/Ipad", image : "https://demo-uminex.myshopify.com/cdn/shop/files/col_3_5.png?v=1681548716&width=1500"},
-    ]
+
    
     return (
         <section className='lg:my-5'>

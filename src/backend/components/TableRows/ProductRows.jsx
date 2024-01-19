@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { Link } from "react-router-dom";
+import { charecterLimit } from "../../../services/charecterLimit";
 
 
 const ProductRows = ({product,index}) => {
@@ -13,8 +14,8 @@ const ProductRows = ({product,index}) => {
                     <div className="flex gap-2 ">
                         <img src={media?.images[0]} className="w-10" alt="" />
                         <div>
-                            <p className="text-gray-700">{name}</p>
-                            <p className="text-xs text-gray-400">{slug}</p>
+                            <p className="text-gray-700" title={name}>{ charecterLimit(name, 20,true) }</p>
+                            <p className="text-xs text-gray-400" title={slug}>{charecterLimit(slug, 20)}</p>
                         </div>
                     </div>
                 </td>

@@ -89,7 +89,7 @@ const ProductCard = ({product,another}) => {
                         <span className='text-primary font-bold text-lg'>${price?.sellingPrice}.00</span> 
                         {price?.discountPrice > 0 && <del className='text-xs text-gray-400'>${price?.productPrice}</del> }  
                     </div>
-                    <button onClick={handleAddtoCart} disabled={isStock == 0} className={`py-2 flex items-center justify-center rounded-sm transition-all text-gray-700 w-8 h-8  hover:text-white ${isStock == 0 ? 'hover:bg-secondary':"hover:bg-primary"} `}> <LuPlusSquare className='text-2xl' /> </button>
+                    <button onClick={handleAddtoCart} disabled={isStock == 0} className={`py-2 flex items-center justify-center rounded-sm transition-all text-gray-500 w-8 h-8  hover:text-white ${isStock == 0 ? 'hover:bg-secondary':"hover:bg-primary"} `}> <LuPlusSquare className='text-2xl' /> </button>
                 </div>
             </div>
         </>

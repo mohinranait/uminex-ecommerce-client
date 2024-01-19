@@ -44,17 +44,10 @@ const Account = () => {
                                 <td className="py-2 text-left px-5 border-b border-r text-gray-600">{user?.mobile? user?.mobile : '-/-'}</td>
                             </tr>
                             <tr>
-                                <th className="py-2 text-left px-5 border-b border-r text-gray-600">City</th>
-                                <td className="py-2 text-left px-5 border-b border-r text-gray-600">US State</td>
+                                <th className="py-2 text-left px-5 border-b border-r text-gray-600">Company</th>
+                                <td className="py-2 text-left px-5 border-b border-r text-gray-600">{user?.company ? user?.company : '-/-'}</td>
                             </tr>
-                            <tr>
-                                <th className="py-2 text-left px-5 border-b border-r text-gray-600">Zip</th>
-                                <td className="py-2 text-left px-5 border-b border-r text-gray-600">5412</td>
-                            </tr>
-                            <tr>
-                                <th className="py-2 text-left px-5 border-b border-r text-gray-600">Address</th>
-                                <td className="py-2 text-left px-5 border-b border-r text-gray-600">Sd d bolck, forman mainue, Global</td>
-                            </tr>
+                           
                         </tbody>
                     </table>
                 </div>

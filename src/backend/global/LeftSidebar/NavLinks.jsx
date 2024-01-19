@@ -3,6 +3,8 @@ import {  IoGridOutline, IoHomeOutline } from 'react-icons/io5';
 import { TbBrandBinance, TbCategory } from "react-icons/tb";
 import { LiaSlidersHSolid } from "react-icons/lia";
 import { HiOutlineUsers } from 'react-icons/hi2';
+import { BiCart } from "react-icons/bi";
+
 const LeftSidebarLinks = [
     {
         id : 1,
@@ -15,7 +17,7 @@ const LeftSidebarLinks = [
         id : 8,
         link : "/admin/orders",
         name : "Orders",
-        icon : <IoHomeOutline className='text-lg' />,
+        icon : <BiCart className='text-lg' />,
         path : '/admin/orders',
     },
     {

@@ -7,7 +7,7 @@ import { uploadImage } from '../../../services/UploadImage';
 import toast from 'react-hot-toast';
 const UserProfile = () => {
     const [imgText, setImgText] = useState("Profile image")
-    const {user} = useAuth()
+    const {user, setUser} = useAuth()
     const axios = useAxios();
 
 
@@ -20,6 +20,10 @@ const UserProfile = () => {
         const mobile = form?.mobile.value;
         const company = form?.company.value;
         const profile = form.image.files[0];
+        if(name?.length == 0){
+            toast("Name filed is require", {icon: '❌'})
+            return 
+        }
        
         try {
             let avater = user?.avater;
@@ -30,6 +34,7 @@ const UserProfile = () => {
             const userObj = {name,mobile,company,avater} 
             const {data} = await axios.patch(`/user/${user?.email}`, userObj)
             if(data.success){
+                setUser(data.user)
                 toast.success("Update successfull")
             }
         } catch (error) {

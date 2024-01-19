@@ -52,18 +52,19 @@ const Register = () => {
         try {
             const user = await createUser(email, password);
             if( user.user ){
-                await userProfileUpdate( name);
+                await userProfileUpdate(name);
                 const newUser = {name ,email}
                 try {
-                    const {data} = await axiosPublic.post(`/api/v1/users`, {newUser})
+                    const {data} = await axiosPublic.post(`/users`, newUser)
                     console.log(data);
+                    toast.success("Register Successfull")
+                    navigate('/login');
                     
                 } catch (error) {
                     toast.error(error.message);
                 }
             }
-            toast.success("Register Successfull")
-            navigate('/');
+           
         } catch (error) {
         
             if( error.message == 'Firebase: Error (auth/email-already-in-use).'){
