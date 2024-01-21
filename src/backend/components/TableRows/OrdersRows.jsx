@@ -117,7 +117,7 @@ const OrdersRows = ({order,index}) => {
                 </td>
             </tr>   
             <Modal isOpenModal={isOpenModal} width={'30'} closeModal={closeModal} >
-                <div className="w-[95vw] lg:w-[70vw]">
+                <div className="w-[95vw] lg:w-[70vw] h-vh lg:h-[80vh] overflow-y-auto">
                     <div className='grid lg:grid-cols-3 gap-5'>
                         <div className='border border-gray-100 rounded p-5 py-4'>
                             <p className='text-sm text-gray-600'>Mohin</p>

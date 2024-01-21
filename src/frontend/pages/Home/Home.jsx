@@ -5,6 +5,7 @@ import ProductSection from "../../components/Section/ProductSection";
 import CoverProduct from "../../components/Section/CoverProduct";
 import DisplayProducts from "../../components/Section/DisplayProducts";
 import { Helmet } from "react-helmet-async";
+import ProductBoxs from "../../components/Section/ProductBoxs";
 
 const Home = () => {
    
@@ -33,6 +34,9 @@ const Home = () => {
             </section>
 
             <DisplayProducts  />
+
+            <ProductBoxs />
+
 
         </>
     );

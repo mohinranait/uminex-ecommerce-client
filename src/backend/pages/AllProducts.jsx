@@ -38,9 +38,10 @@ const AllProducts = () => {
     const handleProductPerPage = (e) => {
         const limitPage = Number(e.target.value);
         setPerViews(limitPage)
+        setCurrentPage(1)
         
     }
-    console.log(currentPage);
+
 
     // handle search product
     const handleSearchForm =() => {

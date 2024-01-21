@@ -116,7 +116,6 @@ const Shops = () => {
         queryKey: ['categoriesProducts',getCategory,brand,color,delivery,search,currentPage, perViews,sorting, sortFiled,offersSell,priceRange],
         queryFn: async () => {
             const products = await axiosPublic.get(`/category-wish-product/${getCategory}?limit=${perViews}&page=${currentPage}&sort=${sorting}&sortFiled=${sortFiled}&brand=${brand}&color=${color}&delivery=${delivery}&search=${search}&offers=${offersSell}&priceRange=${priceRange || '0-200000'}`)
-            
             return products?.data;
         }
     })

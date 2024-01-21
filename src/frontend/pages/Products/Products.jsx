@@ -42,8 +42,6 @@ const Products = () => {
         queryKey: ['getSingleProductBySlug',slug],
         queryFn: async () => {
             const {data} = await axiosPublic.get(`/product-by-slug/${slug}`);
-            // console.log(data?.product?.productFeatures?.keyFeatures?.colors[0].label);
-            // console.log(data?.product?.productFeatures?.keyFeatures?.memorys[0].label);
             const pFeatures = data?.product?.productFeatures
             setColor(pFeatures?.keyFeatures?.colors?.length > 0 ? pFeatures?.keyFeatures?.colors[0].label : null)
             setSize(pFeatures?.keyFeatures?.memorys?.length > 0 ? pFeatures?.keyFeatures?.memorys[0].label : null)
@@ -52,8 +50,8 @@ const Products = () => {
     })
     const {_id , name,media,brand,rating, reviews, category,price,isStock
     ,product_type,productFeatures} = product || {};
-    console.log(brand?.slug);
-    const {data:categoryProducts} = useQuery({
+
+    const {data:categoryProducts, isPending:categoryPending} = useQuery({
         queryKey: ["getCategoryProducts",category?.slug],
         enabled : !isPending,
         queryFn: async () => {
@@ -62,7 +60,7 @@ const Products = () => {
         }
     })
     
-    const {data:brandProducts} = useQuery({
+    const {data:brandProducts, isPending:brandPending} = useQuery({
         queryKey: ["getBrandProducts",category?.slug,brand?.slug],
         enabled : !isPending,
         queryFn: async () => {
@@ -70,8 +68,6 @@ const Products = () => {
             return data?.products;
         }
     })
-
-    console.log(brandProducts);
     
 
 
@@ -310,8 +306,8 @@ const Products = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                         <div className='order-2 lg:order-1 space-y-4'>
 
-                            <SidebarProduct products={categoryProducts} category={category} titleText={`Related Category`} />
-                            <SidebarProduct products={brandProducts} category={category} titleText={`Related Brand`} />
+                            <SidebarProduct products={categoryProducts} dataLoading={categoryPending} category={category} titleText={`Related Category`} />
+                            <SidebarProduct products={brandProducts} dataLoading={brandPending} category={category} titleText={`Related Brand`} />
 
                         </div>
                         <div className='order-1 lg:order-2 col-span-2 '>
