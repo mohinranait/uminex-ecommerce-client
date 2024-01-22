@@ -50,6 +50,7 @@ const Products = () => {
     })
     const {_id , name,media,brand,rating, reviews, category,price,isStock
     ,product_type,productFeatures} = product || {};
+    
 
     const {data:categoryProducts, isPending:categoryPending} = useQuery({
         queryKey: ["getCategoryProducts",category?.slug],
@@ -81,7 +82,7 @@ const Products = () => {
    
 
     const handleIncrement = () => {
-        if( quantity <= 9  ){
+        if( quantity <= 9 && isStock > quantity  ){
             setQuantity(quantity + 1)
         }
     }

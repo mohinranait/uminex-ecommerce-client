@@ -43,12 +43,8 @@ const AuthProvider = ({children}) => {
 
     useEffect(() => {
         const onSubscribe = onAuthStateChanged(auth , async currentUser => {
-            
-            const email = currentUser?.email;
-            console.log(email);
 
             if(currentUser?.email){
-                // console.log("inside auth", email);
                 // Create JWT 
                 await axios.post('/jwt', {email: currentUser?.email});
                 // Find a new user / admin
@@ -61,7 +57,6 @@ const AuthProvider = ({children}) => {
             }else{
                 await axios.post('/logout-user', {email:currentUser?.email});
                 setUser({});
-                console.log('Logout');
             }
             setLoading(false)
           

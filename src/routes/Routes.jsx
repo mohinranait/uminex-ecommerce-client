@@ -29,6 +29,7 @@ import LiveChatFromAdmin from '../backend/pages/LiveChatFromAdmin';
 import Notfound from '../frontend/pages/Notfound';
 import UserOrderDetails from '../frontend/pages/User/UserOrderDetails';
 import AdminDashboard from '../backend/pages/AdminDashboard';
+import OrderEdit from '../backend/pages/OrderEdit';
 
 const myRoutes = createBrowserRouter([
     {
@@ -89,6 +90,10 @@ const myRoutes = createBrowserRouter([
             {
                 path: 'orders',
                 element : <Orders />
+            },
+            {
+                path: 'order/:id',
+                element : <OrderEdit />,
             },
             {
                 path: 'products',

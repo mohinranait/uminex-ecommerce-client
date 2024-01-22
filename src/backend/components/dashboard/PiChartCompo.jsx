@@ -18,13 +18,15 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 };
 
 
-const PiChartCompo = () => {
-    const data = [
-        { name: 'Group A', value: 400 },
-        { name: 'Group B', value: 300 },
-        { name: 'Group C', value: 300 },
-        { name: 'Group D', value: 200 },
-    ];
+const PiChartCompo = ({charts=[]}) => {
+    console.log(charts);
+    const newDatas = charts?.map(item => {
+        return {
+            name : item?.name?.split('-')?.join(' '),
+            value: item?.value,
+        }
+    })
+    const data = newDatas;
 
     return (
         <>

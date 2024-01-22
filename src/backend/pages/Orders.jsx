@@ -12,9 +12,9 @@ const Orders = () => {
     return (
         <>
           <div className="bg-white px-5 py-5">
-                <div className="flex justify-between items-center gap-5 mb-5">
-                    <div className="flex items-center  gap-5">
-                        <div className="flex items-center gap-1">
+                <div className="flex justify-between items-center flex-wrap gap-5 mb-5">
+                    <div className="flex items-center flex-wrap gap-5">
+                        <div className="flex w-[45%] md:w-auto items-center gap-1">
                             Show 
                             <select name="" className="py-2 border rounded w-[60px] text-sm px-1 outline-blue-500" id="">
                                 <option value="10">10</option>
@@ -25,22 +25,22 @@ const Orders = () => {
                             </select>
                             items
                         </div>
-                        <div>
+                        <div className="w-[45%] md:w-auto">
                             <select name="" className="py-2 border rounded w-full lg:w-[300px] text-sm px-3 outline-blue-500" id="">
                                 <option value="">Status</option>
                                 <option value="true">Public</option>
                                 <option value="false">Unpublic</option>
                             </select>
                         </div>
-                        <div>
+                        <div className="w-full md:w-[300px]">
                             <input type="search" className="py-2 border rounded w-full lg:w-[300px] text-sm px-3 outline-blue-500" placeholder="Search by name" />
                         </div>
                     </div>
                     <Link to={'/admin/new-product'} className="flex gap-1 items-center py-2 px-3 bg-primary text-white rounded text-sm"><IoAddOutline />Add Product</Link>
                 </div>
                 <hr />
-                <div className="overflow-x-auto min-h-[300px]">
-                    <table className="w-full border-collapse">
+                <div className="overflow-x-auto  min-h-[300px]">
+                    <table className="w-full min-w-[600px] border-collapse">
                         <thead>
                             <tr>
                                 <th className="text-left text-gray-600 py-3">ID</th>

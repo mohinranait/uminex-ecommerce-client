@@ -35,6 +35,8 @@ const Home = () => {
 
             <DisplayProducts  />
 
+            <CoverProduct />
+            
             <ProductBoxs />
 
 

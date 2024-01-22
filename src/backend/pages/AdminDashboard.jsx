@@ -1,8 +1,20 @@
 import { IoBagHandleOutline, IoCartOutline, IoCellularOutline, IoHome, IoTrendingDownOutline, IoTrendingUp } from 'react-icons/io5';
 import AreaChartCom from '../components/dashboard/AreaChartCom';
 import PiChartCompo from '../components/dashboard/PiChartCompo';
+import { useEffect, useState } from 'react';
+import useAxios from '../../hooks/useAxios';
 
 const AdminDashboard = () => {
+    const axios = useAxios();
+    const [analytics, setAnalytics] = useState({})
+    useEffect(() => {
+        const getTotals = async () => {
+            const res = await axios.get(`/admin-analytics`);
+            console.log(res.data);
+            setAnalytics(res.data);
+        };
+        getTotals();
+    },[])
     return (
         <div>
             <div className=' grid lg:grid-cols-2 justify-between items-center mb-3 py-2'>
@@ -30,8 +42,8 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                     <div className=''>
-                        <p className='text-sm text-white font-normal'>Total Orders</p>
-                        <p className='text-2xl text-white font-semibold'>12,088</p>
+                        <p className='text-sm text-white font-normal'>Total Products</p>
+                        <p className='text-2xl text-white font-semibold'>{ analytics?.totalProducts }</p>
                         <p className='text-xs text-gray-100'>Increased by <span className='text-green-500'>+12.2%</span> </p>
                     </div>
                     <span className='absolute right-0 bottom-0 z-10 inline-block'>
@@ -50,8 +62,8 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                     <div className=''>
-                        <p className='text-sm text-white font-normal'>Total Sales</p>
-                        <p className='text-2xl text-white font-semibold'>12,088</p>
+                        <p className='text-sm text-white font-normal'>Success order</p>
+                        <p className='text-2xl text-white font-semibold'>{ analytics?.successOrders }</p>
                         <p className='text-xs text-gray-100'>Decreased by <span className='text-green-500'>+12.2%</span> </p>
                     </div>
                     <span className='absolute right-0 bottom-0 z-10 inline-block'>
@@ -71,7 +83,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className=''>
                         <p className='text-sm text-white font-normal'>Total Income</p>
-                        <p className='text-2xl text-white font-semibold'>12,088</p>
+                        <p className='text-2xl text-white font-semibold'>{analytics?.totalIncome} BDT</p>
                         <p className='text-xs text-gray-100'>Increased by <span className='text-gray-800'>+12.2%</span> </p>
                     </div>
                     <span className='absolute right-0 bottom-2 z-10 inline-block'>
@@ -145,7 +157,7 @@ const AdminDashboard = () => {
                         <p className='font-semibold'>Order vs Seals</p>
                     </div>
                     <div  className=''>
-                        <PiChartCompo />
+                        <PiChartCompo charts={analytics?.piCharts} />
                     </div>
                 </div>
             </div>

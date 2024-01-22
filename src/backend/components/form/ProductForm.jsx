@@ -371,7 +371,12 @@ const ProductForm = ({product}) => {
                                     <div>
                                         <div className='mb-5'>
                                             <label htmlFor="" className="text-sm font-medium text-gray-600 mb-3">Product name</label>
-                                            <input type="text" name="name" defaultValue={product?.name || ''} onChange={(e) => setIsSlug(e.target.value.split(' ').join('-').toLocaleLowerCase())} className="py-2 px-3 w-full border outline-primary transition-all focus:pl-5 rounded-md border-gray-200" placeholder="Name" />
+                                            <input 
+                                            type="text" 
+                                            name="name" 
+                                            defaultValue={product?.name || ''} 
+                                            onChange={(e) => setIsSlug(e.target.value.toLocaleLowerCase()?.split(' ')?.join('-').split('(').join('').split(')').join('').split('/').join('_'))} 
+                                            className="py-2 px-3 w-full border outline-primary transition-all focus:pl-5 rounded-md border-gray-200" placeholder="Name" />
                                             {isSlug && <p className={`text-xs font-normal  ${error?.slugError ? 'text-red-600' : 'text-gray-400' }`}>Slug: {isSlug} { error?.slugError && error?.slugError } </p>}
                                         </div>
                                         <div className='mb-5'>
